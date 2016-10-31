@@ -1,0 +1,1 @@
+INFO: Window Initialized (d:\homework\humber\semester5\engine\engine\engine\win32test\main.cpp: 18)
