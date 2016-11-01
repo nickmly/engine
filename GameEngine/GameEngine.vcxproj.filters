@@ -75,6 +75,9 @@
     <ClInclude Include="IOException.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="GLShader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="LogManager.cpp">
@@ -114,6 +117,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Util.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GLShader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

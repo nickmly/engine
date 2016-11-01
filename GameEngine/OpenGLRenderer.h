@@ -5,11 +5,15 @@
 #include "gtc\matrix_transform.hpp"
 #include "Camera.h"
 #include "SOIL.h"
+#include "GLShader.h"
+
 #include <iostream>
 
 class OpenGLRenderer : public AbstractRenderer
 {
 private:
+	GLuint texCoord;
+	GLuint texID;
 	GLuint buffers[3];
 	GLuint program;
 	Camera camera;
@@ -39,6 +43,7 @@ public:
 			0.5f, -0.5f, 0.0f,
 			0.0f,  0.5f, 0.0f,
 		};
+
 		glGenBuffers(1, buffers);
 		glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
@@ -75,24 +80,50 @@ public:
 			}
 		}
 
+		/*ShaderInfo shaders[] = {
+			{ GL_VERTEX_SHADER, "shader.vert" },
+			{ GL_FRAGMENT_SHADER, "shader.frag" },
+			{ GL_NONE, NULL }
+		};*/
+
+		
+
+		GLint width, height;										  // Load image, create texture and generate mipmaps
+		GLubyte* image = SOIL_load_image("wall.bmp", &width, &height, 0, SOIL_LOAD_RGB);
+		if (image == 0) {
+			printf("fuckkk");
+		}
+
+
+		GLuint program = LoadShader("shader.vert", "shader.frag");
+		glUseProgram(program);
 		//Enable depth test to prevent some faces from being invisible
 		glEnable(GL_DEPTH_TEST);
 	
 		// Generate a texture
 		glGenTextures(1, &currentTexture);
 		glBindTexture(GL_TEXTURE_2D, currentTexture); // All upcoming GL_TEXTURE_2D operations now have effect on this texture object
-													  // Set the texture wrapping parameters
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_BGR, GL_UNSIGNED_BYTE, image);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// Set texture wrapping to GL_REPEAT (usually basic wrapping method)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 		// Set texture filtering parameters
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-		GLint width, height;
-		// Load image, create texture and generate mipmaps
-		unsigned char* image = SOIL_load_image("wall.jpg", &width, &height, 0, SOIL_LOAD_RGB);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+	/*
+		GLuint program = LoadShader("shader.vert", "shader.frag");
+		glUseProgram(program);*/
+		texCoord = glGetAttribLocation(program, "vtexCoord");
+		glEnableVertexAttribArray(texCoord);
+		glVertexAttribPointer(texCoord, 2, GL_FLOAT, GL_FALSE, 0, 0);
+		texID = glGetAttribLocation(program, "texture");
+		glActiveTexture(GL_TEXTURE0);
+		glUniform1i(texID, 0);
+		
+		
 		//glGenerateMipmap(GL_TEXTURE_2D);
+
+		printf("width %i \n", width);
+		printf("height %i \n", height);
 
 		SOIL_free_image_data(image); // Free image from memory
 		glBindTexture(GL_TEXTURE_2D, 0); // Unbind texture when done, so we won't accidentily mess up our texture.
@@ -121,7 +152,7 @@ public:
 		//Bind UV coordinates
 		glBindBuffer(GL_ARRAY_BUFFER, buffers[2]);
 		glBufferData(GL_ARRAY_BUFFER, textures.size() * sizeof(glm::vec2), &textures[0], GL_STATIC_DRAW);
-		glBindAttribLocation(program, 2, "texCoord");
+		glBindAttribLocation(texID, 2, "vtexCoord");
 		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
 		glEnableVertexAttribArray(2);
 
