@@ -7,5 +7,6 @@ public:
 	virtual void preRender(double timeSinceLastFrame);
 	virtual void render();
 	virtual void postRender();
+	virtual void update(double deltaTime);
 };
 

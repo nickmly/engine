@@ -15,6 +15,7 @@ using namespace std;
 
 void TestApp::onStart()
 {
+	//TODO: Move this to renderer
 	//Load shaders
 	ShaderLoader shaderLoader = ShaderLoader();
 	shaderLoader.LoadShader(GL_VERTEX_SHADER,
@@ -113,12 +114,59 @@ void TestApp::onStart()
 	}
 	
 	//Add texture coords to our vector
-	for (int i = 0; i < 12; i++) 
+	/*for (int i = 0; i < 12; i++) 
 	{
 		verts.insert(verts.end(), Vertex(0.0f, 0.0f, 0.0f, 0.0f, Vertex::TEXTURE));
 		verts.insert(verts.end(), Vertex(1.0f, 0.0f, 0.0f, 0.0f, Vertex::TEXTURE));
 		verts.insert(verts.end(), Vertex(1.0f, 1.0f, 0.0f, 0.0f, Vertex::TEXTURE));
-	}
+	}*/
+	verts.insert(verts.end(), Vertex(0.0f, 1.0f, 0.0f, 0.0f, Vertex::TEXTURE));
+	verts.insert(verts.end(), Vertex(0.0f, 0.66f, 0.0f, 0.0f, Vertex::TEXTURE));
+	verts.insert(verts.end(), Vertex(0.33f, 0.66f, 0.0f, 0.0f, Vertex::TEXTURE));
+
+	verts.insert(verts.end(), Vertex(0.33f, 0.66f, 0.0f, 0.0f, Vertex::TEXTURE));
+	verts.insert(verts.end(), Vertex(0.33f, 1.0f, 0.0f, 0.0f, Vertex::TEXTURE));
+	verts.insert(verts.end(), Vertex(0.0f, 1.0f, 0.0f, 0.0f, Vertex::TEXTURE));
+
+	verts.insert(verts.end(), Vertex(0.0f, 0.66f, 0.0f, 0.0f, Vertex::TEXTURE));
+	verts.insert(verts.end(), Vertex(0.33f, 0.66f, 0.0f, 0.0f, Vertex::TEXTURE));
+	verts.insert(verts.end(), Vertex(0.0f, 0.33f, 0.0f, 0.0f, Vertex::TEXTURE));
+
+	verts.insert(verts.end(), Vertex(0.0f, 0.33f, 0.0f, 0.0f, Vertex::TEXTURE));
+	verts.insert(verts.end(), Vertex(0.33f, 0.33f, 0.0f, 0.0f, Vertex::TEXTURE));
+	verts.insert(verts.end(), Vertex(0.33f, 0.66f, 0.0f, 0.0f, Vertex::TEXTURE));
+
+	verts.insert(verts.end(), Vertex(0.0f, 0.33f, 0.0f, 0.0f, Vertex::TEXTURE));
+	verts.insert(verts.end(), Vertex(0.0f, 0.0f, 0.0f, 0.0f, Vertex::TEXTURE));
+	verts.insert(verts.end(), Vertex(0.33f, 0.33f, 0.0f, 0.0f, Vertex::TEXTURE));
+
+	verts.insert(verts.end(), Vertex(0.33f, 0.33f, 0.0f, 0.0f, Vertex::TEXTURE));
+	verts.insert(verts.end(), Vertex(0.0f, 0.0f, 0.0f, 0.0f, Vertex::TEXTURE));
+	verts.insert(verts.end(), Vertex(0.33f, 0.0f, 0.0f, 0.0f, Vertex::TEXTURE));
+
+	verts.insert(verts.end(), Vertex(0.33f, 0.0f, 0.0f, 0.0f, Vertex::TEXTURE));
+	verts.insert(verts.end(), Vertex(0.33f, 0.33f, 0.0f, 0.0f, Vertex::TEXTURE));
+	verts.insert(verts.end(), Vertex(0.66f, 0.0f, 0.0f, 0.0f, Vertex::TEXTURE));
+
+	verts.insert(verts.end(), Vertex(0.66f, 0.0f, 0.0f, 0.0f, Vertex::TEXTURE));
+	verts.insert(verts.end(), Vertex(0.33f, 0.33f, 0.0f, 0.0f, Vertex::TEXTURE));
+	verts.insert(verts.end(), Vertex(0.66f, 0.33f, 0.0f, 0.0f, Vertex::TEXTURE));
+
+	verts.insert(verts.end(), Vertex(0.66f, 0.33f, 0.0f, 0.0f, Vertex::TEXTURE));
+	verts.insert(verts.end(), Vertex(0.33f, 0.33f, 0.0f, 0.0f, Vertex::TEXTURE));
+	verts.insert(verts.end(), Vertex(0.33f, 0.66f, 0.0f, 0.0f, Vertex::TEXTURE));
+
+	verts.insert(verts.end(), Vertex(0.33f, 0.66f, 0.0f, 0.0f, Vertex::TEXTURE));
+	verts.insert(verts.end(), Vertex(0.66f, 0.66f, 0.0f, 0.0f, Vertex::TEXTURE));
+	verts.insert(verts.end(), Vertex(0.66f, 0.33f, 0.0f, 0.0f, Vertex::TEXTURE)); 
+
+	verts.insert(verts.end(), Vertex(0.66f, 0.33f, 0.0f, 0.0f, Vertex::TEXTURE));
+	verts.insert(verts.end(), Vertex(0.66f, 0.0f, 0.0f, 0.0f, Vertex::TEXTURE));
+	verts.insert(verts.end(), Vertex(1.0f, 0.33f, 0.0f, 0.0f, Vertex::TEXTURE));
+
+	verts.insert(verts.end(), Vertex(1.0f, 0.33f, 0.0f, 0.0f, Vertex::TEXTURE));
+	verts.insert(verts.end(), Vertex(1.0f, 0.0f, 0.0f, 0.0f, Vertex::TEXTURE));
+	verts.insert(verts.end(), Vertex(0.66f, 0.0f, 0.0f, 0.0f, Vertex::TEXTURE));
 
 	//Create a model with these vertices and assign it to a renderer
 	square = SimpleModel(verts, renderer);
@@ -135,9 +183,16 @@ void TestApp::preRender(double timeSinceLastFrame)
 
 void TestApp::render()
 {
-	//Render square
-	square.transform = glm::translate(square.transform, square.movement);
+	//Render square	
 	square.RenderModel();
+}
+
+void TestApp::update(double deltaTime)
+{
+	//Handle movement
+	square.transform = glm::translate(square.transform, glm::vec3(square.movement.x * deltaTime,
+																	square.movement.y * deltaTime,
+																	square.movement.z * deltaTime));
 }
 
 void TestApp::postRender()
@@ -145,21 +200,22 @@ void TestApp::postRender()
 }
 
 //Called from main.cpp
+//Handles all input from a keyboard
 void TestApp::onInput(Uint32 event, SDL_Keycode key, int x, int y) {
 	switch (event) {
 	case SDL_KEYDOWN:
 		switch (key) {
 		case SDLK_a:
-			square.movement.x = -0.003f;
+			square.movement.x = -6.0f;
 			break;
 		case SDLK_d:
-			square.movement.x = 0.003f;
+			square.movement.x = 6.0f;
 			break;
 		case SDLK_w:
-			square.movement.y = 0.003f;
+			square.movement.y = 6.0f;
 			break;
 		case SDLK_s:
-			square.movement.y = -0.003f;
+			square.movement.y = -6.0f;
 			break;
 		}
 		break;
@@ -181,6 +237,7 @@ void TestApp::onInput(Uint32 event, SDL_Keycode key, int x, int y) {
 }
 
 //Called from main.cpp
+//Handles all input from a mouse
 void TestApp::onMouse(int button, int state, int x, int y)
 {
 	switch (button) {

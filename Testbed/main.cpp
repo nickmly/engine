@@ -51,7 +51,8 @@ int main(int argc, char** argv) {
 
 	SDL_Event windowEvent;
 	while (true) {
-		app.preRender(clock.GetDeltaTime());
+		clock.Tick();
+		
 		if (SDL_PollEvent(&windowEvent))
 		{
 			if (windowEvent.type == SDL_QUIT)
@@ -64,13 +65,12 @@ int main(int argc, char** argv) {
 			if (windowEvent.type == SDL_KEYUP) {
 				app.onInput(windowEvent.type, windowEvent.key.keysym.sym, 0, 0);
 			}
-		}
-
-
+		}	
+		app.update(clock.GetDeltaTime());
+		app.preRender(clock.GetDeltaTime());
 		app.render();
 		SDL_GL_SwapWindow(window);
 		app.postRender();
-		clock.Tick();
 	}
 	
 	app.onEnd();

@@ -19,3 +19,7 @@ void Engine::render()
 void Engine::postRender()
 {
 }
+
+void Engine::update(double deltaTime)
+{
+}

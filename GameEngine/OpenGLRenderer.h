@@ -5,7 +5,6 @@
 #include "gtc\matrix_transform.hpp"
 #include "Camera.h"
 #include "SOIL.h"
-#include "SDL_image.h"
 #include <iostream>
 
 class OpenGLRenderer : public AbstractRenderer
@@ -52,6 +51,7 @@ public:
 		glDisableVertexAttribArray(0);
 	}
 
+	//Generate buffers and load all vertex positions, colors, and texture coordinates into the vertex array
 	void AssignVertices(std::vector<Vertex> _vertices) {
 		glm::vec3 newVertex;
 		glm::vec2 new2DVertex;
@@ -68,53 +68,17 @@ public:
 				break;
 			case Vertex::NORMAL:
 				break;
-			case Vertex::TEXTURE:
+			case Vertex::TEXTURE:// If texture, take only x,y(UV) values
 				new2DVertex = glm::vec2(_vertices[i].values.x, _vertices[i].values.y);
 				textures.insert(textures.end(), new2DVertex);
 				break;
 			}
 		}
+
+		//Enable depth test to prevent some faces from being invisible
 		glEnable(GL_DEPTH_TEST);
-		//GLuint indices[] = {  // Note that we start from 0!
-		//	0, 1, 3,  // First Triangle
-		//	1, 2, 3   // Second Triangle
-		//};
-
 	
-		glGenBuffers(3, buffers);
-		glGenVertexArrays(1, &VAO);
-		//glGenBuffers(1, &EBO);
-		// Bind the Vertex Array Object first, then bind and set vertex buffer(s) and attribute pointer(s).
-		glBindVertexArray(VAO);
-
-		glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
-		glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec3), &vertices[0], GL_STATIC_DRAW);
-
-		//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-		//glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-
-		glBindAttribLocation(program, 0, "vPosition");
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
-		glEnableVertexAttribArray(0);
-
-		glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
-		glBufferData(GL_ARRAY_BUFFER, colors.size() * sizeof(glm::vec3), &colors[0], GL_STATIC_DRAW);
-		glBindAttribLocation(program, 1, "vertexColor");
-		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
-		glEnableVertexAttribArray(1);
-
-		glBindBuffer(GL_ARRAY_BUFFER, buffers[2]);
-		glBufferData(GL_ARRAY_BUFFER, textures.size() * sizeof(glm::vec2), &textures[0], GL_STATIC_DRAW);
-		glBindAttribLocation(program, 2, "texCoord");
-		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
-		glEnableVertexAttribArray(2);
-
-		glBindBuffer(GL_ARRAY_BUFFER, 0); // Note that this is allowed, the call to glVertexAttribPointer registered VBO as the currently bound vertex buffer object so afterwards we can safely unbind
-
-		glBindVertexArray(0); // Unbind VAO (it's always a good thing to unbind any buffer/array to prevent strange bugs), remember: do NOT unbind the EBO, keep it bound to this VAO
-		
-
-
+		// Generate a texture
 		glGenTextures(1, &currentTexture);
 		glBindTexture(GL_TEXTURE_2D, currentTexture); // All upcoming GL_TEXTURE_2D operations now have effect on this texture object
 													  // Set the texture wrapping parameters
@@ -123,49 +87,81 @@ public:
 		// Set texture filtering parameters
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
 		GLint width, height;
 		// Load image, create texture and generate mipmaps
 		unsigned char* image = SOIL_load_image("wall.jpg", &width, &height, 0, SOIL_LOAD_RGB);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
 		//glGenerateMipmap(GL_TEXTURE_2D);
 
-		SOIL_free_image_data(image);
+		SOIL_free_image_data(image); // Free image from memory
 		glBindTexture(GL_TEXTURE_2D, 0); // Unbind texture when done, so we won't accidentily mess up our texture.
 
-		camera = Camera(program); // Setup our camera
+		// Generate 3 buffers and store them into an array
+		glGenBuffers(3, buffers);
+		// Generate a vertex array
+		glGenVertexArrays(1, &VAO);
+		// Bind the Vertex Array Object first, then bind and set vertex buffer(s) and attribute pointer(s).
+		glBindVertexArray(VAO);
+
+		// Bind vertex positions
+		glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
+		glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec3), &vertices[0], GL_STATIC_DRAW);
+		glBindAttribLocation(program, 0, "vPosition");
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+		glEnableVertexAttribArray(0);
+
+		// Bind colors
+		glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
+		glBufferData(GL_ARRAY_BUFFER, colors.size() * sizeof(glm::vec3), &colors[0], GL_STATIC_DRAW);
+		glBindAttribLocation(program, 1, "vertexColor");
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+		glEnableVertexAttribArray(1);
+		
+		//Bind UV coordinates
+		glBindBuffer(GL_ARRAY_BUFFER, buffers[2]);
+		glBufferData(GL_ARRAY_BUFFER, textures.size() * sizeof(glm::vec2), &textures[0], GL_STATIC_DRAW);
+		glBindAttribLocation(program, 2, "texCoord");
+		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
+		glEnableVertexAttribArray(2);
+
+		// Unbind buffers and arrays to clear memory
+		glBindBuffer(GL_ARRAY_BUFFER, 0); // Note that this is allowed, the call to glVertexAttribPointer registered VBO as the currently bound vertex buffer object so afterwards we can safely unbind
+		glBindVertexArray(0); // Unbind VAO (it's always a good thing to unbind any buffer/array to prevent strange bugs), remember: do NOT unbind the EBO, keep it bound to this VAO
+		
+		camera = Camera(Camera::PROJECTION, 800, 600, program); // Setup our camera
 	}
 
+
+	// Render all vertices
 	void RenderVertices() {
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);	
-		glClear(GL_DEPTH_BUFFER_BIT);
-		//glm::mat4 model = glm::translate(glm::mat4(1.0), glm::vec3(0.0, 0.0, 0.0));
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	
+
 		camera.fov = 80;
 		camera.SetPositionVector(0.0f, -10.0f, 4.0f); // Put camera at this position
 		camera.SetTargetVector(0.0f, 0.0f, 0.0f); // Look at this position
 		camera.SetUpVector(0.0f, 1.0f, 0.0f); // Camera is pointing up (0,-1,0) for down
 		camera.Render();
 
-
 		glBindTexture(GL_TEXTURE_2D, currentTexture);
 
 		glUseProgram(program);
 
-		//glUniform1i(glGetUniformLocation(program, "ourTexture"), 0);
+		//glUniform1i(glGetUniformLocation(program, "myTexture"), 0);
 		glBindVertexArray(VAO);
 		glDrawArrays(GL_TRIANGLES, 0, vertices.size());
-		//glDrawElements(GL_TRIANGLES, vertices.size(), GL_UNSIGNED_INT, 0);
-		glBindVertexArray(0);
-		//glDrawArrays(GL_POLYGON, 0, vertices.size());
-		
+		glBindVertexArray(0);		
 	}
 
+	//Link a shader program for first time use. Must call glUseProgram after first time!
 	void UseProgram(GLuint _program) {
 		program = _program;
 		glLinkProgram(program);
 		glUseProgram(program);
 	}
 
+	//Delete all buffers, shader program, and arrays
 	void Destroy() {
 		glDeleteBuffers(3, buffers);
 		glDisableVertexAttribArray(0);
@@ -178,6 +174,7 @@ public:
 
 	}
 
+	//Render a model using its transform matrix
 	void RenderTransform(glm::mat4 transform) {
 		camera.RenderModel(transform);
 	}

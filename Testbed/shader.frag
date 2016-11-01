@@ -5,9 +5,9 @@ in vec2 texCoord;
 out vec4 fColor;
 
 
-uniform sampler2D ourTexture;
+uniform sampler2D myTexture;
 
 void main()
 {
-	fColor = myColor;
+	fColor = texture(myTexture,texCoord);
 }

@@ -1,11 +1,12 @@
 #pragma once
+#include "SDL.h"
 #include <Windows.h>
 
 class Clock
 {
 private:
-	__int64 prevTime, currTime;
-	double secondsPerCount, deltaTime;
+	int prevTime, currTime;
+	double deltaTime;
 public:
 	Clock();
 	~Clock();
