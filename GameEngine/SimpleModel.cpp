@@ -43,3 +43,4 @@ void SimpleModel::AddVertices(vector<Vertex> _vert)
 {
 	vertices = _vert;
 }
+

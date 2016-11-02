@@ -10,11 +10,12 @@
 #include "glut.h"
 
 OpenGLRenderer renderer;
-SimpleModel square;
+SimpleModel square, square2;
 using namespace std;
 
 void TestApp::onStart()
 {
+	renderer = OpenGLRenderer();
 	//TODO: Move this to renderer
 	//Load shaders
 	ShaderLoader shaderLoader = ShaderLoader();
@@ -108,9 +109,9 @@ void TestApp::onStart()
 
 	//Add colors to our vector
 	for (int i = 0; i < 12; i++) {
-		verts.insert(verts.end(), Vertex(1, 0, 0, 0, Vertex::COLOR));
-		verts.insert(verts.end(), Vertex(0, 1, 0, 0, Vertex::COLOR));
-		verts.insert(verts.end(), Vertex(0, 0, 1, 0, Vertex::COLOR));
+		verts.insert(verts.end(), Vertex(1, 1, 1, 0, Vertex::COLOR));
+		verts.insert(verts.end(), Vertex(1, 1, 0, 0, Vertex::COLOR));
+		verts.insert(verts.end(), Vertex(1, 1, 1, 0, Vertex::COLOR));
 	}
 	
 	//Add texture coords to our vector
@@ -120,6 +121,8 @@ void TestApp::onStart()
 		verts.insert(verts.end(), Vertex(1.0f, 0.0f, 0.0f, 0.0f, Vertex::TEXTURE));
 		verts.insert(verts.end(), Vertex(1.0f, 1.0f, 0.0f, 0.0f, Vertex::TEXTURE));
 	}*/
+
+	//TODO: store texture info into a simple model so renderer doesn't have to do it
 	verts.insert(verts.end(), Vertex(0.0f, 1.0f, 0.0f, 0.0f, Vertex::TEXTURE));
 	verts.insert(verts.end(), Vertex(0.0f, 0.66f, 0.0f, 0.0f, Vertex::TEXTURE));
 	verts.insert(verts.end(), Vertex(0.33f, 0.66f, 0.0f, 0.0f, Vertex::TEXTURE));
@@ -170,6 +173,8 @@ void TestApp::onStart()
 
 	//Create a model with these vertices and assign it to a renderer
 	square = SimpleModel(verts, renderer);
+	//square2 = SimpleModel(verts, renderer);
+	renderer.EnableOpenGL();
 }
 
 void TestApp::onEnd()
@@ -185,6 +190,7 @@ void TestApp::render()
 {
 	//Render square	
 	square.RenderModel();
+	//square2.RenderModel();
 }
 
 void TestApp::update(double deltaTime)
@@ -193,6 +199,7 @@ void TestApp::update(double deltaTime)
 	square.transform = glm::translate(square.transform, glm::vec3(square.movement.x * deltaTime,
 																	square.movement.y * deltaTime,
 																	square.movement.z * deltaTime));
+	//square2.transform = glm::rotate(square2.transform, (float)deltaTime * 5.0f, glm::vec3(0.0f, 0.0f, 1.0f));
 }
 
 void TestApp::postRender()

@@ -38,7 +38,7 @@ void Camera::RenderModel(glm::mat4 _model)
 void Camera::Render() {
 	view = glm::lookAt(positionVector, targetVector, upVector);
 	if(type == CameraType::PROJECTION)
-		projection = glm::perspective(glm::radians(fov), width/height, nearClipPlane, farClipPlane);
+		projection = glm::perspective(glm::radians(60.0f), 800.0f/600.0f, 0.1f, 100.0f);
 	else if (type == CameraType::ORTHO)
 		projection = glm::ortho(0.0f, width, 0.0f, height,  nearClipPlane, farClipPlane);
 	glUniformMatrix4fv(viewHandle, 1, GL_FALSE, &view[0][0]); // Send it to the GLSL file
