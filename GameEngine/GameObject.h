@@ -23,10 +23,16 @@ public:
 	void Update(double deltaTime);
 	void Render();
 	glm::mat4 GetTransform();
-	glm::vec3 GetMovement();
-	void SetMovement(glm::vec3 _movement);
+	glm::vec3 GetVelocity();
+	void SetVelocity(glm::vec3 _velocity);
+	glm::vec3 GetAcceleration();
+	void SetAcceleration(glm::vec3 _accel);
 	glm::vec3 GetRotation();
 	void SetRotation(glm::vec3 _rotation);
+	glm::vec3 GetPosition();
+	void SetPosition(glm::vec3 _position);
+	void UpdatePosition();
+	void UpdateRotation();
 	float GetAngle();
 	void SetAngle(float _angle);
 	BoundingSphere GetSphere();

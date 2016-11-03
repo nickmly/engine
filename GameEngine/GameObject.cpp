@@ -22,9 +22,11 @@ GameObject::GameObject()
 {
 }
 
-BoundingSphere GameObject::GetSphere(){
+BoundingSphere GameObject::GetSphere()
+{
 	return sphere;
 }
+
 void GameObject::OnInput(Uint32 event, SDL_Keycode key)
 {	
 	
@@ -36,12 +38,17 @@ void GameObject::Update(double deltaTime)
 	position = initialVelocity * (float)deltaTime + (0.5f*accel) * (float)(deltaTime*deltaTime);
 	initialVelocity = velocity;
 	
-	transform = glm::translate(transform, glm::vec3(position));/* glm::vec3(movement.x * deltaTime,
-		movement.y * deltaTime,
-		movement.z * deltaTime));*/
-	transform = glm::rotate(transform, (float)deltaTime * angle, rotation);
+	UpdatePosition();
+	transform = glm::rotate(transform, (float)deltaTime * angle, rotation);	
+}
 
+void GameObject::UpdatePosition() 
+{
+	sphere.SetCenter(position);
+	transform = glm::translate(transform, glm::vec3(position));
+}
 
+void GameObject::UpdateRotation() {
 
 }
 
@@ -56,14 +63,25 @@ glm::mat4 GameObject::GetTransform()
 {
 	return transform;
 }
-glm::vec3 GameObject::GetMovement()
+
+glm::vec3 GameObject::GetVelocity()
 {
 	return velocity;
 }
 
-void GameObject::SetMovement(glm::vec3 _movement)
+void GameObject::SetVelocity(glm::vec3 _velocity)
 {
-	accel = _movement;
+	velocity = _velocity;
+}
+
+glm::vec3 GameObject::GetAcceleration()
+{
+	return accel;
+}
+
+void GameObject::SetAcceleration(glm::vec3 _accel)
+{
+	accel = _accel;
 }
 
 glm::vec3 GameObject::GetRotation()
@@ -74,6 +92,17 @@ glm::vec3 GameObject::GetRotation()
 void GameObject::SetRotation(glm::vec3 _rotation)
 {
 	rotation = _rotation;
+}
+
+glm::vec3 GameObject::GetPosition()
+{
+	return position;
+}
+
+void GameObject::SetPosition(glm::vec3 _position)
+{
+	position = _position;
+	UpdatePosition();
 }
 
 float GameObject::GetAngle()

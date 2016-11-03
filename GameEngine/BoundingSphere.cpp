@@ -4,6 +4,7 @@ BoundingSphere::BoundingSphere()
 {
 
 }
+
 BoundingSphere::BoundingSphere(glm::vec3 _center, float _radius)
 {
 	center = _center;
@@ -15,19 +16,26 @@ glm::vec3 BoundingSphere::GetCenter()
 	return center;
 }
 
+void BoundingSphere::SetCenter(glm::vec3 _center)
+{
+	center = _center;
+}
+
 float BoundingSphere::GetRadius()
 {
 	return radius;
 }
 
-IntersectData BoundingSphere::Intersect(const BoundingSphere & other)
+bool BoundingSphere::Intersect(const BoundingSphere & other)
 {
 	float radiusDist = radius + other.radius;
 	float centerDist = (other.center - center).length();
 	if (centerDist < radiusDist) {
-		return IntersectData(true, centerDist - radiusDist);
+		return true;
+		//return IntersectData(true, centerDist - radiusDist);
 	}
 	else {
-		return IntersectData(false, centerDist - radiusDist);
+		return false;
+		//return IntersectData(false, centerDist - radiusDist);
 	}
 }

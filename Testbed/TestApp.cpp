@@ -151,11 +151,14 @@ void TestApp::onStart()
 
 
 	// don't know how to update these over time?
-	BoundingSphere playerSphere = BoundingSphere(glm::vec3(0.0f), 3.0f);
-	BoundingSphere ballSphere = BoundingSphere(glm::vec3(0.0f), 3.0f);
+	BoundingSphere playerSphere = BoundingSphere(glm::vec3(0.0f), 1.5f);
+	BoundingSphere ballSphere = BoundingSphere(glm::vec3(0.0f), 1.5f);
 
 	player = GameObject(square, playerSphere, *renderer);
-	ball = GameObject(square2, ballSphere,*renderer);
+	ball = GameObject(square2, ballSphere, *renderer);
+
+	ball.SetPosition(glm::vec3(-4.0f, 0.0f, 0.0f));
+
 	ball.SetAngle(5.0f); // Rotate by 5.0 units each frame
 	renderer->EnableOpenGL();
 }
@@ -173,9 +176,7 @@ void TestApp::preRender(double timeSinceLastFrame)
 void TestApp::render()
 {
 	player.Render();
-	ball.Render();
-
-	
+	ball.Render();	
 }
 
 void TestApp::update(double deltaTime)
@@ -184,9 +185,9 @@ void TestApp::update(double deltaTime)
 	player.Update(deltaTime);
 	ball.Update(deltaTime);
 
-	//if (player.GetSphere().Intersect(&ball.GetSphere()) {
-
-	//}
+	if (player.GetSphere().Intersect(ball.GetSphere())) {
+		printf("Collision\n");
+	}
 }
 
 void TestApp::postRender()
@@ -197,29 +198,29 @@ void TestApp::postRender()
 //Called from main.cpp
 //Handles all input from a keyboard
 void TestApp::onInput(Uint32 event, SDL_Keycode key, int x, int y) {
-	glm::vec3 newMovement;
+	glm::vec3 newAcceleration;
 	switch (event) {
 	case SDL_KEYDOWN:
 		switch (key) {
 		case SDLK_a:
-			newMovement = player.GetMovement();
-			newMovement.x = -6.0f;
-			player.SetMovement(newMovement);
+			newAcceleration = player.GetAcceleration();
+			newAcceleration.x = -12.0f;
+			player.SetAcceleration(newAcceleration);
 			break;
 		case SDLK_d:
-			newMovement = player.GetMovement();
-			newMovement.x = 6.0f;
-			player.SetMovement(newMovement);
+			newAcceleration = player.GetAcceleration();
+			newAcceleration.x = 12.0f;
+			player.SetAcceleration(newAcceleration);
 			break;
 		case SDLK_w:
-			newMovement = player.GetMovement();
-			newMovement.y = 6.0f;
-			player.SetMovement(newMovement);
+			newAcceleration = player.GetAcceleration();
+			newAcceleration.y = 12.0f;
+			player.SetAcceleration(newAcceleration);
 			break;
 		case SDLK_s:
-			newMovement = player.GetMovement();
-			newMovement.y = -6.0f;
-			player.SetMovement(newMovement);
+			newAcceleration = player.GetAcceleration();
+			newAcceleration.y = -12.0f;
+			player.SetAcceleration(newAcceleration);
 			break;
 		}
 		break;
@@ -228,15 +229,15 @@ void TestApp::onInput(Uint32 event, SDL_Keycode key, int x, int y) {
 		switch (key) {
 		case SDLK_a:
 		case SDLK_d:
-			newMovement = player.GetMovement();
-			newMovement.x = 0.0f;
-			player.SetMovement(newMovement);
+			newAcceleration = player.GetAcceleration();
+			newAcceleration.x = 0.0f;
+			player.SetAcceleration(newAcceleration);
 			break;
 		case SDLK_w:
 		case SDLK_s:
-			newMovement = player.GetMovement();
-			newMovement.y = 0.0f;
-			player.SetMovement(newMovement);
+			newAcceleration = player.GetAcceleration();
+			newAcceleration.y = 0.0f;
+			player.SetAcceleration(newAcceleration);
 			break;
 		}
 		break;
