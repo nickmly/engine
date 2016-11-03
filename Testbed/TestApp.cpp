@@ -154,10 +154,9 @@ void TestApp::onStart()
 	BoundingSphere playerSphere = BoundingSphere(glm::vec3(0.0f), 3.0f);
 	BoundingSphere ballSphere = BoundingSphere(glm::vec3(0.0f), 3.0f);
 
-	player = GameObject(square, playerSphere);
-	ball = GameObject(square2, ballSphere);
+	player = GameObject(square, playerSphere, *renderer);
+	ball = GameObject(square2, ballSphere,*renderer);
 	ball.SetAngle(5.0f); // Rotate by 5.0 units each frame
-
 	renderer->EnableOpenGL();
 }
 
@@ -175,6 +174,8 @@ void TestApp::render()
 {
 	player.Render();
 	ball.Render();
+
+	
 }
 
 void TestApp::update(double deltaTime)
@@ -182,6 +183,10 @@ void TestApp::update(double deltaTime)
 	//Handle movement
 	player.Update(deltaTime);
 	ball.Update(deltaTime);
+
+	//if (player.GetSphere().Intersect(&ball.GetSphere()) {
+
+	//}
 }
 
 void TestApp::postRender()

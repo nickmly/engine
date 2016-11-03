@@ -50,4 +50,5 @@ public:
 
 	//Render a model using its transform matrix
 	void RenderTransform(glm::mat4 transform);
+
 };
