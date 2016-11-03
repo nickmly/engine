@@ -1,10 +1,10 @@
 #include "SimpleModel.h"
 
-SimpleModel::SimpleModel(vector<Vertex> _vert, OpenGLRenderer &_rend)
+SimpleModel::SimpleModel(vector<Vertex> _vert, OpenGLRenderer _rend)
 {
 	vertices = _vert;
-	renderer = &_rend;
-	renderer->AssignVertices(vertices);
+	renderer = _rend;
+	renderer.AssignVertices(vertices);
 	movement = glm::vec3(0.0f, 0.0f, 0.0f); //default to 0,0,0
 }
 
@@ -19,9 +19,9 @@ SimpleModel::~SimpleModel()
 
 void SimpleModel::RenderModel()
 {
-	renderer->RenderVertices();
-	//renderer->RenderSimpleModel(vertices);
-	renderer->RenderTransform(transform);
+	//renderer.RenderSimpleModel(vertices);
+	renderer.RenderTransform(transform);
+	renderer.RenderVertices();
 }
 
 void SimpleModel::AddComponent(Vertex::VertexType type)
