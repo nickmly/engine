@@ -19,9 +19,8 @@ SimpleModel::~SimpleModel()
 
 void SimpleModel::RenderModel()
 {
-	renderer->RenderVertices();
-	//renderer->RenderSimpleModel(vertices);
 	renderer->RenderTransform(transform);
+	renderer->RenderVertices();
 }
 
 void SimpleModel::AddComponent(Vertex::VertexType type)

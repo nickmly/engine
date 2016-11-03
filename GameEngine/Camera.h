@@ -10,6 +10,7 @@ private:
 	GLuint modelHandle, viewHandle, projHandle;
 	glm::vec3 positionVector, targetVector, upVector;
 	glm::mat4 view, projection;
+	GLuint program;
 public:
 	enum CameraType {
 		PROJECTION,

@@ -55,13 +55,12 @@ void OpenGLRenderer::AssignVertices(std::vector<Vertex> _vertices)
 			break;
 		}
 	}
+	printf("AssignVertices() called\nNew size of verts: %d\n", getGlobalVertices().size());
 }
-void OpenGLRenderer::EnableOpenGL(){
+void OpenGLRenderer::EnableOpenGL() {
 
-	printf("EnableRenderCalled()");
-	printf("Vert Size before enable opengl: %d\n", getGlobalVertices().size());
-	printf("Vert Size after enable opengl: %d\n", getGlobalVertices().size());
-	
+	printf("EnableOpenGL() called\n");
+
 	GLint width, height;									  // Load image, create texture and generate mipmaps
 	GLubyte* image = SOIL_load_image("wall.bmp", &width, &height, 0, SOIL_LOAD_RGB);
 	if (image == 0) {
@@ -79,14 +78,43 @@ void OpenGLRenderer::EnableOpenGL(){
 	// Set texture filtering parameters
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	printf("width %i \n", width);
-	printf("height %i \n", height);
 
 	camera = Camera(Camera::PROJECTION, 800, 600, program); // Setup our camera
 	camera.fov = 120.0f;
 	camera.SetPositionVector(0.0f, -10.0f, 4.0f); // Put camera at this position
 	camera.SetTargetVector(0.0f, 0.0f, 0.0f); // Look at this position
 	camera.SetUpVector(0.0f, 1.0f, 0.0f); // Camera is pointing up (0,-1,0) for down
+
+	// Generate 3 buffers and store them into an array
+	glGenBuffers(3, buffers);
+	// Generate a vertex array
+	glGenVertexArrays(1, &VAO);
+
+	// Bind the Vertex Array Object first, then bind and set vertex buff`er(s) and attribute pointer(s).
+	glBindVertexArray(VAO);
+
+	// Bind vertex positions
+	glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
+	glBufferData(GL_ARRAY_BUFFER, getGlobalVertices().size() * sizeof(glm::vec3), &getGlobalVertices()[0], GL_STATIC_DRAW);
+	glBindAttribLocation(program, 0, "vPosition");
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+	glEnableVertexAttribArray(0);
+	// Bind colors
+	glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
+	glBufferData(GL_ARRAY_BUFFER, getGlobalColors().size() * sizeof(glm::vec3), &getGlobalColors()[0], GL_STATIC_DRAW);
+	glBindAttribLocation(program, 1, "vertexColor");
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+	glEnableVertexAttribArray(1);
+	//Bind UV coordinates
+	glBindBuffer(GL_ARRAY_BUFFER, buffers[2]);
+	glBufferData(GL_ARRAY_BUFFER, getGlobalTextures().size() * sizeof(glm::vec2), &getGlobalTextures()[0], GL_STATIC_DRAW);
+	glBindAttribLocation(program, 2, "vtexCoord");
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
+	glEnableVertexAttribArray(2);
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0); // Note that this is allowed, the call to glVertexAttribPointer registered VBO as the currently bound vertex buffer object so afterwards we can safely unbind
+
+	glBindVertexArray(0); // Unbind VAO (it's always a good thing to unbind any buffer/array to prevent strange bugs), remember: do NOT unbind the EBO, keep it bound to this 
 }
 
 std::vector<glm::vec3>& OpenGLRenderer::getGlobalVertices()
@@ -107,47 +135,21 @@ std::vector<glm::vec2>& OpenGLRenderer::getGlobalTextures()
 	return g_textures;
 }
 
-void OpenGLRenderer::UpdateBuffers() {
-	// Generate 3 buffers and store them into an array
-	glGenBuffers(3, buffers);
-	// Generate a vertex array
-	glGenVertexArrays(1, &VAO);
 
-	// Bind the Vertex Array Object first, then bind and set vertex buff`er(s) and attribute pointer(s).
+void OpenGLRenderer::RenderVertices() {	
 	glBindVertexArray(VAO);
-
-	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	// Bind vertex positions
-	glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
-	glBufferData(GL_ARRAY_BUFFER, getGlobalVertices().size() * sizeof(glm::vec3), &getGlobalVertices()[0], GL_STATIC_DRAW);
-	glBindAttribLocation(program, 0, "vPosition");
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
-	glEnableVertexAttribArray(0);
-	// Bind colors
-	glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
-	glBufferData(GL_ARRAY_BUFFER, getGlobalColors().size() * sizeof(glm::vec3), &getGlobalColors()[0], GL_STATIC_DRAW);
-	glBindAttribLocation(program, 1, "vertexColor");
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
-	glEnableVertexAttribArray(1);
-	//Bind UV coordinates
-	glBindBuffer(GL_ARRAY_BUFFER, buffers[2]);
-	glBufferData(GL_ARRAY_BUFFER, getGlobalTextures().size() * sizeof(glm::vec2), &getGlobalTextures()[0], GL_STATIC_DRAW);
-	glBindAttribLocation(program, 2, "vtexCoord");
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
-	glEnableVertexAttribArray(2);
-
-	glDrawArrays(GL_TRIANGLES, 0, getGlobalVertices().size());
-
-	glBindBuffer(GL_ARRAY_BUFFER, 0); // Note that this is allowed, the call to glVertexAttribPointer registered VBO as the currently bound vertex buffer object so afterwards we can safely unbind
-	glBindVertexArray(0); // Unbind VAO (it's always a good thing to unbind any buffer/array to prevent strange bugs), remember: do NOT unbind the EBO, keep it bound to this VAO
-
+	glDrawArrays(GL_TRIANGLES, 0, getGlobalVertices().size());	
 }
 
-void OpenGLRenderer::RenderVertices()
-{   	
-		camera.Render();
-		UpdateBuffers();
+void OpenGLRenderer::PrepareToRender()
+{
+	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	glUseProgram(program);
+	glBindTexture(GL_TEXTURE_2D, currentTexture);
+
+	camera.Render();
 }
 
 void OpenGLRenderer::UseProgram(GLuint _program)
@@ -160,17 +162,19 @@ void OpenGLRenderer::UseProgram(GLuint _program)
 void OpenGLRenderer::Destroy()
 {
 	// Unbind buffers and arrays to clear memory
-	glBindBuffer(GL_ARRAY_BUFFER, 0); // Note that this is allowed, the call to glVertexAttribPointer registered VBO as the currently bound vertex buffer object so afterwards we can safely unbind
-	glBindVertexArray(0); // Unbind VAO (it's always a good thing to unbind any buffer/array to prevent strange bugs), remember: do NOT unbind the EBO, keep it bound to this VAO
+	//glBindBuffer(GL_ARRAY_BUFFER, 0); // Note that this is allowed, the call to glVertexAttribPointer registered VBO as the currently bound vertex buffer object so afterwards we can safely unbind
+	//glBindVertexArray(0); // Unbind VAO (it's always a good thing to unbind any buffer/array to prevent strange bugs), remember: do NOT unbind the EBO, keep it bound to this VAO
 	glDeleteBuffers(3, buffers);
 	glDisableVertexAttribArray(0);
 	glDisableVertexAttribArray(1);
 	glDisableVertexAttribArray(2);
+	glDeleteVertexArrays(3, &VAO);
+	glDeleteTextures(1, &currentTexture);
 	glDeleteProgram(program);
 
 }
 
-void OpenGLRenderer::RenderSimpleModel(std::vector<Vertex> vertices)
+void OpenGLRenderer::RenderSimpleModel()
 {
 }
 

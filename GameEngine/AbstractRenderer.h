@@ -9,5 +9,5 @@ public:
 		SQUARE
 	};
 	virtual void RenderPrimitive(PrimitiveType prim) = 0;
-	virtual void RenderSimpleModel(std::vector<Vertex> vertices) = 0;
+	virtual void RenderSimpleModel() = 0;
 };

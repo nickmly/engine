@@ -156,20 +156,19 @@ void TestApp::onEnd()
 
 void TestApp::preRender(double timeSinceLastFrame)
 {
+	renderer->PrepareToRender();
 }
 
 void TestApp::render()
 {
-	//Render square	
-	square2->RenderModel();
+	//Render squares
 	square->RenderModel();
-	
+	square2->RenderModel();	
 }
 
 void TestApp::update(double deltaTime)
 {
 	//Handle movement
-
 	square->transform = glm::translate(square->transform, glm::vec3(square->movement.x * deltaTime,
 																	square->movement.y * deltaTime,
 																	square->movement.z * deltaTime));
@@ -179,6 +178,7 @@ void TestApp::update(double deltaTime)
 
 void TestApp::postRender()
 {
+	glBindVertexArray(0); // Unbind VAO (it's always a good thing to unbind any buffer/array to prevent strange bugs), remember: do NOT unbind the EBO, keep it bound to this VAO
 }
 
 //Called from main.cpp

@@ -10,6 +10,7 @@ Camera::Camera(CameraType _type, float _width, float _height, GLuint _program)
 	type = _type;
 	width = _width;
 	height = _height;
+	program = _program;
 	modelHandle = glGetUniformLocation(_program, "model"); // Assign modelHandle to uniform value model in shader program
 	viewHandle = glGetUniformLocation(_program, "view"); 
 	projHandle = glGetUniformLocation(_program, "projection");
@@ -41,6 +42,7 @@ void Camera::Render() {
 		projection = glm::perspective(glm::radians(60.0f), 800.0f/600.0f, 0.1f, 100.0f);
 	else if (type == CameraType::ORTHO)
 		projection = glm::ortho(0.0f, width, 0.0f, height,  nearClipPlane, farClipPlane);
+
 	glUniformMatrix4fv(viewHandle, 1, GL_FALSE, &view[0][0]); // Send it to the GLSL file
 	glUniformMatrix4fv(projHandle, 1, GL_FALSE, &projection[0][0]); // Send it to the GLSL file
 }
