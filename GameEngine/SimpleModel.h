@@ -12,9 +12,9 @@ private:
 	bool colors = false;
 	bool normals = false;
 	bool textures = false;
-	OpenGLRenderer renderer;
+	OpenGLRenderer* renderer;
 public:
-	SimpleModel(vector<Vertex> _vert, OpenGLRenderer _rend);
+	SimpleModel(vector<Vertex> _vert, OpenGLRenderer &_rend);
 	SimpleModel();
 	~SimpleModel();
 	void RenderModel();
