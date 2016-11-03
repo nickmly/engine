@@ -13,7 +13,7 @@
 OpenGLRenderer* renderer;
 SimpleModel *square, *square2;
 
-GameObject player, ball;
+GameObject *player, *ball;
 using namespace std;
 
 void TestApp::onStart()
@@ -154,12 +154,12 @@ void TestApp::onStart()
 	BoundingSphere playerSphere = BoundingSphere(glm::vec3(0.0f), 1.5f);
 	BoundingSphere ballSphere = BoundingSphere(glm::vec3(0.0f), 1.5f);
 
-	player = GameObject(square, playerSphere, *renderer);
-	ball = GameObject(square2, ballSphere, *renderer);
+	player =new GameObject(square, playerSphere, *renderer);
+	ball = new GameObject(square2, ballSphere, *renderer);
 
-	ball.SetPosition(glm::vec3(-4.0f, 0.0f, 0.0f));
+	ball->SetPosition(glm::vec3(-4.0f, 0.0f, 0.0f));
 
-	ball.SetAngle(5.0f); // Rotate by 5.0 units each frame
+	ball->SetAngle(5.0f); // Rotate by 5.0 units each frame
 	renderer->EnableOpenGL();
 }
 
@@ -175,17 +175,21 @@ void TestApp::preRender(double timeSinceLastFrame)
 
 void TestApp::render()
 {
-	player.Render();
-	ball.Render();	
+	player->Render();
+	ball->Render();	
 }
 
 void TestApp::update(double deltaTime)
 {
 	//Handle movement
-	player.Update(deltaTime);
-	ball.Update(deltaTime);
+	player->Update(deltaTime);
+	ball->Update(deltaTime);
 
-	if (player.GetSphere().Intersect(ball.GetSphere())) {
+	printf(" center   %f, %f, %f \n", player->GetSphere().GetCenter().x, player->GetSphere().GetCenter().y, player->GetSphere().GetCenter().z);
+	printf(" position %f, %f, %f \n", player->GetPosition()->x, player->GetPosition()->y, player->GetPosition()->z);
+	printf(".........................\n");
+
+	if (player->GetSphere().Intersect(ball->GetSphere())) {
 		printf("Collision\n");
 	}
 }
@@ -198,52 +202,31 @@ void TestApp::postRender()
 //Called from main.cpp
 //Handles all input from a keyboard
 void TestApp::onInput(Uint32 event, SDL_Keycode key, int x, int y) {
+	float speedScale = 0.5f;
 	glm::vec3 newAcceleration;
 	switch (event) {
 	case SDL_KEYDOWN:
 		switch (key) {
 		case SDLK_a:
-			newAcceleration = player.GetAcceleration();
-			newAcceleration.x = -12.0f;
-			player.SetAcceleration(newAcceleration);
+			printf("aDown");
+			player->AddForce(glm::vec3(-1.0f, 0.0f, 0.0f));
 			break;
 		case SDLK_d:
-			newAcceleration = player.GetAcceleration();
-			newAcceleration.x = 12.0f;
-			player.SetAcceleration(newAcceleration);
+			printf("dDown");
+			player->AddForce(glm::vec3(1.0f, 0.0f, 0.0f));
 			break;
 		case SDLK_w:
-			newAcceleration = player.GetAcceleration();
-			newAcceleration.y = 12.0f;
-			player.SetAcceleration(newAcceleration);
+			player->AddForce(glm::vec3(0.0f, 1.0f, 0.0f));
 			break;
 		case SDLK_s:
-			newAcceleration = player.GetAcceleration();
-			newAcceleration.y = -12.0f;
-			player.SetAcceleration(newAcceleration);
+			player->AddForce(glm::vec3(0.0f, -1.0f, 0.0f));
 			break;
 		}
 		break;
 
-	case SDL_KEYUP:
-		switch (key) {
-		case SDLK_a:
-		case SDLK_d:
-			newAcceleration = player.GetAcceleration();
-			newAcceleration.x = 0.0f;
-			player.SetAcceleration(newAcceleration);
-			break;
-		case SDLK_w:
-		case SDLK_s:
-			newAcceleration = player.GetAcceleration();
-			newAcceleration.y = 0.0f;
-			player.SetAcceleration(newAcceleration);
-			break;
-		}
-		break;
 	}
-
 }
+
 
 //Called from main.cpp
 //Handles all input from a mouse
