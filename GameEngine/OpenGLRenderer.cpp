@@ -136,7 +136,8 @@ std::vector<glm::vec2>& OpenGLRenderer::getGlobalTextures()
 }
 
 
-void OpenGLRenderer::RenderVertices() {	
+void OpenGLRenderer::RenderVertices() 
+{	
 	glBindVertexArray(VAO);
 	glDrawArrays(GL_TRIANGLES, 0, getGlobalVertices().size());	
 }

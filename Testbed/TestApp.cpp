@@ -8,9 +8,12 @@
 #include "FileReader.h"
 #include "glm.hpp"
 #include "glut.h"
+#include "GameObject.h"
 
 OpenGLRenderer* renderer;
 SimpleModel *square, *square2;
+
+GameObject player, ball;
 using namespace std;
 
 void TestApp::onStart()
@@ -146,6 +149,15 @@ void TestApp::onStart()
 	square = new SimpleModel(verts, *renderer);
 	square2 = new SimpleModel(verts, *renderer);
 
+
+	// don't know how to update these over time?
+	BoundingSphere playerSphere = BoundingSphere(glm::vec3(0.0f), 3.0f);
+	BoundingSphere ballSphere = BoundingSphere(glm::vec3(0.0f), 3.0f);
+
+	player = GameObject(square, playerSphere);
+	ball = GameObject(square2, ballSphere);
+	ball.SetAngle(5.0f); // Rotate by 5.0 units each frame
+
 	renderer->EnableOpenGL();
 }
 
@@ -161,19 +173,15 @@ void TestApp::preRender(double timeSinceLastFrame)
 
 void TestApp::render()
 {
-	//Render squares
-	square->RenderModel();
-	square2->RenderModel();	
+	player.Render();
+	ball.Render();
 }
 
 void TestApp::update(double deltaTime)
 {
 	//Handle movement
-	square->transform = glm::translate(square->transform, glm::vec3(square->movement.x * deltaTime,
-																	square->movement.y * deltaTime,
-																	square->movement.z * deltaTime));
-	
-	square2->transform = glm::rotate(square2->transform, (float)deltaTime * 5.0f, glm::vec3(0.0f, 0.0f, 1.0f));
+	player.Update(deltaTime);
+	ball.Update(deltaTime);
 }
 
 void TestApp::postRender()
@@ -184,20 +192,29 @@ void TestApp::postRender()
 //Called from main.cpp
 //Handles all input from a keyboard
 void TestApp::onInput(Uint32 event, SDL_Keycode key, int x, int y) {
+	glm::vec3 newMovement;
 	switch (event) {
 	case SDL_KEYDOWN:
 		switch (key) {
 		case SDLK_a:
-			square->movement.x = -6.0f;
+			newMovement = player.GetMovement();
+			newMovement.x = -6.0f;
+			player.SetMovement(newMovement);
 			break;
 		case SDLK_d:
-			square->movement.x = 6.0f;
+			newMovement = player.GetMovement();
+			newMovement.x = 6.0f;
+			player.SetMovement(newMovement);
 			break;
 		case SDLK_w:
-			square->movement.y = 6.0f;
+			newMovement = player.GetMovement();
+			newMovement.y = 6.0f;
+			player.SetMovement(newMovement);
 			break;
 		case SDLK_s:
-			square->movement.y = -6.0f;
+			newMovement = player.GetMovement();
+			newMovement.y = -6.0f;
+			player.SetMovement(newMovement);
 			break;
 		}
 		break;
@@ -206,11 +223,15 @@ void TestApp::onInput(Uint32 event, SDL_Keycode key, int x, int y) {
 		switch (key) {
 		case SDLK_a:
 		case SDLK_d:
-			square->movement.x = 0.0f;
+			newMovement = player.GetMovement();
+			newMovement.x = 0.0f;
+			player.SetMovement(newMovement);
 			break;
 		case SDLK_w:
 		case SDLK_s:
-			square->movement.y = 0.0f;
+			newMovement = player.GetMovement();
+			newMovement.y = 0.0f;
+			player.SetMovement(newMovement);
 			break;
 		}
 		break;

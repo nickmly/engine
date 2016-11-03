@@ -5,7 +5,6 @@ SimpleModel::SimpleModel(vector<Vertex> _vert, OpenGLRenderer &_rend)
 	vertices = _vert;
 	renderer = &_rend;
 	renderer->AssignVertices(vertices);
-	movement = glm::vec3(0.0f, 0.0f, 0.0f); //default to 0,0,0
 }
 
 SimpleModel::SimpleModel()
@@ -41,5 +40,10 @@ void SimpleModel::AddComponent(Vertex::VertexType type)
 void SimpleModel::AddVertices(vector<Vertex> _vert)
 {
 	vertices = _vert;
+}
+
+void SimpleModel::SetTransform(glm::mat4 _transform)
+{
+	transform = _transform;
 }
 
