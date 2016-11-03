@@ -122,5 +122,8 @@
     <ClCompile Include="GLShader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="OpenGLRenderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
