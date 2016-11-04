@@ -60,25 +60,18 @@ void OpenGLRenderer::AssignVertices(std::vector<Vertex> _vertices)
 void OpenGLRenderer::EnableOpenGL() {
 
 	printf("EnableOpenGL() called\n");
-
-	GLint width, height;									  // Load image, create texture and generate mipmaps
-	GLubyte* image = SOIL_load_image("wall.bmp", &width, &height, 0, SOIL_LOAD_RGB);
-	if (image == 0) {
-		printf("Image failed to load");
-	}
+	//Load shaders
+	ShaderLoader shaderLoader = ShaderLoader();
+	shaderLoader.LoadShader(GL_VERTEX_SHADER,
+		FileReader::ReadFromFile("shader.vert"));
+	shaderLoader.LoadShader(GL_FRAGMENT_SHADER,
+		FileReader::ReadFromFile("shader.frag"));
+	UseProgram(shaderLoader.GetProgram());
+	//	
 
 	//Enable depth test to prevent some faces from being invisible
 	glEnable(GL_DEPTH_TEST);
-	// Generate a texture
-	glGenTextures(1, &currentTexture);
-	glBindTexture(GL_TEXTURE_2D, currentTexture); // All upcoming GL_TEXTURE_2D operations now have effect on this texture object
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_BGR, GL_UNSIGNED_BYTE, image);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// Set texture wrapping to GL_REPEAT (usually basic wrapping method)
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	// Set texture filtering parameters
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
+	
 	camera = Camera(Camera::PROJECTION, 800, 600, program); // Setup our camera
 	camera.fov = 120.0f;
 	camera.SetPositionVector(0.0f, -10.0f, 4.0f); // Put camera at this position
@@ -148,8 +141,6 @@ void OpenGLRenderer::PrepareToRender()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glUseProgram(program);
-	glBindTexture(GL_TEXTURE_2D, currentTexture);
-
 	camera.Render();
 }
 
@@ -170,7 +161,7 @@ void OpenGLRenderer::Destroy()
 	glDisableVertexAttribArray(1);
 	glDisableVertexAttribArray(2);
 	glDeleteVertexArrays(3, &VAO);
-	glDeleteTextures(1, &currentTexture);
+	//glDeleteTextures(1, &currentTexture);
 	glDeleteProgram(program);
 
 }

@@ -1,8 +1,7 @@
 #pragma once
 #include <iostream>
-#include "LogManager.h"
+
 using namespace std;
-LogManager* lm = LogManager::getInstance();
 class FileReader {
 public:
 	static char* ReadFromFile(char* filename) { 

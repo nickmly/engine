@@ -4,9 +4,7 @@
 #include "ResourceManager.h"
 #include "SimpleModel.h"
 #include "Vertex.h"
-#include "ShaderLoader.h"
 #include "GeometricShapes.h"
-#include "FileReader.h"
 #include "glm.hpp"
 #include "glut.h"
 #include "GameObject.h"
@@ -20,146 +18,16 @@ using namespace std;
 void TestApp::onStart()
 {
 	renderer = new OpenGLRenderer();
-	//TODO: Move this to renderer
-	//Load shaders
-	ShaderLoader shaderLoader = ShaderLoader();
-	shaderLoader.LoadShader(GL_VERTEX_SHADER,
-		FileReader::ReadFromFile("shader.vert"));
-	shaderLoader.LoadShader(GL_FRAGMENT_SHADER,
-		FileReader::ReadFromFile("shader.frag"));
-	renderer->UseProgram(shaderLoader.GetProgram());
-	//
-	
-	////Add 4 vertices to our vector
-	//vector<Vertex> verts;
 
-	////Left
-	//verts.insert(verts.end(), Vertex(-1.0f, 1.0f, 1.0f, 0.0f, Vertex::POSITION));//triangle 1
-	//verts.insert(verts.end(), Vertex(-1.0f, 1.0f, -1.0f, 0.0f, Vertex::POSITION));
-	//verts.insert(verts.end(), Vertex(-1.0f, -1.0f, -1.0f, 0.0f, Vertex::POSITION));//
-
-	//verts.insert(verts.end(), Vertex(-1.0f, 1.0f, 1.0f, 0.0f, Vertex::POSITION));//triangle 2
-	//verts.insert(verts.end(), Vertex(-1.0f, -1.0f, -1.0f, 0.0f, Vertex::POSITION));
-	//verts.insert(verts.end(), Vertex(-1.0f, -1.0f, 1.0f, 0.0f, Vertex::POSITION));//
-
-	////Right
-	//verts.insert(verts.end(), Vertex(1.0f, 1.0f, 1.0f, 0.0f, Vertex::POSITION));//triangle 1
-	//verts.insert(verts.end(), Vertex(1.0f, -1.0f, -1.0f, 0.0f, Vertex::POSITION));
-	//verts.insert(verts.end(), Vertex(1.0f, -1.0f, 1.0f, 0.0f, Vertex::POSITION));//
-
-	//verts.insert(verts.end(), Vertex(1.0f, 1.0f, 1.0f, 0.0f, Vertex::POSITION));//triangle 2
-	//verts.insert(verts.end(), Vertex(1.0f, -1.0f, -1.0f, 0.0f, Vertex::POSITION));
-	//verts.insert(verts.end(), Vertex(1.0f, 1.0f, -1.0f, 0.0f, Vertex::POSITION));//
-
-	////Back
-	//verts.insert(verts.end(), Vertex(-1.0f, 1.0f, 1.0f, 0.0f, Vertex::POSITION));//triangle 1
-	//verts.insert(verts.end(), Vertex(1.0f, 1.0f, -1.0f, 0.0f, Vertex::POSITION));
-	//verts.insert(verts.end(), Vertex(1.0f, 1.0f, 1.0f, 0.0f, Vertex::POSITION));//
-
-	//verts.insert(verts.end(), Vertex(-1.0f, 1.0f, 1.0f, 0.0f, Vertex::POSITION));//triangle 2
-	//verts.insert(verts.end(), Vertex(1.0f, 1.0f, -1.0f, 0.0f, Vertex::POSITION));
-	//verts.insert(verts.end(), Vertex(-1.0f, 1.0f, -1.0f, 0.0f, Vertex::POSITION));//
-
-	////Front
-	//verts.insert(verts.end(), Vertex(1.0f, -1.0f, 1.0f, 0.0f, Vertex::POSITION));//triangle 1
-	//verts.insert(verts.end(), Vertex(-1.0f, -1.0f, -1.0f, 0.0f, Vertex::POSITION));
-	//verts.insert(verts.end(), Vertex(-1.0f, -1.0f, 1.0f, 0.0f, Vertex::POSITION));//
-
-	//verts.insert(verts.end(), Vertex(1.0f, -1.0f, 1.0f, 0.0f, Vertex::POSITION));//triangle 2
-	//verts.insert(verts.end(), Vertex(-1.0f, -1.0f, -1.0f, 0.0f, Vertex::POSITION));
-	//verts.insert(verts.end(), Vertex(1.0f, -1.0f, -1.0f, 0.0f, Vertex::POSITION));//
-
-
-	////Bottom
-	//verts.insert(verts.end(), Vertex(1.0f, -1.0f, -1.0f, 0.0f, Vertex::POSITION));//triangle 1
-	//verts.insert(verts.end(), Vertex(-1.0f, 1.0f, -1.0f, 0.0f, Vertex::POSITION));
-	//verts.insert(verts.end(), Vertex(-1.0f, -1.0f, -1.0f, 0.0f, Vertex::POSITION));//
-
-	//verts.insert(verts.end(), Vertex(1.0f, -1.0f, -1.0f, 0.0f, Vertex::POSITION));//triangle 2
-	//verts.insert(verts.end(), Vertex(-1.0f, 1.0f, -1.0f, 0.0f, Vertex::POSITION));
-	//verts.insert(verts.end(), Vertex(1.0f, 1.0f, -1.0f, 0.0f, Vertex::POSITION));//
-
-	////Top
-	//verts.insert(verts.end(), Vertex(-1.0f, 1.0f, 1.0f, 0.0f, Vertex::POSITION));//triangle 1
-	//verts.insert(verts.end(), Vertex(1.0f, -1.0f, 1.0f, 0.0f, Vertex::POSITION));
-	//verts.insert(verts.end(), Vertex(-1.0f, -1.0f, 1.0f, 0.0f, Vertex::POSITION));//
-
-	//verts.insert(verts.end(), Vertex(-1.0f, 1.0f, 1.0f, 0.0f, Vertex::POSITION));//triangle 2
-	//verts.insert(verts.end(), Vertex(1.0f, -1.0f, 1.0f, 0.0f, Vertex::POSITION));
-	//verts.insert(verts.end(), Vertex(1.0f, 1.0f, 1.0f, 0.0f, Vertex::POSITION));//
-
-
-
-	////Add colors to our vector
-	//for (int i = 0; i < 12; i++) {
-	//	verts.insert(verts.end(), Vertex(1, 1, 1, 0, Vertex::COLOR));
-	//	verts.insert(verts.end(), Vertex(1, 1, 0, 0, Vertex::COLOR));
-	//	verts.insert(verts.end(), Vertex(1, 1, 1, 0, Vertex::COLOR));
-	//}
-	//
-	////TODO: store texture info into a simple model so renderer doesn't have to do it
-	//verts.insert(verts.end(), Vertex(0.0f, 1.0f, 0.0f, 0.0f, Vertex::TEXTURE));
-	//verts.insert(verts.end(), Vertex(0.0f, 0.66f, 0.0f, 0.0f, Vertex::TEXTURE));
-	//verts.insert(verts.end(), Vertex(0.33f, 0.66f, 0.0f, 0.0f, Vertex::TEXTURE));
-
-	//verts.insert(verts.end(), Vertex(0.33f, 0.66f, 0.0f, 0.0f, Vertex::TEXTURE));
-	//verts.insert(verts.end(), Vertex(0.33f, 1.0f, 0.0f, 0.0f, Vertex::TEXTURE));
-	//verts.insert(verts.end(), Vertex(0.0f, 1.0f, 0.0f, 0.0f, Vertex::TEXTURE));
-
-	//verts.insert(verts.end(), Vertex(0.0f, 0.66f, 0.0f, 0.0f, Vertex::TEXTURE));
-	//verts.insert(verts.end(), Vertex(0.33f, 0.66f, 0.0f, 0.0f, Vertex::TEXTURE));
-	//verts.insert(verts.end(), Vertex(0.0f, 0.33f, 0.0f, 0.0f, Vertex::TEXTURE));
-
-	//verts.insert(verts.end(), Vertex(0.0f, 0.33f, 0.0f, 0.0f, Vertex::TEXTURE));
-	//verts.insert(verts.end(), Vertex(0.33f, 0.33f, 0.0f, 0.0f, Vertex::TEXTURE));
-	//verts.insert(verts.end(), Vertex(0.33f, 0.66f, 0.0f, 0.0f, Vertex::TEXTURE));
-
-	//verts.insert(verts.end(), Vertex(0.0f, 0.33f, 0.0f, 0.0f, Vertex::TEXTURE));
-	//verts.insert(verts.end(), Vertex(0.0f, 0.0f, 0.0f, 0.0f, Vertex::TEXTURE));
-	//verts.insert(verts.end(), Vertex(0.33f, 0.33f, 0.0f, 0.0f, Vertex::TEXTURE));
-
-	//verts.insert(verts.end(), Vertex(0.33f, 0.33f, 0.0f, 0.0f, Vertex::TEXTURE));
-	//verts.insert(verts.end(), Vertex(0.0f, 0.0f, 0.0f, 0.0f, Vertex::TEXTURE));
-	//verts.insert(verts.end(), Vertex(0.33f, 0.0f, 0.0f, 0.0f, Vertex::TEXTURE));
-
-	//verts.insert(verts.end(), Vertex(0.33f, 0.0f, 0.0f, 0.0f, Vertex::TEXTURE));
-	//verts.insert(verts.end(), Vertex(0.33f, 0.33f, 0.0f, 0.0f, Vertex::TEXTURE));
-	//verts.insert(verts.end(), Vertex(0.66f, 0.0f, 0.0f, 0.0f, Vertex::TEXTURE));
-
-	//verts.insert(verts.end(), Vertex(0.66f, 0.0f, 0.0f, 0.0f, Vertex::TEXTURE));
-	//verts.insert(verts.end(), Vertex(0.33f, 0.33f, 0.0f, 0.0f, Vertex::TEXTURE));
-	//verts.insert(verts.end(), Vertex(0.66f, 0.33f, 0.0f, 0.0f, Vertex::TEXTURE));
-
-	//verts.insert(verts.end(), Vertex(0.66f, 0.33f, 0.0f, 0.0f, Vertex::TEXTURE));
-	//verts.insert(verts.end(), Vertex(0.33f, 0.33f, 0.0f, 0.0f, Vertex::TEXTURE));
-	//verts.insert(verts.end(), Vertex(0.33f, 0.66f, 0.0f, 0.0f, Vertex::TEXTURE));
-
-	//verts.insert(verts.end(), Vertex(0.33f, 0.66f, 0.0f, 0.0f, Vertex::TEXTURE));
-	//verts.insert(verts.end(), Vertex(0.66f, 0.66f, 0.0f, 0.0f, Vertex::TEXTURE));
-	//verts.insert(verts.end(), Vertex(0.66f, 0.33f, 0.0f, 0.0f, Vertex::TEXTURE)); 
-
-	//verts.insert(verts.end(), Vertex(0.66f, 0.33f, 0.0f, 0.0f, Vertex::TEXTURE));
-	//verts.insert(verts.end(), Vertex(0.66f, 0.0f, 0.0f, 0.0f, Vertex::TEXTURE));
-	//verts.insert(verts.end(), Vertex(1.0f, 0.33f, 0.0f, 0.0f, Vertex::TEXTURE));
-
-	//verts.insert(verts.end(), Vertex(1.0f, 0.33f, 0.0f, 0.0f, Vertex::TEXTURE));
-	//verts.insert(verts.end(), Vertex(1.0f, 0.0f, 0.0f, 0.0f, Vertex::TEXTURE));
-	//verts.insert(verts.end(), Vertex(0.66f, 0.0f, 0.0f, 0.0f, Vertex::TEXTURE));
-	
-	
 	//Create a model with these vertices and assign it to a renderer
-	square = new SimpleModel(GeometricShapes::GetShape(GeometricShapes::cube), *renderer);
-	square2 = new SimpleModel(GeometricShapes::GetShape(GeometricShapes::cube), *renderer);
+	square = new SimpleModel(GeometricShapes::GetShape(GeometricShapes::cube), *renderer, "bluewall.jpg");
+	square2 = new SimpleModel(GeometricShapes::GetShape(GeometricShapes::cube), *renderer, "container.jpg");
 
-	//BoundingSphere playerSphere = BoundingSphere(glm::vec3(0.0f), 1.5f);
-	//BoundingSphere ballSphere = BoundingSphere(glm::vec3(0.0f), 1.5f);
-	//player =new GameObject(square, playerSphere, *renderer);
-	//ball = new GameObject(square2, ballSphere, *renderer);
-
-	BoundingBox playerBox = BoundingBox(glm::vec3(0.0f, 0.0f,0.0f), glm::vec3(2.0f, 2.0f, 2.0f));
+	square2->SetScale(glm::vec3(1.0f));
+	BoundingBox playerBox = BoundingBox(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(2.0f, 2.0f, 2.0f));
 	BoundingBox ballBox = BoundingBox(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(2.0f, 2.0f, 2.0f));
 
-	player =new GameObject(square, playerBox, *renderer);
+	player = new GameObject(square, playerBox, *renderer);
 	ball = new GameObject(square2, ballBox, *renderer);
 	ball->SetPosition(glm::vec3(-6.0f, 0.0f, 0.0f));
 	ball->SetAngle(5.0f); // Rotate by 5.0 units each frame
@@ -180,7 +48,7 @@ void TestApp::preRender(double timeSinceLastFrame)
 void TestApp::render()
 {
 	player->Render();
-	ball->Render();	
+	ball->Render();
 }
 
 void TestApp::update(double deltaTime)
@@ -188,17 +56,9 @@ void TestApp::update(double deltaTime)
 	//Handle movement
 	player->Update(deltaTime);
 	ball->Update(deltaTime);
-
-	printf(" center   %f, %f, %f \n", player->GetSphere().GetCenter()->x, player->GetSphere().GetCenter()->y, player->GetSphere().GetCenter()->z);
-	printf(" position %f, %f, %f \n", player->GetPosition()->x, player->GetPosition()->y, player->GetPosition()->z);
-	printf(".........................\n");
-
 	bool intersecting = player->GetBoundingBox().BoxIntersects(ball->GetBoundingBox());
 	if (intersecting) {
-		printf("intersecting\n");
-	}
-	else {
-		printf("not intersecting\n");
+		player->SetInitialVelocity(-player->GetInitialVelocity());
 	}
 }
 
@@ -215,11 +75,9 @@ void TestApp::onInput(Uint32 event, SDL_Keycode key, int x, int y) {
 	case SDL_KEYDOWN:
 		switch (key) {
 		case SDLK_a:
-			printf("aDown");
 			player->AddForce(glm::vec3(-15.0f, 0.0f, 0.0f));
 			break;
 		case SDLK_d:
-			printf("dDown");
 			player->AddForce(glm::vec3(15.0f, 0.0f, 0.0f));
 			break;
 		case SDLK_w:

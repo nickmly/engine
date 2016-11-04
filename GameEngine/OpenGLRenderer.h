@@ -1,12 +1,13 @@
 #pragma once
+
 #include "AbstractRenderer.h"
 #include <GL\glew.h>
 #include "glm.hpp"
 #include "gtc\matrix_transform.hpp"
 #include "Camera.h"
 #include "SOIL.h"
-#include "GLShader.h"
-
+#include "FileReader.h"
+#include "ShaderLoader.h"
 #include <iostream>
 
 class OpenGLRenderer : public AbstractRenderer
@@ -16,11 +17,8 @@ private:
 	GLuint program;
 	Camera camera;
 	GLuint VAO;
-	//GLuint VBO, VAO, EBO, COLOR, TEXTURE;
-	GLuint currentTexture;
 	std::vector<glm::vec3> vertices, colors;
 	std::vector<glm::vec2> textures;
-
 	
 public:
 	virtual void RenderPrimitive(PrimitiveType prim);

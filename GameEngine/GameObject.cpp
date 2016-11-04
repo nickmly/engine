@@ -57,13 +57,14 @@ void GameObject::OnInput(Uint32 event, SDL_Keycode key)
 void GameObject::Update(double deltaTime)
 {
 	//sets up 
-	accel = mass*force;
+	accel = force/mass;
 	velocity = initialVelocity + accel*(float)deltaTime;
 	newPos = velocity*(float)deltaTime + (0.5f*accel)*(float)(deltaTime*deltaTime);
 	initialVelocity = velocity;
 	//dampen acceleration 
 	initialVelocity *= 0.9992f;
-	
+
+	transform = glm::scale(transform, model->GetScale());
 	UpdatePosition();
 	transform = glm::rotate(transform, (float)deltaTime * angle, rotation);
 }
@@ -110,15 +111,15 @@ glm::mat4 GameObject::GetTransform()
 	return transform;
 }
 
-glm::vec3 GameObject::GetVelocity()
+glm::vec3 GameObject::GetInitialVelocity()
 {
-	return velocity;
-	
+	return initialVelocity;
+
 }
 
-void GameObject::SetVelocity(glm::vec3 _velocity)
+void GameObject::SetInitialVelocity(glm::vec3 _velocity)
 {
-	velocity = _velocity;
+	initialVelocity = _velocity;
 }
 glm::vec3 GameObject::GetAcceleration()
 {
@@ -168,3 +169,7 @@ void GameObject::SetAngle(float _angle)
 	transform = glm::rotate(transform,angle, rotation);
 }
 
+SimpleModel GameObject::GetModel()
+{
+	return *model;
+}

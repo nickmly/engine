@@ -1,4 +1,6 @@
 #pragma once
+#ifndef LOGMANAGER_H
+#define LOGMANAGER_H
 #include <iostream>
 #include <memory>
 using namespace std;
@@ -20,3 +22,4 @@ public:
 	void Info(string& msg, const string& filename, const int line);
 };
 
+#endif

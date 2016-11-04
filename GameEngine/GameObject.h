@@ -28,8 +28,9 @@ public:
 	void Update(double deltaTime);
 	void Render();
 	glm::mat4 GetTransform();
-	glm::vec3 GetVelocity();
-	void SetVelocity(glm::vec3 _velocity);
+	glm::vec3 GetInitialVelocity();
+
+	void SetInitialVelocity(glm::vec3 _velocity);
 	glm::vec3 GetAcceleration();
 	void SetAcceleration(glm::vec3 _accel);
 	glm::vec3 GetRotation();
@@ -45,10 +46,14 @@ public:
 	void updateWorldPosition();
 	float GetAngle();
 
+	SimpleModel GetModel();
+
 	void AddForce(glm::vec3 _forceVec);
 	void SetAngle(float _angle);
+
 	BoundingSphere GetSphere();
 	BoundingBox GetBoundingBox();
+
 	GameObject(SimpleModel *_model, BoundingSphere _sphere, OpenGLRenderer &_rend);
 	GameObject(SimpleModel *_model, BoundingBox _box, OpenGLRenderer &_rend);
 	~GameObject();
