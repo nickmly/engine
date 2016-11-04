@@ -14,7 +14,8 @@ GameObject::GameObject(SimpleModel *_model, BoundingSphere _sphere, OpenGLRender
 	angle = 0.0f;
 	newPos = glm::vec3(0.0f, 0.0f, 0.0f);
 	force = glm::vec3(0.0f, 0.0f, 0.0f);
-	mass = 0.005f;
+	mass = 0.002f;
+	//position = &newPos;
 	
 }
 
@@ -38,23 +39,33 @@ void GameObject::OnInput(Uint32 event, SDL_Keycode key)
 
 void GameObject::Update(double deltaTime)
 {
+	//accel = (velocity - initialVelocity) / (float)deltaTime + mass*force;
+	accel = mass*force;
+	velocity = initialVelocity + accel*(float)deltaTime;
 	initialVelocity = velocity;
-	newPos = initialVelocity + ((0.5f * accel) * ((float)(deltaTime*deltaTime)));
-	velocity = initialVelocity + accel * (float)deltaTime;
-	position = &newPos;
+	newPos = velocity;
+
 	UpdatePosition();
 	transform = glm::rotate(transform, (float)deltaTime * angle, rotation);
-	
 }
 
 void GameObject::UpdatePosition() 
 {
-	transform = glm::translate(transform, glm::vec3(*position));
+	transform = glm::translate(transform, glm::vec3(newPos));
 	sphere.SetCenter(*position);
 
 	
 }
-
+void GameObject::clearForces() {
+	force = glm::vec3(0.0f, 0.0f, 0.0f);
+}
+void GameObject::clearForces_X() {
+	force *= glm::vec3(0.0f, 1.0f, 1.0f);
+}void GameObject::clearForces_Y() {
+	force *= glm::vec3(1.0f, 0.0f, 1.0f);
+}void GameObject::clearForces_Z() {
+	force *= glm::vec3(1.0f, 1.0f, 0.0f);
+}
 void GameObject::UpdateRotation() {
 
 }
@@ -88,8 +99,7 @@ glm::vec3 GameObject::GetAcceleration()
 }
 void GameObject::AddForce(glm::vec3 _forceVec) {
 	force = _forceVec;
-	accel = mass*force;
-	
+	accel += force;
 }
 
 void GameObject::SetAcceleration(glm::vec3 _accel)

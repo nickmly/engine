@@ -202,8 +202,7 @@ void TestApp::postRender()
 //Called from main.cpp
 //Handles all input from a keyboard
 void TestApp::onInput(Uint32 event, SDL_Keycode key, int x, int y) {
-	float speedScale = 0.5f;
-	glm::vec3 newAcceleration;
+
 	switch (event) {
 	case SDL_KEYDOWN:
 		switch (key) {
@@ -224,8 +223,21 @@ void TestApp::onInput(Uint32 event, SDL_Keycode key, int x, int y) {
 		}
 		break;
 
+	case SDL_KEYUP:
+		switch (key) {
+		case SDLK_a:
+		case SDLK_d:
+			player->clearForces_X();
+			break;
+		case SDLK_w:
+		case SDLK_s:
+			player->clearForces_Y();
+			break;
+		}
+		break;
 	}
 }
+
 
 
 //Called from main.cpp

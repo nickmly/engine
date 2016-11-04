@@ -36,6 +36,10 @@ public:
 	void SetPosition(glm::vec3 &_position);
 	void UpdatePosition();
 	void UpdateRotation();
+	void clearForces();
+	void clearForces_X();
+	void clearForces_Y();
+	void clearForces_Z();
 	float GetAngle();
 
 	void AddForce(glm::vec3 _forceVec);
