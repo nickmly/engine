@@ -1,6 +1,7 @@
 #pragma once
 #include "SDL.h"
 #include "BoundingSphere.h"
+#include "BoundingBox.h"
 #include "SimpleModel.h"
 
 class GameObject
@@ -8,6 +9,7 @@ class GameObject
 private:
 	SimpleModel *model;
 	BoundingSphere sphere;	
+	BoundingBox box;
 	glm::mat4 transform;
 	glm::vec3 velocity;
 	glm::vec3 rotation;
@@ -46,7 +48,9 @@ public:
 	void AddForce(glm::vec3 _forceVec);
 	void SetAngle(float _angle);
 	BoundingSphere GetSphere();
+	BoundingBox GetBoundingBox();
 	GameObject(SimpleModel *_model, BoundingSphere _sphere, OpenGLRenderer &_rend);
+	GameObject(SimpleModel *_model, BoundingBox _box, OpenGLRenderer &_rend);
 	~GameObject();
 };
 

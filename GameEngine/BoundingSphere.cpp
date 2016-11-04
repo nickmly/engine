@@ -9,6 +9,7 @@ BoundingSphere::BoundingSphere(glm::vec3 &_center, float _radius)
 {
 	center = &_center;
 	radius = _radius;
+
 }
 
 glm::vec3* BoundingSphere::GetCenter()

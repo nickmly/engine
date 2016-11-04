@@ -1,6 +1,5 @@
 #include "GameObject.h"
 
-
 GameObject::GameObject(SimpleModel *_model, BoundingSphere _sphere, OpenGLRenderer &_rend)
 {
 	renderer = &_rend;
@@ -18,7 +17,22 @@ GameObject::GameObject(SimpleModel *_model, BoundingSphere _sphere, OpenGLRender
 	
 
 }
+GameObject::GameObject(SimpleModel *_model, BoundingBox _box, OpenGLRenderer &_rend)
+{
+	renderer = &_rend;
+	model = _model;
+	box = _box;
+	position = new glm::vec3(0.0f, 0.0f, 0.0f);
+	velocity = glm::vec3(0.0f, 0.0f, 0.0f); //default to 0,0,0
+	rotation = glm::vec3(0.0f, 0.0f, 1.0f);
+	initialVelocity = glm::vec3(0.0f, 0.0f, 0.0f);
+	accel = glm::vec3(0.0f, 0.0f, 0.0f);
+	newPos = glm::vec3(0.0f, 0.0f, 0.0f);
+	force = glm::vec3(0.0f, 0.0f, 0.0f);
+	angle = 0.0f;
+	mass = 1.0f;
 
+}
 GameObject::~GameObject()
 {
 }
@@ -31,7 +45,10 @@ BoundingSphere GameObject::GetSphere()
 {
 	return sphere;
 }
-
+BoundingBox GameObject::GetBoundingBox()
+{
+	return box;
+}
 void GameObject::OnInput(Uint32 event, SDL_Keycode key)
 {	
 	
@@ -55,9 +72,11 @@ void GameObject::UpdatePosition()
 {
 	//translate object to newPos
 	transform = glm::translate(transform, glm::vec3(newPos));
+
 	//add previous position to change in position for current positionl
 	position = new glm::vec3(newPos + *position);
 	sphere.SetCenter(position);
+	box.SetCenter(position);
 }
 
 void GameObject::UpdateRotation() {
@@ -146,5 +165,6 @@ float GameObject::GetAngle()
 void GameObject::SetAngle(float _angle)
 {
 	angle = _angle;
+	transform = glm::rotate(transform,angle, rotation);
 }
 
