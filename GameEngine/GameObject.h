@@ -40,6 +40,7 @@ public:
 	void clearForces_X();
 	void clearForces_Y();
 	void clearForces_Z();
+	void updateWorldPosition();
 	float GetAngle();
 
 	void AddForce(glm::vec3 _forceVec);

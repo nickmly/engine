@@ -144,22 +144,21 @@ void TestApp::onStart()
 	verts.insert(verts.end(), Vertex(1.0f, 0.33f, 0.0f, 0.0f, Vertex::TEXTURE));
 	verts.insert(verts.end(), Vertex(1.0f, 0.0f, 0.0f, 0.0f, Vertex::TEXTURE));
 	verts.insert(verts.end(), Vertex(0.66f, 0.0f, 0.0f, 0.0f, Vertex::TEXTURE));
-
+	
+	
 	//Create a model with these vertices and assign it to a renderer
 	square = new SimpleModel(verts, *renderer);
 	square2 = new SimpleModel(verts, *renderer);
-
-
 	// don't know how to update these over time?
-	BoundingSphere playerSphere = BoundingSphere(glm::vec3(0.0f), 1.5f);
-	BoundingSphere ballSphere = BoundingSphere(glm::vec3(0.0f), 1.5f);
+	BoundingSphere playerSphere = BoundingSphere(glm::vec3(0.0f), 1.0f);
+	BoundingSphere ballSphere = BoundingSphere(glm::vec3(0.0f), 1.0f);
 
 	player =new GameObject(square, playerSphere, *renderer);
 	ball = new GameObject(square2, ballSphere, *renderer);
 
-	ball->SetPosition(glm::vec3(-4.0f, 0.0f, 0.0f));
-
+	ball->SetPosition(glm::vec3(-6.0f, 0.0f, 0.0f));
 	ball->SetAngle(5.0f); // Rotate by 5.0 units each frame
+	
 	renderer->EnableOpenGL();
 }
 
@@ -185,12 +184,16 @@ void TestApp::update(double deltaTime)
 	player->Update(deltaTime);
 	ball->Update(deltaTime);
 
-	printf(" center   %f, %f, %f \n", player->GetSphere().GetCenter().x, player->GetSphere().GetCenter().y, player->GetSphere().GetCenter().z);
+	printf(" center   %f, %f, %f \n", player->GetSphere().GetCenter()->x, player->GetSphere().GetCenter()->y, player->GetSphere().GetCenter()->z);
 	printf(" position %f, %f, %f \n", player->GetPosition()->x, player->GetPosition()->y, player->GetPosition()->z);
 	printf(".........................\n");
 
-	if (player->GetSphere().Intersect(ball->GetSphere())) {
-		printf("Collision\n");
+	bool intersecting = player->GetSphere().Intersect(ball->GetSphere());
+	if (intersecting) {
+		printf("intersecting\n");
+	}
+	else {
+		printf("not intersecting\n");
 	}
 }
 
@@ -208,17 +211,17 @@ void TestApp::onInput(Uint32 event, SDL_Keycode key, int x, int y) {
 		switch (key) {
 		case SDLK_a:
 			printf("aDown");
-			player->AddForce(glm::vec3(-1.0f, 0.0f, 0.0f));
+			player->AddForce(glm::vec3(-15.0f, 0.0f, 0.0f));
 			break;
 		case SDLK_d:
 			printf("dDown");
-			player->AddForce(glm::vec3(1.0f, 0.0f, 0.0f));
+			player->AddForce(glm::vec3(15.0f, 0.0f, 0.0f));
 			break;
 		case SDLK_w:
-			player->AddForce(glm::vec3(0.0f, 1.0f, 0.0f));
+			player->AddForce(glm::vec3(0.0f, 15.0f, 0.0f));
 			break;
 		case SDLK_s:
-			player->AddForce(glm::vec3(0.0f, -1.0f, 0.0f));
+			player->AddForce(glm::vec3(0.0f, -15.0f, 0.0f));
 			break;
 		}
 		break;

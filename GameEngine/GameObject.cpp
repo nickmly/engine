@@ -11,12 +11,12 @@ GameObject::GameObject(SimpleModel *_model, BoundingSphere _sphere, OpenGLRender
 	rotation = glm::vec3(0.0f, 0.0f, 1.0f);
 	initialVelocity =  glm::vec3(0.0f, 0.0f, 0.0f);
 	accel = glm::vec3(0.0f,0.0f,0.0f);
-	angle = 0.0f;
 	newPos = glm::vec3(0.0f, 0.0f, 0.0f);
 	force = glm::vec3(0.0f, 0.0f, 0.0f);
-	mass = 0.002f;
-	//position = &newPos;
+	angle = 0.0f;
+	mass = 1.0f;
 	
+
 }
 
 GameObject::~GameObject()
@@ -39,36 +39,45 @@ void GameObject::OnInput(Uint32 event, SDL_Keycode key)
 
 void GameObject::Update(double deltaTime)
 {
-	//accel = (velocity - initialVelocity) / (float)deltaTime + mass*force;
+	//sets up 
 	accel = mass*force;
 	velocity = initialVelocity + accel*(float)deltaTime;
+	newPos = velocity*(float)deltaTime + (0.5f*accel)*(float)(deltaTime*deltaTime);
 	initialVelocity = velocity;
-	newPos = velocity;
-
+	//dampen acceleration 
+	initialVelocity *= 0.9992f;
+	
 	UpdatePosition();
 	transform = glm::rotate(transform, (float)deltaTime * angle, rotation);
 }
 
-void GameObject::UpdatePosition() 
+void GameObject::UpdatePosition()
 {
+	//translate object to newPos
 	transform = glm::translate(transform, glm::vec3(newPos));
-	sphere.SetCenter(*position);
+	//add previous position to change in position for current positionl
+	position = new glm::vec3(newPos + *position);
+	sphere.SetCenter(position);
+}
 
-	
-}
-void GameObject::clearForces() {
-	force = glm::vec3(0.0f, 0.0f, 0.0f);
-}
-void GameObject::clearForces_X() {
-	force *= glm::vec3(0.0f, 1.0f, 1.0f);
-}void GameObject::clearForces_Y() {
-	force *= glm::vec3(1.0f, 0.0f, 1.0f);
-}void GameObject::clearForces_Z() {
-	force *= glm::vec3(1.0f, 1.0f, 0.0f);
-}
 void GameObject::UpdateRotation() {
 
 }
+
+void GameObject::clearForces() {
+	force = glm::vec3(0.0f, 0.0f, 0.0f); 
+}
+
+void GameObject::clearForces_X(){
+	force *= glm::vec3(0.0f, 1.0f, 1.0f);
+}
+void GameObject::clearForces_Y() {
+	force *= glm::vec3(1.0f, 0.0f, 1.0f);
+}
+void GameObject::clearForces_Z() {
+	force *= glm::vec3(1.0f, 1.0f, 0.0f);
+}
+
 
 void GameObject::Render()
 {
@@ -125,8 +134,8 @@ glm::vec3* GameObject::GetPosition()
 
 void GameObject::SetPosition(glm::vec3 &_position)
 {
-	position = &_position;
-	//UpdatePosition();
+	newPos = _position;
+	UpdatePosition();
 }
 
 float GameObject::GetAngle()
