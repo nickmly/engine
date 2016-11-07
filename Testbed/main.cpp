@@ -1,5 +1,4 @@
 #include <SDL.h>
-#include <SDL_ttf.h>
 #include "GL\glew.h"
 #include <stdio.h>
 #include <Windows.h>
@@ -26,7 +25,6 @@ int main(int argc, char** argv) {
 	logManager->threshold = LOG_THRESHOLD; // Apply the threshold for the logManager (remove this line for no threshold)
 
 	SDL_Init(SDL_INIT_EVERYTHING);
-	TTF_Init();
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
@@ -77,7 +75,6 @@ int main(int argc, char** argv) {
 
 	app.onEnd();
 	SDL_GL_DeleteContext(context);
-	TTF_Quit();
 	SDL_Quit();
 	return 0;
 }

@@ -6,7 +6,6 @@
 #include "gtc\matrix_transform.hpp"
 #include "Camera.h"
 #include "SOIL.h"
-#include "SDL_ttf.h"
 #include "FileReader.h"
 #include "ShaderLoader.h"
 #include <iostream>
