@@ -6,15 +6,19 @@
 #include "gtc\matrix_transform.hpp"
 #include "Camera.h"
 #include "SOIL.h"
+#include "SDL_ttf.h"
 #include "FileReader.h"
 #include "ShaderLoader.h"
 #include <iostream>
+#include <map>
+#include "ft2build.h"
+#include FT_FREETYPE_H
 
 class OpenGLRenderer : public AbstractRenderer
 {
 private:
-	GLuint buffers[3];
-	GLuint program;
+	GLuint buffers[4];
+	GLuint program, textProgram;
 	Camera camera;
 	GLuint VAO;
 	std::vector<glm::vec3> vertices, colors;
@@ -48,5 +52,10 @@ public:
 
 	//Render a model using its transform matrix
 	void RenderTransform(glm::mat4 transform);
+
+	void ShowText(char *text, float x, float y);
+	void RenderText(std::string text, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 color);
+
+		
 
 };

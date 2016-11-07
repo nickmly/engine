@@ -1,4 +1,5 @@
 #include <SDL.h>
+#include <SDL_ttf.h>
 #include "GL\glew.h"
 #include <stdio.h>
 #include <Windows.h>
@@ -8,7 +9,6 @@
 //#include <Material.h>
 #include <sstream>
 #include "TestApp.h"
-
 
 using namespace std;
 const string LOG_THRESHOLD = "NONE"; // Set a threshold for the log file
@@ -26,7 +26,7 @@ int main(int argc, char** argv) {
 	logManager->threshold = LOG_THRESHOLD; // Apply the threshold for the logManager (remove this line for no threshold)
 
 	SDL_Init(SDL_INIT_EVERYTHING);
-
+	TTF_Init();
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
@@ -34,11 +34,13 @@ int main(int argc, char** argv) {
 
 
 	SDL_Window* window = SDL_CreateWindow(TITLE, 100, 100, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_OPENGL);
-
 	SDL_GLContext context = SDL_GL_CreateContext(window);
 
 	glewExperimental = true;
 	glewInit();
+
+	// Define the viewport dimensions
+	glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	Clock clock;
 	//ResourceManager<Material> manager;
@@ -72,9 +74,10 @@ int main(int argc, char** argv) {
 		SDL_GL_SwapWindow(window);
 		app.postRender();
 	}
-	
+
 	app.onEnd();
 	SDL_GL_DeleteContext(context);
+	TTF_Quit();
 	SDL_Quit();
 	return 0;
 }

@@ -7,6 +7,7 @@
 #include "GeometricShapes.h"
 #include "glm.hpp"
 #include "glut.h"
+#include "SDL.h"
 #include "GameObject.h"
 
 OpenGLRenderer* renderer;
@@ -49,6 +50,9 @@ void TestApp::render()
 {
 	player->Render();
 	ball->Render();
+
+	renderer->RenderText("This is sample text", 25.0f, 25.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
+	
 }
 
 void TestApp::update(double deltaTime)

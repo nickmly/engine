@@ -62,7 +62,7 @@ void GameObject::Update(double deltaTime)
 	newPos = velocity*(float)deltaTime + (0.5f*accel)*(float)(deltaTime*deltaTime);
 	initialVelocity = velocity;
 	//dampen acceleration 
-	initialVelocity *= 0.9992f;
+	//initialVelocity *= 0.9992f;
 
 	transform = glm::scale(transform, model->GetScale());
 	UpdatePosition();
