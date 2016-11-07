@@ -165,6 +165,7 @@
     <ClInclude Include="LogManager.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="OpenGLRenderer.h" />
+    <ClInclude Include="Random.h" />
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="ShaderLoader.h" />
     <ClInclude Include="SimpleModel.h" />
@@ -188,6 +189,7 @@
     <ClCompile Include="LogManager.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="OpenGLRenderer.cpp" />
+    <ClCompile Include="Random.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="ShaderLoader.cpp" />
     <ClCompile Include="SimpleModel.cpp" />
