@@ -3,7 +3,7 @@
 class BoundingBox
 {
 public:
-	BoundingBox(glm::vec3 &_center, glm::vec3 &_scale);
+	BoundingBox(glm::vec3 &_center);
 	BoundingBox();
 	~BoundingBox();
 public:

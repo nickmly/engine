@@ -31,7 +31,8 @@ GameObject::GameObject(SimpleModel *_model, BoundingBox _box, OpenGLRenderer &_r
 	force = glm::vec3(0.0f, 0.0f, 0.0f);
 	angle = 0.0f;
 	mass = 1.0f;
-
+	transform = glm::scale(transform, model->GetScale());
+	box.SetScale(model->GetScale());
 }
 GameObject::~GameObject()
 {
@@ -62,9 +63,9 @@ void GameObject::Update(double deltaTime)
 	newPos = velocity*(float)deltaTime + (0.5f*accel)*(float)(deltaTime*deltaTime);
 	initialVelocity = velocity;
 	//dampen acceleration 
-	//initialVelocity *= 0.9992f;
+	initialVelocity *= 0.9992f;
 
-	transform = glm::scale(transform, model->GetScale());
+	
 	UpdatePosition();
 	transform = glm::rotate(transform, (float)deltaTime * angle, rotation);
 }

@@ -9,9 +9,8 @@ BoundingBox::~BoundingBox()
 {
 }
 
-BoundingBox::BoundingBox(glm::vec3 &_center,glm::vec3 &_scale) { 
+BoundingBox::BoundingBox(glm::vec3 &_center) { 
 	center = &_center;
-	scale = _scale;
 }
 
 bool BoundingBox::BoxIntersects(const BoundingBox & otherBox) {
@@ -30,13 +29,13 @@ bool BoundingBox::BoxIntersects(const BoundingBox & otherBox) {
 
 void BoundingBox::SetCenter(glm::vec3 *_center) {
 	center = _center;
-	Xmin = center->x - (scale.x*0.5f);
-	Xmax = center->x + (scale.x*0.5f);
-	Ymin = center->y - (scale.y*0.5f);
-	Ymax = center->y + (scale.y*0.5f);
-	Zmin = center->z - (scale.z*0.5f);
-	Zmax = center->z + (scale.z*0.5f);
-}
+	Xmin = center->x - (scale.x);
+	Xmax = center->x + (scale.x);
+	Ymin = center->y - (scale.y);
+	Ymax = center->y + (scale.y);
+	Zmin = center->z - (scale.z);
+	Zmax = center->z + (scale.z);
+}							    
 void BoundingBox::SetScale(glm::vec3 &_scale) {
 	scale = _scale;
 }

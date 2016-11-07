@@ -24,12 +24,16 @@ void TestApp::onStart()
 	square = new SimpleModel(GeometricShapes::GetShape(GeometricShapes::cube), *renderer, "bluewall.jpg");
 	square2 = new SimpleModel(GeometricShapes::GetShape(GeometricShapes::cube), *renderer, "container.jpg");
 
+	square->SetScale(glm::vec3(0.5f, 0.5f, 2.0f));
 	square2->SetScale(glm::vec3(1.0f));
-	BoundingBox playerBox = BoundingBox(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(2.0f, 2.0f, 2.0f));
-	BoundingBox ballBox = BoundingBox(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(2.0f, 2.0f, 2.0f));
+	BoundingBox playerBox = BoundingBox(glm::vec3(0.0f, 0.0f, 0.0f));
+	BoundingBox ballBox = BoundingBox(glm::vec3(0.0f, 0.0f, 0.0f));
+
 
 	player = new GameObject(square, playerBox, *renderer);
 	ball = new GameObject(square2, ballBox, *renderer);
+
+
 	ball->SetPosition(glm::vec3(-6.0f, 0.0f, 0.0f));
 	ball->SetAngle(5.0f); // Rotate by 5.0 units each frame
 	
