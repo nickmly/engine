@@ -77,6 +77,7 @@ void OpenGLRenderer::EnableOpenGL() {
 		FileReader::ReadFromFile("shader.frag"));
 	UseProgram(shaderLoader.GetProgram());
 	//	
+	//Load text shader
 	ShaderLoader textShaderLoader = ShaderLoader();
 	textShaderLoader.LoadShader(GL_VERTEX_SHADER,
 		FileReader::ReadFromFile("textShader.vert"));
@@ -84,7 +85,7 @@ void OpenGLRenderer::EnableOpenGL() {
 		FileReader::ReadFromFile("textShader.frag"));
 	textProgram = textShaderLoader.GetProgram();
 	glLinkProgram(textProgram);
-
+	//
 
 	FT_Library ft;
 	if (FT_Init_FreeType(&ft))
@@ -97,7 +98,7 @@ void OpenGLRenderer::EnableOpenGL() {
 	FT_Set_Pixel_Sizes(face, 0, 48);
 
 	if (FT_Load_Char(face, 'X', FT_LOAD_RENDER))
-		std::cout << "ERROR::FREETYTPE: Failed to load Glyph" << std::endl;
+		std::cout << "ERROR::FREETYPE: Failed to load Glyph" << std::endl;
 
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1); // Disable byte-alignment restriction
 
@@ -106,7 +107,7 @@ void OpenGLRenderer::EnableOpenGL() {
 		// Load character glyph 
 		if (FT_Load_Char(face, c, FT_LOAD_RENDER))
 		{
-			std::cout << "ERROR::FREETYTPE: Failed to load Glyph" << std::endl;
+			std::cout << "ERROR::FREETYPE: Failed to load Glyph" << std::endl;
 			continue;
 		}
 		// Generate texture
@@ -195,20 +196,20 @@ void OpenGLRenderer::EnableOpenGL() {
 
 std::vector<glm::vec3>& OpenGLRenderer::getGlobalVertices()
 {
-	static std::vector<glm::vec3> g_vertices;
-	return g_vertices;
+	//static std::vector<glm::vec3> g_vertices;
+	return vertices;
 }
 
 std::vector<glm::vec3>& OpenGLRenderer::getGlobalColors()
 {
-	static std::vector<glm::vec3> g_colors;
-	return g_colors;
+	//static std::vector<glm::vec3> g_colors;
+	return colors;
 }
 
 std::vector<glm::vec2>& OpenGLRenderer::getGlobalTextures()
 {
-	static std::vector<glm::vec2> g_textures;
-	return g_textures;
+	//static std::vector<glm::vec2> g_textures;
+	return textures;
 }
 
 
@@ -305,45 +306,6 @@ void OpenGLRenderer::RenderText(std::string text, GLfloat x, GLfloat y, GLfloat 
 	}
 	glBindVertexArray(0);
 	glBindTexture(GL_TEXTURE_2D, 0);
-}
-
-void OpenGLRenderer::ShowText(char * text, float x, float y)
-{
-	//TTF_Font *font = TTF_OpenFont("micross.ttf", 24);
-	//SDL_Color white = { 255,255,255 };
-	//SDL_Surface* surf = TTF_RenderText_Solid(font, text, white);
-
-	//Uint8 colors = surf->format->BytesPerPixel;
-	//GLenum textureFormat;
-	//if (colors == 4) {   // alpha
-	//	if (surf->format->Rmask == 0x000000ff)
-	//		textureFormat = GL_RGBA;
-	//	else
-	//		textureFormat = GL_BGRA;
-	//}
-	//else {             // no alpha
-	//	if (surf->format->Rmask == 0x000000ff)
-	//		textureFormat = GL_RGB;
-	//	else
-	//		textureFormat = GL_BGR;
-	//}
-	//
-	//GLuint texture;
-	//glGenTextures(1, &texture);
-	//glBindTexture(GL_TEXTURE_2D, texture);
-	//glTexImage2D(GL_TEXTURE_2D, 0, colors, surf->w, surf->h, 0,
-	//	textureFormat, GL_UNSIGNED_BYTE, surf->pixels);
-
-	//const GLfloat quadVertices[] = { -1.0f, 1.0f, 0.0f,
-	//	1.0f, 1.0f, 0.0f,
-	//	1.0f,-1.0f, 0.0f,
-	//	-1.0f,-1.0f, 0.0f
-	//};
-
-	//glVertexPointer(3, GL_FLOAT, 0, quadVertices);
-	//glDrawArrays(GL_QUADS, 0, 4);
-
-
 }
 
 

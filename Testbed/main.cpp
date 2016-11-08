@@ -41,11 +41,15 @@ int main(int argc, char** argv) {
 	glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	Clock clock;
+	
+	// Put material into ResourceManager
 	//ResourceManager<Material> manager;
 	//Material mat = Material();
 	//manager.Put(string("MAT_01"), &mat);
 	//
 	//Material* getMat = manager.Get(string("MAT_01"));
+	////////////////////////////////////
+	
 	
 	app.onStart();	
 

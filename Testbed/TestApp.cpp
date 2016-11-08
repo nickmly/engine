@@ -21,19 +21,17 @@ void TestApp::onStart()
 	renderer = new OpenGLRenderer();
 
 	//Create a model with these vertices and assign it to a renderer
-	square = new SimpleModel(GeometricShapes::GetShape(GeometricShapes::cube), *renderer, "bluewall.jpg");
-	square2 = new SimpleModel(GeometricShapes::GetShape(GeometricShapes::cube), *renderer, "container.jpg");
+	square = new SimpleModel(GeometricShapes::GetShape(GeometricShapes::sphere), *renderer, "bluewall.jpg");
+	square2 = new SimpleModel(GeometricShapes::GetShape(GeometricShapes::sphere), *renderer, "container.jpg");
 
-	square->SetScale(glm::vec3(0.5f, 0.5f, 2.0f));
+	square->SetScale(glm::vec3(1.0f, 1.0f, 1.0f));
 	square2->SetScale(glm::vec3(1.0f));
 	BoundingBox playerBox = BoundingBox(glm::vec3(0.0f, 0.0f, 0.0f));
 	BoundingBox ballBox = BoundingBox(glm::vec3(0.0f, 0.0f, 0.0f));
 
-
 	player = new GameObject(square, playerBox, *renderer);
 	ball = new GameObject(square2, ballBox, *renderer);
-
-
+	
 	ball->SetPosition(glm::vec3(-6.0f, 0.0f, 0.0f));
 	ball->SetAngle(5.0f); // Rotate by 5.0 units each frame
 	
@@ -47,7 +45,7 @@ void TestApp::onEnd()
 
 void TestApp::preRender(double timeSinceLastFrame)
 {
-	renderer->PrepareToRender();
+	 renderer->PrepareToRender();
 }
 
 void TestApp::render()
@@ -55,7 +53,7 @@ void TestApp::render()
 	player->Render();
 	ball->Render();
 
-	renderer->RenderText("This is sample text", 25.0f, 25.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
+	renderer->RenderText("This is sample text", 25.0f, 25.0f, 1.0f, glm::vec3(0.5f, 0.8f, 0.2f));
 	
 }
 
@@ -93,6 +91,12 @@ void TestApp::onInput(Uint32 event, SDL_Keycode key, int x, int y) {
 			break;
 		case SDLK_s:
 			player->AddForce(glm::vec3(0.0f, -15.0f, 0.0f));
+			break;
+		case SDLK_z:
+			glDisable(GL_DEPTH_TEST);
+			break;
+		case SDLK_x:
+			glEnable(GL_DEPTH_TEST);
 			break;
 		}
 		break;

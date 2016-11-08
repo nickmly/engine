@@ -31,9 +31,9 @@ public:
 	void AssignVertices(std::vector<Vertex> _vertices);
 	void EnableOpenGL();
 	
-	static std::vector<glm::vec3> &getGlobalVertices();
-	static std::vector<glm::vec3> &getGlobalColors();
-	static std::vector<glm::vec2> &getGlobalTextures();
+	std::vector<glm::vec3> &getGlobalVertices();
+	std::vector<glm::vec3> &getGlobalColors();
+	std::vector<glm::vec2> &getGlobalTextures();
 
 	// Render all vertices
 	void RenderVertices();
@@ -52,9 +52,6 @@ public:
 	//Render a model using its transform matrix
 	void RenderTransform(glm::mat4 transform);
 
-	void ShowText(char *text, float x, float y);
-	void RenderText(std::string text, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 color);
-
-		
+	void RenderText(std::string text, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 color);		
 
 };

@@ -118,5 +118,17 @@ std::vector<Vertex> GeometricShapes::GetShape(SHAPES _shapeType) {
 		verts.insert(verts.end(), Vertex(0.66f, 0.0f, 0.0f, 0.0f, Vertex::TEXTURE));
 		return verts;
 	}
+	if (_shapeType == SHAPES::sphere) {
+		std::vector<Vertex> verts;
+		bool res = FileReader::LoadOBJ("sphere.obj",verts);
+		if (res)
+			printf("File loaded properly\n");
+		//Add colors to our vector
+		for (int i = 0; i < 482; i++) {
+			verts.push_back(Vertex(1, 1, 1, 0, Vertex::COLOR));
+		}
+
+		return verts;
+	}
 	return verts;
 }

@@ -1,5 +1,5 @@
 #include "ShaderLoader.h"
-
+#include <iostream>
 void ShaderLoader::LoadShader(GLenum shaderType, GLchar* src)
 {
 	if(program == 0)
@@ -15,7 +15,7 @@ void ShaderLoader::LoadShader(GLenum shaderType, GLchar* src)
 		glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &length);
 		GLchar * msg = new GLchar[length];
 		glGetShaderInfoLog(shader, length, &length, msg);
-
+		std::cout << "Shader compilation failed" << std::endl;
 		//lm->Error(std::string("Shader Compilation Failed: ") + std::string(msg), __FILE__, __LINE__);
 	}
 	glAttachShader(program, shader);

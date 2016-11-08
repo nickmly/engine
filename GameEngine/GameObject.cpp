@@ -64,7 +64,6 @@ void GameObject::Update(double deltaTime)
 	initialVelocity = velocity;
 	//dampen acceleration 
 	initialVelocity *= 0.9992f;
-
 	
 	UpdatePosition();
 	transform = glm::rotate(transform, (float)deltaTime * angle, rotation);
