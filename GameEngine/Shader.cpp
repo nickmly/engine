@@ -72,4 +72,6 @@ GLuint Shader::GetProgram()
 
 Shader::~Shader()
 {
+	//this doesn't work here, move it to another place
+	//glDeleteProgram(program);
 }

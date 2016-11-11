@@ -7,6 +7,7 @@
 #include "Camera.h"
 #include "SOIL.h"
 #include "FileReader.h"
+#include "Shader.h"
 #include <iostream>
 #include <map>
 #include "ft2build.h"
@@ -15,15 +16,12 @@
 class OpenGLRenderer : public AbstractRenderer
 {
 private:
-	GLuint buffers[4];
-	GLuint program, textProgram;
+	GLuint program;
 	Camera camera;
-	GLuint VAO;
-	
+	GLuint VAO, VBO;
+	Shader textShader;
 public:
 	virtual void RenderPrimitive(PrimitiveType prim);
-	//Draw a triangle to the screen
-	void RenderTriangle();
 	void EnableOpenGL();
 
 	//Prepare to render each model

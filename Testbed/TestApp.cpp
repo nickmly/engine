@@ -34,6 +34,7 @@ void TestApp::onStart()
 
 	square->SetScale(glm::vec3(1.0f, 1.0f, 1.0f));
 	square2->SetScale(glm::vec3(1.0f));
+	//TODO: move bounding box to gameobject class
 	BoundingBox playerBox = BoundingBox(glm::vec3(0.0f, 0.0f, 0.0f));
 	BoundingBox ballBox = BoundingBox(glm::vec3(0.0f, 0.0f, 0.0f));
 
@@ -61,7 +62,8 @@ void TestApp::render()
 	player->Render();
 	ball->Render();
 
-	renderer->RenderText("This is sample text", 25.0f, 25.0f, 1.0f, glm::vec3(0.5f, 0.8f, 0.2f));
+	renderer->RenderText("Sample text", 25.0f, 25.0f, 1.0f, glm::vec3(0.5f, 0.8f, 0.2f));
+	renderer->RenderText("Testing", 0.0f, 0.0f, 1.0f, glm::vec3(1.0f, 1.0f, 1.0f));
 }
 
 void TestApp::update(double deltaTime)

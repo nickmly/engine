@@ -13,7 +13,7 @@ void OpenGLRenderer::RenderPrimitive(PrimitiveType prim)
 {
 	switch (prim) {
 	case PrimitiveType::TRIANGLE:
-		RenderTriangle();
+		// add code here
 		break;
 	case PrimitiveType::SQUARE:
 		// add code here
@@ -21,37 +21,12 @@ void OpenGLRenderer::RenderPrimitive(PrimitiveType prim)
 	}
 }
 
-void OpenGLRenderer::RenderTriangle()
-{
-	GLfloat vertices[] = {
-		-0.5f, -0.5f, 0.0f,
-		0.5f, -0.5f, 0.0f,
-		0.0f,  0.5f, 0.0f,
-	};
-
-	glGenBuffers(1, buffers);
-	glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-	glEnableVertexAttribArray(0);
-	glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
-
-	glDrawArrays(GL_TRIANGLES, 0, 3);
-	glDisableVertexAttribArray(0);
-}
-
 void OpenGLRenderer::EnableOpenGL() {
 
 	printf("EnableOpenGL() called\n");
 	//Load text shader
-	/*ShaderLoader textShaderLoader = ShaderLoader();
-	textShaderLoader.LoadShader(GL_VERTEX_SHADER,
-		FileReader::ReadFromFile("textShader.vert"));
-	textShaderLoader.LoadShader(GL_FRAGMENT_SHADER,
+	textShader = Shader(FileReader::ReadFromFile("textShader.vert"),
 		FileReader::ReadFromFile("textShader.frag"));
-	textProgram = textShaderLoader.GetProgram();
-	glLinkProgram(textProgram);*/
 	//
 
 	FT_Library ft;
@@ -110,6 +85,17 @@ void OpenGLRenderer::EnableOpenGL() {
 	FT_Done_Face(face);
 	FT_Done_FreeType(ft);
 
+	// Configure VAO/VBO for texture quads
+	glGenVertexArrays(1, &VAO);
+	glGenBuffers(1, &VBO);
+	glBindVertexArray(VAO);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 6 * 4, NULL, GL_DYNAMIC_DRAW);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), 0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
+
 
 	//Enable depth test to prevent some faces from being invisible
 	glEnable(GL_DEPTH_TEST);
@@ -122,7 +108,6 @@ void OpenGLRenderer::EnableOpenGL() {
 	camera.SetPositionVector(0.0f, -10.0f, 4.0f); // Put camera at this position
 	camera.SetTargetVector(0.0f, 0.0f, 0.0f); // Look at this position
 	camera.SetUpVector(0.0f, 1.0f, 0.0f); // Camera is pointing up (0,-1,0) for down
-
 }
 
 void OpenGLRenderer::PrepareToRender()
@@ -142,18 +127,9 @@ void OpenGLRenderer::SetProgram(GLuint _program)
 void OpenGLRenderer::Destroy()
 {
 	// Unbind buffers and arrays to clear memory
-	//glBindBuffer(GL_ARRAY_BUFFER, 0); // Note that this is allowed, the call to glVertexAttribPointer registered VBO as the currently bound vertex buffer object so afterwards we can safely unbind
-	//glBindVertexArray(0); // Unbind VAO (it's always a good thing to unbind any buffer/array to prevent strange bugs), remember: do NOT unbind the EBO, keep it bound to this VAO
-	glDeleteBuffers(4, buffers);
+	glDeleteBuffers(1, &VBO);
 	glDisableVertexAttribArray(0);
-	glDisableVertexAttribArray(1);
-	glDisableVertexAttribArray(2);
-	glDisableVertexAttribArray(3);
-	glDeleteVertexArrays(4, &VAO);
-
-	glDeleteProgram(program);
-	glDeleteProgram(textProgram);
-
+	glDeleteVertexArrays(1, &VAO);
 }
 
 void OpenGLRenderer::RenderSimpleModel()
@@ -167,11 +143,11 @@ void OpenGLRenderer::RenderTransform(glm::mat4 transform)
 
 void OpenGLRenderer::RenderText(std::string text, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 color)
 {
-	glm::mat4 projection = glm::ortho(0.0f, static_cast<GLfloat>(800.0f), 0.0f, static_cast<GLfloat>(600.0f));
+	glm::mat4 projection = glm::ortho(0.0f, 800.0f, 0.0f, 600.0f);
+	glUniformMatrix4fv(glGetUniformLocation(textShader.GetProgram(), "projection"), 1, GL_FALSE, &projection[0][0]);
 	// Activate corresponding render state		
-	glUseProgram(textProgram);
-	glUniformMatrix4fv(glGetUniformLocation(textProgram, "projection"), 1, GL_FALSE, &projection[0][0]);
-	glUniform3f(glGetUniformLocation(textProgram, "textColor"), color.x, color.y, color.z);
+	textShader.Use();
+	glUniform3f(glGetUniformLocation(textShader.GetProgram(), "textColor"), color.x, color.y, color.z);
 	glActiveTexture(GL_TEXTURE0);
 	glBindVertexArray(VAO);
 
@@ -199,7 +175,7 @@ void OpenGLRenderer::RenderText(std::string text, GLfloat x, GLfloat y, GLfloat 
 		// Render glyph texture over quad
 		glBindTexture(GL_TEXTURE_2D, ch.TextureID);
 		// Update content of VBO memory
-		glBindBuffer(GL_ARRAY_BUFFER, buffers[3]);
+		glBindBuffer(GL_ARRAY_BUFFER, VBO);
 		glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(verts), verts);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		// Render quad
