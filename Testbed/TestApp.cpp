@@ -8,11 +8,11 @@
 #include "glm.hpp"
 #include "glut.h"
 #include "SDL.h"
+#include "FileReader.h"
 #include "GameObject.h"
 
 OpenGLRenderer* renderer;
 SimpleModel *square, *square2;
-
 GameObject *player, *ball;
 using namespace std;
 
@@ -21,8 +21,16 @@ void TestApp::onStart()
 	renderer = new OpenGLRenderer();
 
 	//Create a model with these vertices and assign it to a renderer
-	square = new SimpleModel(GeometricShapes::GetShape(GeometricShapes::sphere), *renderer, "bluewall.jpg");
-	square2 = new SimpleModel(GeometricShapes::GetShape(GeometricShapes::sphere), *renderer, "container.jpg");
+	square = new SimpleModel(GeometricShapes::GetShape(GeometricShapes::cube),
+		*renderer,
+		"bluewall.jpg",
+		"shader.vert",
+		"shader.frag");
+	square2 = new SimpleModel(GeometricShapes::GetShape(GeometricShapes::cube),
+		*renderer,
+		"container.jpg",
+		"shader2.vert",
+		"shader.frag");
 
 	square->SetScale(glm::vec3(1.0f, 1.0f, 1.0f));
 	square2->SetScale(glm::vec3(1.0f));
@@ -45,7 +53,7 @@ void TestApp::onEnd()
 
 void TestApp::preRender(double timeSinceLastFrame)
 {
-	 renderer->PrepareToRender();
+	renderer->PrepareToRender();
 }
 
 void TestApp::render()
@@ -54,7 +62,6 @@ void TestApp::render()
 	ball->Render();
 
 	renderer->RenderText("This is sample text", 25.0f, 25.0f, 1.0f, glm::vec3(0.5f, 0.8f, 0.2f));
-	
 }
 
 void TestApp::update(double deltaTime)
@@ -70,7 +77,7 @@ void TestApp::update(double deltaTime)
 
 void TestApp::postRender()
 {
-	glBindVertexArray(0); // Unbind VAO (it's always a good thing to unbind any buffer/array to prevent strange bugs), remember: do NOT unbind the EBO, keep it bound to this VAO
+
 }
 
 //Called from main.cpp

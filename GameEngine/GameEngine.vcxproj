@@ -159,7 +159,6 @@
     <ClInclude Include="FileReader.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GeometricShapes.h" />
-    <ClInclude Include="GLShader.h" />
     <ClInclude Include="Image.h" />
     <ClInclude Include="IOException.h" />
     <ClInclude Include="LogManager.h" />
@@ -167,7 +166,7 @@
     <ClInclude Include="OpenGLRenderer.h" />
     <ClInclude Include="Random.h" />
     <ClInclude Include="ResourceManager.h" />
-    <ClInclude Include="ShaderLoader.h" />
+    <ClInclude Include="Shader.h" />
     <ClInclude Include="SimpleModel.h" />
     <ClInclude Include="SOILImage.h" />
     <ClInclude Include="StlOptions.h" />
@@ -185,13 +184,12 @@
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GeometricShapes.cpp" />
-    <ClCompile Include="GLShader.cpp" />
     <ClCompile Include="LogManager.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="OpenGLRenderer.cpp" />
     <ClCompile Include="Random.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
-    <ClCompile Include="ShaderLoader.cpp" />
+    <ClCompile Include="Shader.cpp" />
     <ClCompile Include="SimpleModel.cpp" />
     <ClCompile Include="SOILImage.cpp" />
     <ClCompile Include="Util.cpp" />
