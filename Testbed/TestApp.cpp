@@ -62,8 +62,9 @@ void TestApp::render()
 	player->Render();
 	ball->Render();
 
-	renderer->RenderText("Sample text", 25.0f, 25.0f, 1.0f, glm::vec3(0.5f, 0.8f, 0.2f));
-	renderer->RenderText("Testing", 0.0f, 0.0f, 1.0f, glm::vec3(1.0f, 1.0f, 1.0f));
+	//For some reason this won't work unless there is two rendertext calls?
+	renderer->RenderText("fillertext", 800.0f, 600.0f, 1.0f, glm::vec3(0.5f, 0.8f, 0.2f));
+	renderer->RenderText("Testing", 0.0f, 16.0f, 1.0f, glm::vec3(1.0f, 1.0f, 1.0f));
 }
 
 void TestApp::update(double deltaTime)

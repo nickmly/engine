@@ -21,7 +21,7 @@ Shader::Shader(const char* _vertexFile, const char* _fragFile)
 		glGetShaderiv(vertShader, GL_INFO_LOG_LENGTH, &length);
 		GLchar * msg = new GLchar[length];
 		glGetShaderInfoLog(vertShader, length, &length, msg);
-		std::cout << "Shader compilation failed: " << msg << std::endl;
+		std::cout << "Vertex Shader compilation failed: " << msg << std::endl;
 	}
 	//
 
@@ -36,7 +36,7 @@ Shader::Shader(const char* _vertexFile, const char* _fragFile)
 		glGetShaderiv(fragShader, GL_INFO_LOG_LENGTH, &length);
 		GLchar * msg = new GLchar[length];
 		glGetShaderInfoLog(fragShader, length, &length, msg);
-		std::cout << "Shader compilation failed: " << msg << std::endl;
+		std::cout << "Fragment Shader compilation failed: " << msg << std::endl;
 	}
 	//
 

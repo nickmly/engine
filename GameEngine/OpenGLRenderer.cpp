@@ -24,6 +24,12 @@ void OpenGLRenderer::RenderPrimitive(PrimitiveType prim)
 void OpenGLRenderer::EnableOpenGL() {
 
 	printf("EnableOpenGL() called\n");
+
+	//Enable depth test to prevent some faces from being invisible
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	
 	//Load text shader
 	textShader = Shader(FileReader::ReadFromFile("textShader.vert"),
 		FileReader::ReadFromFile("textShader.frag"));
@@ -95,13 +101,6 @@ void OpenGLRenderer::EnableOpenGL() {
 	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), 0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
-
-
-	//Enable depth test to prevent some faces from being invisible
-	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
 
 	camera = Camera(Camera::PROJECTION, 800, 600, program); // Setup our camera
 	camera.fov = 120.0f;
