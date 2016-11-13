@@ -7,7 +7,7 @@ SimpleModel::SimpleModel(vector<Vertex> _vert, OpenGLRenderer &_rend, const char
 	AssignVertices(_vert);
 
 	//Load shaders
-	shader = Shader(FileReader::ReadFromFile(_vertShader), FileReader::ReadFromFile(_fragShader));
+	shader = Shader(FileReader::ReadFromFile(_vertShader).c_str(), FileReader::ReadFromFile(_fragShader).c_str());
 
 	// Generate 3 buffers and store them into an array
 	glGenBuffers(3, buffers);

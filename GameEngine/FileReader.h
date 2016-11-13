@@ -1,4 +1,7 @@
 #pragma once
+#include <string>
+#include <fstream>
+#include <sstream>
 #include <iostream>
 #include <vector>
 #include "glm.hpp"
@@ -7,16 +10,23 @@
 using namespace std;
 class FileReader {
 public:
-	static char* ReadFromFile(char* filename) {
-		FILE* file;
-		fopen_s(&file, filename, "rb");
-		fseek(file, 0, SEEK_END);
-		int length = ftell(file);
-		fseek(file, 0, SEEK_SET);
-		char* src = new char[length + 1];
-		fread(src, 1, length, file);
-		fclose(file);
-		return src;
+	static std::string ReadFromFile(char* filename) {
+		std::string code;
+		std::ifstream file;
+		file.exceptions(std::ifstream::badbit); // enable exceptions on this file
+		try 
+		{
+			file.open(filename);
+			std::stringstream fileStream;
+			fileStream << file.rdbuf();
+			file.close();
+			code = fileStream.str();
+		}
+		catch (std::ifstream::failure e) {
+			std::cout << "Failed to load file!" << std::endl;
+			return nullptr;
+		}
+		return code;
 	}
 	static bool LoadOBJ(const char* fname, std::vector<Vertex> &vertices) {
 		std::vector<unsigned int> vertexIndices, uvIndices, normalIndices;

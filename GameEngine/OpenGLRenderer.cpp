@@ -31,8 +31,8 @@ void OpenGLRenderer::EnableOpenGL() {
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	
 	//Load text shader
-	textShader = Shader(FileReader::ReadFromFile("textShader.vert"),
-		FileReader::ReadFromFile("textShader.frag"));
+	textShader = Shader(FileReader::ReadFromFile("textShader.vert").c_str(),
+		FileReader::ReadFromFile("textShader.frag").c_str());
 	//
 
 	FT_Library ft;
