@@ -12,7 +12,7 @@
 #include "GameObject.h"
 
 OpenGLRenderer* renderer;
-SimpleModel *square, *square2;
+SimpleModel *square, *square2, *light;
 GameObject *player, *ball;
 using namespace std;
 
@@ -31,6 +31,7 @@ void TestApp::onStart()
 		"container.jpg",
 		"shader2.vert",
 		"shader.frag");
+	light = new SimpleModel(GeometricShapes::GetShape(GeometricShapes::cube), *renderer, "wall.jpg", "lightShader.vert", "lightShader.frag");
 
 	square->SetScale(glm::vec3(1.0f, 1.0f, 1.0f));
 	square2->SetScale(glm::vec3(1.0f));
@@ -61,7 +62,7 @@ void TestApp::render()
 {
 	player->Render();
 	ball->Render();
-
+	light->RenderModel();
 	//For some reason this won't work unless there is two rendertext calls?
 	renderer->RenderText("fillertext", 800.0f, 600.0f, 1.0f, glm::vec3(0.5f, 0.8f, 0.2f));
 	renderer->RenderText("Testing", 0.0f, 16.0f, 1.0f, glm::vec3(1.0f, 1.0f, 1.0f));

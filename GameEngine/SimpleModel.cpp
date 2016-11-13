@@ -103,6 +103,11 @@ void SimpleModel::RenderModel()
 	if (currentTexture)
 		glBindTexture(GL_TEXTURE_2D, currentTexture);
 	renderer->RenderTransform(transform);
+
+	//TODO: move this to another class
+	GLint lightColorLoc = glGetUniformLocation(shader.GetProgram(), "lightColor");
+	glUniform3f(lightColorLoc, 1.0f, 0.8f, 0.5f); // Also set light's color (white)
+
 	glBindVertexArray(VAO);
 	glDrawArrays(GL_TRIANGLES, 0, vertPos.size());
 	glBindVertexArray(0);

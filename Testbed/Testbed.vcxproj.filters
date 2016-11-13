@@ -40,6 +40,15 @@
     <None Include="textShader.vert">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="shader2.vert">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="lightShader.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="lightShader.vert">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="container.jpg">
