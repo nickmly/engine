@@ -12,8 +12,9 @@ private:
 	std::vector<glm::vec3> vertPos;
 	std::vector<glm::vec3> vertColor;
 	std::vector<glm::vec2> vertUV;
+	std::vector<glm::vec3> vertNormal;
 
-	GLuint buffers[3];
+	GLuint buffers[4];
 	GLuint VAO;
 
 	bool colors = false;
