@@ -27,8 +27,8 @@ bool BoundingBox::BoxIntersects(const BoundingBox & otherBox) {
 	}
 }
 
-void BoundingBox::SetCenter(glm::vec3 *_center) {
-	center = _center;
+void BoundingBox::SetCenter(glm::vec3 &_center) {
+	center = &_center;
 	Xmin = center->x - (scale.x);
 	Xmax = center->x + (scale.x);
 	Ymin = center->y - (scale.y);

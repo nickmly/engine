@@ -1,27 +1,27 @@
 #include "GameObject.h"
 
-GameObject::GameObject(SimpleModel *_model, BoundingSphere _sphere, OpenGLRenderer &_rend)
+//GameObject::GameObject(SimpleModel _model, BoundingSphere _sphere, OpenGLRenderer _rend)
+//{
+//
+//		renderer = &_rend;
+//		model = &_model;
+//		sphere = &_sphere;
+//		position = new glm::vec3(0.0f, 0.0f, 0.0f);
+//		velocity = glm::vec3(0.0f, 0.0f, 0.0f); //default to 0,0,0
+//		rotation = glm::vec3(0.0f, 0.0f, 1.0f);
+//		initialVelocity = glm::vec3(0.0f, 0.0f, 0.0f);
+//		accel = glm::vec3(0.0f, 0.0f, 0.0f);
+//		newPos = glm::vec3(0.0f, 0.0f, 0.0f);
+//		force = glm::vec3(0.0f, 0.0f, 0.0f);
+//		angle = 0.0f;
+//		mass = 1.0f;
+//
+//}
+GameObject::GameObject(SimpleModel &_model, BoundingBox &_box, OpenGLRenderer &_rend)
 {
 	renderer = &_rend;
-	model = _model;
-	sphere = _sphere;
-	position = new glm::vec3(0.0f, 0.0f, 0.0f);
-	velocity = glm::vec3(0.0f, 0.0f, 0.0f); //default to 0,0,0
-	rotation = glm::vec3(0.0f, 0.0f, 1.0f);
-	initialVelocity =  glm::vec3(0.0f, 0.0f, 0.0f);
-	accel = glm::vec3(0.0f,0.0f,0.0f);
-	newPos = glm::vec3(0.0f, 0.0f, 0.0f);
-	force = glm::vec3(0.0f, 0.0f, 0.0f);
-	angle = 0.0f;
-	mass = 1.0f;
-	
-
-}
-GameObject::GameObject(SimpleModel *_model, BoundingBox _box, OpenGLRenderer &_rend)
-{
-	renderer = &_rend;
-	model = _model;
-	box = _box;
+	model = &_model;
+	box = &_box;
 	position = new glm::vec3(0.0f, 0.0f, 0.0f);
 	velocity = glm::vec3(0.0f, 0.0f, 0.0f); //default to 0,0,0
 	rotation = glm::vec3(0.0f, 0.0f, 1.0f);
@@ -32,21 +32,25 @@ GameObject::GameObject(SimpleModel *_model, BoundingBox _box, OpenGLRenderer &_r
 	angle = 0.0f;
 	mass = 1.0f;
 	transform = glm::scale(transform, model->GetScale());
-	box.SetScale(model->GetScale());
+	box->SetScale(model->GetScale());
 }
 GameObject::~GameObject()
 {
+	position = nullptr;
+	delete(position);
+	box->~BoundingBox();
+	model->~SimpleModel();
 }
 
 GameObject::GameObject()
 {
 }
-
-BoundingSphere GameObject::GetSphere()
-{
-	return sphere;
-}
-BoundingBox GameObject::GetBoundingBox()
+//
+//BoundingSphere* GameObject::GetSphere()
+//{
+//	return sphere;
+//}
+BoundingBox* GameObject::GetBoundingBox()
 {
 	return box;
 }
@@ -55,7 +59,7 @@ void GameObject::OnInput(Uint32 event, SDL_Keycode key)
 	
 }
 
-void GameObject::Update(double deltaTime)
+void GameObject::Update(float deltaTime)
 {
 	//sets up 
 	accel = force/mass;
@@ -76,8 +80,9 @@ void GameObject::UpdatePosition()
 
 	//add previous position to change in position for current positionl
 	position = new glm::vec3(newPos + *position);
-	sphere.SetCenter(position);
-	box.SetCenter(position);
+
+	//sphere->SetCenter(position);
+	box->SetCenter(*position);
 }
 
 void GameObject::UpdateRotation() {
@@ -101,8 +106,8 @@ void GameObject::clearForces_Z() {
 
 void GameObject::Render()
 {
-	model->RenderModel();
-	model->SetTransform(transform);
+		model->RenderModel();
+		model->SetTransform(transform);
 }
 
 
@@ -155,7 +160,7 @@ glm::vec3* GameObject::GetPosition()
 void GameObject::SetPosition(glm::vec3 &_position)
 {
 	newPos = _position;
-	UpdatePosition();
+	//UpdatePosition();
 }
 
 float GameObject::GetAngle()

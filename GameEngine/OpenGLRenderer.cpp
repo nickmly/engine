@@ -23,8 +23,7 @@ void OpenGLRenderer::RenderPrimitive(PrimitiveType prim)
 
 void OpenGLRenderer::EnableOpenGL() {
 
-	printf("EnableOpenGL() called\n");
-
+	
 	//Enable depth test to prevent some faces from being invisible
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
@@ -102,25 +101,27 @@ void OpenGLRenderer::EnableOpenGL() {
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 
-	camera = Camera(Camera::PROJECTION, 800, 600, program); // Setup our camera
+	camera = Camera(Camera::PROJECTION, 800, 600); // Setup our camera
 	camera.fov = 120.0f;
 	camera.SetPositionVector(0.0f, -10.0f, 4.0f); // Put camera at this position
 	camera.SetTargetVector(0.0f, 0.0f, 0.0f); // Look at this position
 	camera.SetUpVector(0.0f, 1.0f, 0.0f); // Camera is pointing up (0,-1,0) for down
+
+	printf("EnableOpenGL() called\n");
+
 }
 
 void OpenGLRenderer::PrepareToRender()
 {
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 	camera.Render();
 }
 
 void OpenGLRenderer::SetProgram(GLuint _program)
 {
-	program = _program;
-	camera.SetProgram(program);
+	//program = _program;
+	camera.SetProgram(_program);
 }
 
 void OpenGLRenderer::Destroy()

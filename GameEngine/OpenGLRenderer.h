@@ -16,7 +16,8 @@
 class OpenGLRenderer : public AbstractRenderer
 {
 private:
-	GLuint program;
+	//GLuint program;
+	//TODO:: camera should be created in scene for multiple camera options... maybe
 	Camera camera;
 	GLuint VAO, VBO;
 	Shader textShader;
@@ -24,7 +25,7 @@ public:
 	virtual void RenderPrimitive(PrimitiveType prim);
 	void EnableOpenGL();
 
-	//Prepare to render each model
+	//Prepare to render eachmodel 
 	void PrepareToRender(); 
 
 	//Set shader program

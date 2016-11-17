@@ -4,10 +4,13 @@
 #include <Windows.h>
 #include <Clock.h>
 #include <LogManager.h>
+#include "MainMenu.h"
+#include "Scene1.h"
 //#include <ResourceManager.h>
 //#include <Material.h>
 #include <sstream>
-#include "TestApp.h"
+//#include "TestApp.h"
+#include "SceneManager.h"
 
 using namespace std;
 const string LOG_THRESHOLD = "NONE"; // Set a threshold for the log file
@@ -16,11 +19,12 @@ const char* TITLE = "Window Title";
 const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 600;
 
-TestApp app;
+//TestApp app;
+SceneManager *GSM = SceneManager::getInstance();
 LogManager *logManager = LogManager::getInstance();
 
 int main(int argc, char** argv) {
-
+	
 	logManager->Init(); // Initialize log manager to create a new log file
 	logManager->threshold = LOG_THRESHOLD; // Apply the threshold for the logManager (remove this line for no threshold)
 
@@ -29,7 +33,6 @@ int main(int argc, char** argv) {
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
 	SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
-
 
 	SDL_Window* window = SDL_CreateWindow(TITLE, 100, 100, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_OPENGL);
 	SDL_GLContext context = SDL_GL_CreateContext(window);
@@ -40,44 +43,75 @@ int main(int argc, char** argv) {
 	// Define the viewport dimensions
 	glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
-	Clock clock;
-	
-	// Put material into ResourceManager
-	//ResourceManager<Material> manager;
-	//Material mat = Material();
-	//manager.Put(string("MAT_01"), &mat);
-	//
-	//Material* getMat = manager.Get(string("MAT_01"));
-	////////////////////////////////////
-	
-	
-	app.onStart();	
-
+	// main loop variables that will exist throught the game loop
+	Clock clock = Clock();
 	SDL_Event windowEvent;
+	
+	//TODO:: next comment, maybe at least to learn what is most efficient by testing
+	//renderer created on the heap, it may be more efficient to keep this on the stack if it exists throught the entire program... no clue if im right we should test this out
+	OpenGLRenderer *renderer = new OpenGLRenderer();
+
+	//Scene object pointers created in the project testbed all new scenes will inherit from Scene
+	//polymorphically assign the created sceen to basetype Scene
+	Scene *mainMenu = new MainMenu(renderer);
+	Scene *scene1 = new Scene1(renderer);
+
+	/************NOTE********************* 
+	GSM is a SceneManager  is a singleton using unique_ptr
+	only one object can reference it at a time, in this case main.cpp
+	if multiple objects need to share the reference use shared_ptr instead
+	**/
+	//Add scenes to the SceneManager 
+	GSM->AddScene(mainMenu);
+	GSM->AddScene(scene1);
+	//Apply game loop variables to GSM
+	GSM->Initialize(&windowEvent, renderer, &clock);
+	//Start first scene
+	GSM->Run();
+	//app.onStart();	
+
+	renderer->EnableOpenGL();
 	while (true) {
 		clock.Tick();
-		
 		if (SDL_PollEvent(&windowEvent))
 		{
 			if (windowEvent.type == SDL_QUIT)
 				break;
 			if (windowEvent.type == SDL_KEYDOWN) {
-				app.onInput(windowEvent.type, windowEvent.key.keysym.sym, 0, 0);
+				//app.onInput(windowEvent.type, windowEvent.key.keysym.sym, 0, 0);
 				if (windowEvent.key.keysym.sym == SDLK_ESCAPE)
 					break;
+				if (windowEvent.key.keysym.sym == SDLK_1)
+				{
+					//use key to test scene at index 0 
+					GSM->SetScene(0);
+				}
+				if (windowEvent.key.keysym.sym == SDLK_2) {
+					//use key to test scene at index 1
+					GSM->SetScene(1);
+				}
+				
 			}
 			if (windowEvent.type == SDL_KEYUP) {
-				app.onInput(windowEvent.type, windowEvent.key.keysym.sym, 0, 0);
+				//app.onInput(windowEvent.type, windowEvent.key.keysym.sym, 0, 0);
 			}
 		}	
-		app.update(clock.GetDeltaTime());
+		//update everything
+		GSM->Update(clock.GetDeltaTime());
+		
+		/*app.update(clock.GetDeltaTime());
 		app.preRender(clock.GetDeltaTime());
-		app.render();
+		app.render();*/
 		SDL_GL_SwapWindow(window);
-		app.postRender();
+		//app.postRender();
+		//GSM->postRender();
 	}
 
-	app.onEnd();
+
+	//TODO::
+	//End all scnes ***not implemented***
+	GSM->End();
+	//app.onEnd();
 	SDL_GL_DeleteContext(context);
 	SDL_Quit();
 	return 0;

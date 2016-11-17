@@ -7,6 +7,8 @@ std::vector<Vertex> GeometricShapes::GetShape(SHAPES _shapeType) {
 		bool res = FileReader::LoadOBJ("box.obj", verts);
 		if (res)
 			printf("File loaded properly\n");
+		else
+			printf("file did not load \n");
 		//Add colors to our vector
 		int size = verts.size();
 		for (int i = 0; i < size; i++) {

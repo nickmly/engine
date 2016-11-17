@@ -22,7 +22,7 @@ public:
 	float nearClipPlane = 0.1f;
 	float farClipPlane = 100.0f;
 	Camera();
-	Camera(CameraType _type, float _width, float _height, GLuint _program);
+	Camera(CameraType _type, float _width, float _height);
 	void SetProgram(GLuint _program);
 	void SetPositionVector(float _x, float _y, float _z);
 	void SetTargetVector(float _x, float _y, float _z);

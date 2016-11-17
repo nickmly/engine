@@ -9,6 +9,7 @@ using namespace std;
 class SimpleModel
 {
 private:
+	//should possibly be pointers
 	std::vector<glm::vec3> vertPos;
 	std::vector<glm::vec3> vertColor;
 	std::vector<glm::vec2> vertUV;
@@ -27,7 +28,6 @@ private:
 	Shader shader;
 public:
 	SimpleModel(vector<Vertex> _vert, OpenGLRenderer &_rend, const char* _textureFile, char* _vertShader, char* _fragShader);
-	SimpleModel();
 	~SimpleModel();
 	void RenderModel();
 	void AddComponent(Vertex::VertexType type);
@@ -37,5 +37,6 @@ public:
 	//Generate buffers and load all vertex positions, colors, and texture coordinates into the vertex array
 	void SimpleModel::AssignVertices(std::vector<Vertex> _vertices);
 	glm::vec3 GetScale();
+
 };
 

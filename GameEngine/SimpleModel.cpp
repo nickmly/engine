@@ -1,11 +1,15 @@
 #include "SimpleModel.h"
 
+
 SimpleModel::SimpleModel(vector<Vertex> _vert, OpenGLRenderer &_rend, const char* _textureFile,
 	char* _vertShader, char* _fragShader)
 {
+	scale = glm::vec3(1.0);
 	renderer = &_rend;
 	AssignVertices(_vert);
-
+	
+	printf("vertPos after AV() %d\n", vertPos.size());
+	//TODO:: this constructor should be broken up into functions .. maybe
 	//Load shaders
 	shader = Shader(FileReader::ReadFromFile(_vertShader).c_str(), FileReader::ReadFromFile(_fragShader).c_str());
 
@@ -13,31 +17,29 @@ SimpleModel::SimpleModel(vector<Vertex> _vert, OpenGLRenderer &_rend, const char
 	glGenBuffers(4, buffers);
 	// Generate a vertex array
 	glGenVertexArrays(1, &VAO);
-
 	// Bind the Vertex Array Object first, then bind and set vertex buff`er(s) and attribute pointer(s).
 	glBindVertexArray(VAO);
-
 	// Bind vertex positions
 	glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
-	glBufferData(GL_ARRAY_BUFFER, vertPos.size() * sizeof(glm::vec3), &vertPos[0], GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, vertPos.size() * sizeof(glm::vec3), &vertPos.at(0), GL_STATIC_DRAW);
 	glBindAttribLocation(shader.GetProgram(), 0, "vPosition");
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
 	glEnableVertexAttribArray(0);
 	// Bind colors
 	glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
-	glBufferData(GL_ARRAY_BUFFER, vertColor.size() * sizeof(glm::vec3), &vertColor[0], GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, vertColor.size() * sizeof(glm::vec3), &vertColor.at(0), GL_STATIC_DRAW);
 	glBindAttribLocation(shader.GetProgram(), 1, "vColor");
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
 	glEnableVertexAttribArray(1);
 	//Bind UV coordinates
 	glBindBuffer(GL_ARRAY_BUFFER, buffers[2]);
-	glBufferData(GL_ARRAY_BUFFER, vertUV.size() * sizeof(glm::vec2), &vertUV[0], GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER,vertUV.size() * sizeof(glm::vec2), &vertUV.at(0), GL_STATIC_DRAW);
 	glBindAttribLocation(shader.GetProgram(), 2, "vTexCoord");
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
 	glEnableVertexAttribArray(2);
 	//Bind normals
 	glBindBuffer(GL_ARRAY_BUFFER, buffers[3]);
-	glBufferData(GL_ARRAY_BUFFER, vertNormal.size() * sizeof(glm::vec3), &vertNormal[0], GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, vertNormal.size() * sizeof(glm::vec3), &vertNormal.at(0), GL_STATIC_DRAW);
 	glBindAttribLocation(shader.GetProgram(), 3, "vNormal");
 	glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
 	glEnableVertexAttribArray(3);
@@ -64,52 +66,59 @@ SimpleModel::SimpleModel(vector<Vertex> _vert, OpenGLRenderer &_rend, const char
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	}	
 	scale = glm::vec3(1.0f);
+	printf("verPos construction %d\n",vertPos.size());
 }
 
-SimpleModel::SimpleModel()
-{
-}
-
-
-SimpleModel::~SimpleModel()
-{
-}
 
 void SimpleModel::AssignVertices(std::vector<Vertex> _vertices)
 {
 	glm::vec3 newVertex;
 	glm::vec2 new2DVertex;
+	/********************ignore commented code testing for optimization************************/
+	//vector<glm::vec3> pos, color, normal;
+	//vector<glm::vec2> uv;
 	for (int i = 0; i < (int)_vertices.size(); i++) { // Loop through all the vertices in the vector
 		switch (_vertices[i].type)
 		{
 		case Vertex::POSITION: // If position, take only x,y,z values
 			newVertex = glm::vec3(_vertices[i].values.x, _vertices[i].values.y, _vertices[i].values.z);
+			//pos.push_back(newVertex);
 			vertPos.push_back(newVertex);
 			break;
 		case Vertex::COLOR: // If color, take only x,y,z values
 			newVertex = glm::vec3(_vertices[i].values.x, _vertices[i].values.y, _vertices[i].values.z);
+			//color.push_back(newVertex);
 			vertColor.push_back(newVertex);
 			break;
 		case Vertex::NORMAL:
 			newVertex = glm::vec3(_vertices[i].values.x, _vertices[i].values.y, _vertices[i].values.z);
+			//normal.push_back(newVertex);
 			vertNormal.push_back(newVertex);
 			break;
 		case Vertex::TEXTURE:// If texture, take only x,y(UV) values
 			new2DVertex = glm::vec2(_vertices[i].values.x, _vertices[i].values.y);
+			//uv.push_back(new2DVertex);
 			vertUV.push_back(new2DVertex);
 			break;
 		}
-	}
 	
+	}
+	//vertPos = new std::vector<glm::vec3>(pos);
+	//vertColor = new std::vector<glm::vec3>(color);
+	//vertUV = new std::vector<glm::vec2>(uv);
+	//vertNormal = new std::vector<glm::vec3>(normal);
 	printf("AssignVertices() called\nNew size of verts: %d\n", vertPos.size());
 }
 
 void SimpleModel::RenderModel()
 {
+
 	shader.Use();
 	renderer->SetProgram(shader.GetProgram());
+	
 	if (currentTexture)
 		glBindTexture(GL_TEXTURE_2D, currentTexture);
+	
 	renderer->RenderTransform(transform);
 
 	//TODO: move this to another class (lamp/light class)
@@ -119,7 +128,7 @@ void SimpleModel::RenderModel()
 	glUniform3f(lightPosLoc, 0.0f, 0.0f, 0.0f);
 
 	glBindVertexArray(VAO);
-	glDrawArrays(GL_TRIANGLES, 0, vertPos.size());
+	glDrawArrays(GL_TRIANGLES, 0,vertPos.size());
 	glBindVertexArray(0);
 }
 
@@ -158,3 +167,7 @@ glm::vec3 SimpleModel::GetScale()
 	return scale;
 }
 
+
+SimpleModel::~SimpleModel()
+{
+}

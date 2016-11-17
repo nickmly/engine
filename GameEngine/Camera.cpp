@@ -5,20 +5,19 @@ Camera::Camera()
 {
 }
 
-Camera::Camera(CameraType _type, float _width, float _height, GLuint _program)
+Camera::Camera(CameraType _type, float _width, float _height)
 {
 	type = _type;
 	width = _width;
 	height = _height;
-	SetProgram(_program);
 }
 
 void Camera::SetProgram(GLuint _program)
 {
 	program = _program;
-	modelHandle = glGetUniformLocation(_program, "model"); // Assign modelHandle to uniform value model in shader program
-	viewHandle = glGetUniformLocation(_program, "view");
-	projHandle = glGetUniformLocation(_program, "projection");
+	modelHandle = glGetUniformLocation(program, "model"); // Assign modelHandle to uniform value model in shader program
+	viewHandle = glGetUniformLocation(program, "view");
+	projHandle = glGetUniformLocation(program, "projection");
 }
 
 void Camera::SetPositionVector(float _x, float _y, float _z)

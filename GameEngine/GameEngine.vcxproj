@@ -166,6 +166,8 @@
     <ClInclude Include="OpenGLRenderer.h" />
     <ClInclude Include="Random.h" />
     <ClInclude Include="ResourceManager.h" />
+    <ClInclude Include="Scene.h" />
+    <ClInclude Include="SceneManager.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="SimpleModel.h" />
     <ClInclude Include="SOILImage.h" />
@@ -189,6 +191,7 @@
     <ClCompile Include="OpenGLRenderer.cpp" />
     <ClCompile Include="Random.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
+    <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="SimpleModel.cpp" />
     <ClCompile Include="SOILImage.cpp" />

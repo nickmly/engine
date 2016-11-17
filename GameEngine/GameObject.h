@@ -8,24 +8,24 @@ class GameObject
 {
 private:
 	SimpleModel *model;
-	BoundingSphere sphere;	
-	BoundingBox box;
+//	BoundingSphere *sphere;	
+	BoundingBox *box;
 	glm::mat4 transform;
 	glm::vec3 velocity;
 	glm::vec3 rotation;
-	glm::vec3* position;
+	glm::vec3 *position;
 	glm::vec3 initialVelocity;
 	glm::vec3 accel;
 	glm::vec3 newPos;
 	glm::vec3 force;
 	float mass;
 	float angle;
-	OpenGLRenderer* renderer;
+	OpenGLRenderer *renderer;
 public:
 
 	GameObject();
 	void OnInput(Uint32 event, SDL_Keycode key);
-	void Update(double deltaTime);
+	void Update(float deltaTime);
 	void Render();
 	glm::mat4 GetTransform();
 	glm::vec3 GetInitialVelocity();
@@ -43,7 +43,6 @@ public:
 	void clearForces_X();
 	void clearForces_Y();
 	void clearForces_Z();
-	void updateWorldPosition();
 	float GetAngle();
 
 	SimpleModel GetModel();
@@ -51,11 +50,11 @@ public:
 	void AddForce(glm::vec3 _forceVec);
 	void SetAngle(float _angle);
 
-	BoundingSphere GetSphere();
-	BoundingBox GetBoundingBox();
+	//BoundingSphere* GetSphere();
+	BoundingBox* GetBoundingBox();
 
-	GameObject(SimpleModel *_model, BoundingSphere _sphere, OpenGLRenderer &_rend);
-	GameObject(SimpleModel *_model, BoundingBox _box, OpenGLRenderer &_rend);
+//	GameObject(SimpleModel _model, BoundingSphere _sphere, OpenGLRenderer _rend);
+	GameObject(SimpleModel &_model, BoundingBox &_box, OpenGLRenderer &_rend);
 	~GameObject();
 };
 

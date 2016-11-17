@@ -9,7 +9,7 @@ public:
 public:
 	float Xmin, Xmax, Ymin, Ymax, Zmin, Zmax;
 
-	void SetCenter(glm::vec3 *_center);
+	void SetCenter(glm::vec3 &_center);
 	void SetScale(glm::vec3 &_scale);
 	bool BoxIntersects(const BoundingBox &otherBox);
 private:
