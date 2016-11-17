@@ -46,6 +46,7 @@ class SceneManager
 		void Initialize(SDL_Event *e, OpenGLRenderer *_renderer, Clock *clock);
 		void Run();
 		void Update(const float deltaTime);
+		void OnInput(Uint32 event, SDL_Keycode key);
 		void End();
 		void AddScene(Scene *scene);
 		bool sceneChange = false;

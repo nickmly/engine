@@ -78,6 +78,7 @@ int main(int argc, char** argv) {
 			if (windowEvent.type == SDL_QUIT)
 				break;
 			if (windowEvent.type == SDL_KEYDOWN) {
+				GSM->OnInput(windowEvent.type, windowEvent.key.keysym.sym);
 				//app.onInput(windowEvent.type, windowEvent.key.keysym.sym, 0, 0);
 				if (windowEvent.key.keysym.sym == SDLK_ESCAPE)
 					break;
@@ -93,6 +94,7 @@ int main(int argc, char** argv) {
 				
 			}
 			if (windowEvent.type == SDL_KEYUP) {
+				GSM->OnInput(windowEvent.type, windowEvent.key.keysym.sym);
 				//app.onInput(windowEvent.type, windowEvent.key.keysym.sym, 0, 0);
 			}
 		}	

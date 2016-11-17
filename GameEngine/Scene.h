@@ -16,6 +16,7 @@ public:
 	virtual void render()=0;
 	virtual void postRender()=0;
 	virtual void update(float deltaTime)=0;
+	virtual void onInput(Uint32 event, SDL_Keycode key) = 0;
 	
 	bool started = false;
 	bool IsStarted() {

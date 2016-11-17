@@ -35,6 +35,11 @@ void SceneManager::Update(const float deltaTime) {
 	currentScene->update(clock->GetDeltaTime());
 }
 
+void SceneManager::OnInput(Uint32 event, SDL_Keycode key)
+{
+	currentScene->onInput(event, key);
+}
+
 void SceneManager::AddScene(Scene *scene)
 {
 	SceneList.push_back(scene);

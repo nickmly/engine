@@ -80,13 +80,12 @@ void Scene1::preRender(float timeSinceLastFrame)
 
 void Scene1::render()
 {
-	renderer->PrepareToRender();
 	player->Render();
 	//ball->Render();
 	light->RenderModel();
 	//For some reason this won't work unless there is two rendertext calls?
 	renderer->RenderText("fillertext", 800.0f, 600.0f, 1.0f, glm::vec3(0.5f, 0.8f, 0.2f));
-	renderer->RenderText("Testing", 0.0f, 16.0f, 1.0f, glm::vec3(1.0f, 1.0f, 1.0f));
+	renderer->RenderText("Scene1", 0.0f, 16.0f, 1.0f, glm::vec3(1.0f, 1.0f, 1.0f));
 }
 
 void Scene1::update(float deltaTime)
@@ -99,7 +98,6 @@ void Scene1::update(float deltaTime)
 	//	player->SetInitialVelocity(-player->GetInitialVelocity());
 	//}
 }
-
 void Scene1::postRender()
 {
 
@@ -107,7 +105,7 @@ void Scene1::postRender()
 
 //Called from main.cpp
 //Handles all input from a keyboard
-void Scene1::onInput(Uint32 event, SDL_Keycode key, int x, int y) {
+void Scene1::onInput(Uint32 event, SDL_Keycode key) {
 
 	switch (event) {
 	case SDL_KEYDOWN:

@@ -12,11 +12,11 @@ public:
 	virtual void render();
 	virtual void postRender();
 	virtual void update(float deltaTime);
+	virtual void onInput(Uint32 event, SDL_Keycode key);
 
 public:
 	Scene1(OpenGLRenderer *_renderer);
 	~Scene1();
-	void onInput(Uint32 event, SDL_Keycode key, int x, int y);
 	void onMouse(int button, int state, int x, int y);
 
 private:

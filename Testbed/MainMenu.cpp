@@ -51,7 +51,7 @@ void MainMenu::onStart()
 	player = new GameObject(*square, *playerBox, *renderer);
 	ball = new GameObject(*square2, *ballBox, *renderer);
 
-	ball->SetPosition(glm::vec3(-6.0f, 0.0f, 0.0f));
+	ball->SetPosition(glm::vec3(12.0f, 0.0f, 0.0f));
 	ball->SetAngle(5.0f); // Rotate by 5.0 units each frame
 
 	started = true;
@@ -68,15 +68,13 @@ void MainMenu::preRender(float timeSinceLastFrame)
 }
 
 void MainMenu::render()
-{
-	renderer->PrepareToRender();
-	
+{	
 	player->Render();
 	ball->Render();
 	light->RenderModel();
 	//For some reason this won't work unless there is two rendertext calls?
 	renderer->RenderText("fillertext", 800.0f, 600.0f, 1.0f, glm::vec3(0.5f, 0.8f, 0.2f));
-	renderer->RenderText("Testing", 0.0f, 16.0f, 1.0f, glm::vec3(1.0f, 1.0f, 1.0f));
+	renderer->RenderText("MainMenu", 0.0f, 16.0f, 1.0f, glm::vec3(1.0f, 1.0f, 1.0f));
 }
 
 void MainMenu::update(float deltaTime)
@@ -96,7 +94,7 @@ void MainMenu::postRender()
 }
 //Handles all input from a keyboard
 //TODO:: creat input manager class and place it into SceneManager to delegate scene recieving input
-void MainMenu::onInput(Uint32 event, SDL_Keycode key, int x, int y) {
+void MainMenu::onInput(Uint32 event, SDL_Keycode key) {
 
 	switch (event) {
 	case SDL_KEYDOWN:
