@@ -55,20 +55,20 @@ BoundingBox* GameObject::GetBoundingBox()
 	return box;
 }
 void GameObject::OnInput(Uint32 event, SDL_Keycode key)
-{	
-	
+{
+
 }
 
 void GameObject::Update(float deltaTime)
 {
 	//sets up 
-	accel = force/mass;
+	accel = force / mass;
 	velocity = initialVelocity + accel*(float)deltaTime;
 	newPos = velocity*(float)deltaTime + (0.5f*accel)*(float)(deltaTime*deltaTime);
 	initialVelocity = velocity;
 	//dampen acceleration 
 	initialVelocity *= 0.9992f;
-	
+
 	UpdatePosition();
 	transform = glm::rotate(transform, (float)deltaTime * angle, rotation);
 }
@@ -83,6 +83,7 @@ void GameObject::UpdatePosition()
 
 	//sphere->SetCenter(position);
 	box->SetCenter(*position);
+
 }
 
 void GameObject::UpdateRotation() {
@@ -90,10 +91,10 @@ void GameObject::UpdateRotation() {
 }
 
 void GameObject::clearForces() {
-	force = glm::vec3(0.0f, 0.0f, 0.0f); 
+	force = glm::vec3(0.0f, 0.0f, 0.0f);
 }
 
-void GameObject::clearForces_X(){
+void GameObject::clearForces_X() {
 	force *= glm::vec3(0.0f, 1.0f, 1.0f);
 }
 void GameObject::clearForces_Y() {
@@ -106,8 +107,9 @@ void GameObject::clearForces_Z() {
 
 void GameObject::Render()
 {
-		model->RenderModel();
-		model->SetTransform(transform);
+	model->RenderModel();
+	model->SetTransform(transform);
+	box->Draw(transform, renderer);
 }
 
 
@@ -129,7 +131,7 @@ void GameObject::SetInitialVelocity(glm::vec3 _velocity)
 glm::vec3 GameObject::GetAcceleration()
 {
 	return accel;
-	
+
 }
 void GameObject::AddForce(glm::vec3 _forceVec) {
 	force = _forceVec;
@@ -139,7 +141,7 @@ void GameObject::AddForce(glm::vec3 _forceVec) {
 void GameObject::SetAcceleration(glm::vec3 _accel)
 {
 	accel = _accel;
-	
+
 }
 
 glm::vec3 GameObject::GetRotation()
@@ -160,7 +162,7 @@ glm::vec3* GameObject::GetPosition()
 void GameObject::SetPosition(glm::vec3 &_position)
 {
 	newPos = _position;
-	//UpdatePosition();
+	UpdatePosition();
 }
 
 float GameObject::GetAngle()
@@ -171,7 +173,7 @@ float GameObject::GetAngle()
 void GameObject::SetAngle(float _angle)
 {
 	angle = _angle;
-	transform = glm::rotate(transform,angle, rotation);
+	transform = glm::rotate(transform, angle, rotation);
 }
 
 SimpleModel GameObject::GetModel()
