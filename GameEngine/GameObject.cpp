@@ -107,9 +107,15 @@ void GameObject::clearForces_Z() {
 
 void GameObject::Render()
 {
-	model->RenderModel();
-	model->SetTransform(transform);
-	box->Draw(transform, renderer);
+	if (renderer->GetCamera().IsInsideFrustum(*position, 1.0f)) {
+		model->RenderModel();
+		model->SetTransform(transform);
+		box->Draw(transform, renderer);
+	}
+	else
+	{
+		printf("Outside of frustum!\n");
+	}
 }
 
 

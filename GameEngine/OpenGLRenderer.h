@@ -4,10 +4,10 @@
 #include <GL\glew.h>
 #include "glm.hpp"
 #include "gtc\matrix_transform.hpp"
-#include "Camera.h"
 #include "SOIL.h"
 #include "FileReader.h"
 #include "Shader.h"
+#include "Camera.h"
 #include <iostream>
 #include <map>
 #include "ft2build.h"
@@ -41,4 +41,5 @@ public:
 
 	void RenderText(std::string text, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 color);		
 
+	Camera &GetCamera();
 };

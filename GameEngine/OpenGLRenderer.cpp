@@ -1,4 +1,5 @@
 #include "OpenGLRenderer.h"
+
 struct Character {
 	GLuint     TextureID;  // ID handle of the glyph texture
 	glm::ivec2 Size;       // Size of glyph
@@ -107,6 +108,8 @@ void OpenGLRenderer::EnableOpenGL() {
 	camera.SetTargetVector(0.0f, 0.0f, 0.0f); // Look at this position
 	camera.SetUpVector(0.0f, 1.0f, 0.0f); // Camera is pointing up (0,-1,0) for down
 
+	camera.ResizeFrustum(1.0f, 0.1f, 100.0f); // Set up frustum
+
 	printf("EnableOpenGL() called\n");
 
 }
@@ -186,6 +189,12 @@ void OpenGLRenderer::RenderText(std::string text, GLfloat x, GLfloat y, GLfloat 
 	glBindVertexArray(0);
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
+
+Camera & OpenGLRenderer::GetCamera()
+{
+	return camera;
+}
+
 
 
 

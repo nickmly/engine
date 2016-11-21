@@ -4,13 +4,18 @@
 #include "glm.hpp"
 #include "gtc\matrix_transform.hpp"
 
+class Frustum;
+
+
 class Camera
 {
 private:
+	Frustum *frustum;
 	GLuint modelHandle, viewHandle, projHandle;
 	glm::vec3 positionVector, targetVector, upVector;
 	glm::mat4 view, projection;
 	GLuint program;
+	
 public:
 	enum CameraType {
 		PROJECTION,
@@ -29,6 +34,8 @@ public:
 	void SetUpVector(float _x, float _y, float _z);
 	void RenderModel(glm::mat4 _model);
 	void Render();
+	void ResizeFrustum(float _ratio, float _near, float _far);
+	bool IsInsideFrustum(glm::vec3 &cent, float radius);
 	~Camera();
 };
 

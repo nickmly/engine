@@ -17,6 +17,7 @@ MainMenu::~MainMenu()
 
 void MainMenu::onCreate()
 {
+	
 	//Create a model with these vertices and assign it to a renderer
 	//Models should be initialized when the game is loaded doing this in 
 	//loading models in OnStart() would require the creation of possibly really complex models at runtime
@@ -49,9 +50,11 @@ void MainMenu::onStart()
 	//creates a game object using the previously initialized Models5
 	//TODO:: move the above bounding box to GameObject a construction option
 	player = new GameObject(*square, *playerBox, *renderer);
+
 	ball = new GameObject(*square2, *ballBox, *renderer);
 
-	ball->SetPosition(glm::vec3(12.0f, 0.0f, 0.0f));
+	player->SetPosition(glm::vec3(-6.0f, 0.0f, 0.0f));
+	ball->SetPosition(glm::vec3(6.0f, 0.0f, 0.0f));
 	ball->SetAngle(5.0f); // Rotate by 5.0 units each frame
 
 	started = true;

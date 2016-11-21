@@ -112,7 +112,6 @@ void SimpleModel::AssignVertices(std::vector<Vertex> _vertices)
 
 void SimpleModel::RenderModel()
 {
-
 	shader.Use();
 	renderer->SetProgram(shader.GetProgram());
 	

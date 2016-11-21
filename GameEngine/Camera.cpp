@@ -1,5 +1,6 @@
 
 #include "Camera.h"
+#include "Frustum.h"
 
 Camera::Camera()
 {
@@ -10,6 +11,7 @@ Camera::Camera(CameraType _type, float _width, float _height)
 	type = _type;
 	width = _width;
 	height = _height;
+	frustum = new Frustum();
 }
 
 void Camera::SetProgram(GLuint _program)
@@ -49,6 +51,18 @@ void Camera::Render() {
 	else if (type == CameraType::ORTHO)
 		projection = glm::ortho(0.0f, width, 0.0f, height,  nearClipPlane, farClipPlane);
 }
+
+void Camera::ResizeFrustum(float _ratio, float _near, float _far)
+{
+	frustum->windowResized(fov, _ratio, _near, _far);
+	frustum->cameraChanged(positionVector, targetVector, upVector);
+}
+
+bool Camera::IsInsideFrustum(glm::vec3 & cent, float radius)
+{
+	return frustum->isInside(cent, radius) == Frustum::INSIDE;
+}
+
 
 Camera::~Camera()
 {
