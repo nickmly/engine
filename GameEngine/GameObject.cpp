@@ -110,7 +110,7 @@ void GameObject::Render()
 	if (renderer->GetCamera().IsInsideFrustum(*position, 1.0f)) {
 		model->RenderModel();
 		model->SetTransform(transform);
-		box->Draw(transform, renderer);
+		//box->Draw(transform, renderer);
 	}
 	else
 	{

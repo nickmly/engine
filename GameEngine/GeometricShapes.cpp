@@ -12,9 +12,9 @@ std::vector<Vertex> GeometricShapes::GetShape(SHAPES _shapeType) {
 		//Add colors to our vector
 		int size = verts.size();
 		for (int i = 0; i < size; i++) {
-			verts.insert(verts.end(), Vertex(1, 1, 1, 0, Vertex::COLOR));
-			verts.insert(verts.end(), Vertex(1, 1, 1, 0, Vertex::COLOR));
-			verts.insert(verts.end(), Vertex(1, 1, 1, 0, Vertex::COLOR));
+			verts.push_back(Vertex(1, 1, 1, 0, Vertex::COLOR));
+			verts.push_back(Vertex(1, 1, 1, 0, Vertex::COLOR));
+			verts.push_back(Vertex(1, 1, 1, 0, Vertex::COLOR));
 		}
 		////Add 4 vertices to our vector
 		////Left
