@@ -19,7 +19,7 @@ private:
 
 	void LoadModel(GLchar *path);
 	
-	void ProcessNode(aiNode* node, const aiScene* scene);
+	//void ProcessNode(aiNode* node, const aiScene* scene);
 
 public:
 	Model(GLchar *path);

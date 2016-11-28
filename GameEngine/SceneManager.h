@@ -40,18 +40,28 @@ class SceneManager
 		Clock *clock;
 
 	public:
+
 		static SceneManager* getInstance();
 		
 		//TODO:: optimize reference gathering
 		void Initialize(SDL_Event *e, OpenGLRenderer *_renderer, Clock *clock);
 		void Run();
-		void Update(const float deltaTime);
-		void OnInput(Uint32 event, SDL_Keycode key);
-		void End();
-		void AddScene(Scene *scene);
-		bool sceneChange = false;
-		int SceneNumber;
-		void SetScene(int sceneNumber);
 
+		void PreUpdate();
+		void Update(const float deltaTime);
+		void PostUpdate();
+
+		void OnInput(Uint32 event, SDL_Keycode key);
+
+		void End();
+
+		void AddScene(Scene *scene);
+		
+		bool sceneChange = false;
+		
+		unsigned int SceneNumber;
+		void SetScene(unsigned int sceneNumber);
+
+		Scene* GetCurrentScene();
 
 };

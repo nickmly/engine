@@ -9,106 +9,88 @@ struct Character {
 
 std::map<GLchar, Character> Characters;
 
-
-void OpenGLRenderer::RenderPrimitive(PrimitiveType prim)
+OpenGLRenderer::OpenGLRenderer()
 {
-	switch (prim) {
-	case PrimitiveType::TRIANGLE:
-		// add code here
-		break;
-	case PrimitiveType::SQUARE:
-		// add code here
-		break;
-	}
+	
 }
+OpenGLRenderer::~OpenGLRenderer(){}
 
 void OpenGLRenderer::EnableOpenGL() {
 
-	
-	//Enable depth test to prevent some faces from being invisible
-	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	
-	//Load text shader
-	textShader = Shader(FileReader::ReadFromFile("textShader.vert").c_str(),
-		FileReader::ReadFromFile("textShader.frag").c_str());
-	//
-
-	FT_Library ft;
-	if (FT_Init_FreeType(&ft))
-		std::cout << "ERROR::FREETYPE: Could not init FreeType Library" << std::endl;
-
-	FT_Face face;
-	if (FT_New_Face(ft, "micross.ttf", 0, &face))
-		std::cout << "ERROR::FREETYPE: Failed to load font" << std::endl;
-
-	FT_Set_Pixel_Sizes(face, 0, 48);
-
-	if (FT_Load_Char(face, 'X', FT_LOAD_RENDER))
-		std::cout << "ERROR::FREETYPE: Failed to load Glyph" << std::endl;
-
-	glPixelStorei(GL_UNPACK_ALIGNMENT, 1); // Disable byte-alignment restriction
-
-	for (GLubyte c = 0; c < 128; c++)
+	//*********Collapsed TEXT RENDERING CODE *****************//
 	{
-		// Load character glyph 
-		if (FT_Load_Char(face, c, FT_LOAD_RENDER))
-		{
+		//Load text shader
+		textShader = Shader(FileReader::ReadFromFile("textShader.vert").c_str(),
+			FileReader::ReadFromFile("textShader.frag").c_str());
+		//
+
+		FT_Library ft;
+		if (FT_Init_FreeType(&ft))
+			std::cout << "ERROR::FREETYPE: Could not init FreeType Library" << std::endl;
+
+		FT_Face face;
+		if (FT_New_Face(ft, "micross.ttf", 0, &face))
+			std::cout << "ERROR::FREETYPE: Failed to load font" << std::endl;
+
+		FT_Set_Pixel_Sizes(face, 0, 48);
+
+		if (FT_Load_Char(face, 'X', FT_LOAD_RENDER))
 			std::cout << "ERROR::FREETYPE: Failed to load Glyph" << std::endl;
-			continue;
+
+		glPixelStorei(GL_UNPACK_ALIGNMENT, 1); // Disable byte-alignment restriction
+
+		for (GLubyte c = 0; c < 128; c++)
+		{
+			// Load character glyph 
+			if (FT_Load_Char(face, c, FT_LOAD_RENDER))
+			{
+				std::cout << "ERROR::FREETYPE: Failed to load Glyph" << std::endl;
+				continue;
+			}
+			// Generate texture
+			GLuint texture;
+			glGenTextures(1, &texture);
+			glBindTexture(GL_TEXTURE_2D, texture);
+			glTexImage2D(
+				GL_TEXTURE_2D,
+				0,
+				GL_RED,
+				face->glyph->bitmap.width,
+				face->glyph->bitmap.rows,
+				0,
+				GL_RED,
+				GL_UNSIGNED_BYTE,
+				face->glyph->bitmap.buffer
+			);
+			// Set texture options
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+			// Now store character for later use
+			Character character = {
+				texture,
+				glm::ivec2(face->glyph->bitmap.width, face->glyph->bitmap.rows),
+				glm::ivec2(face->glyph->bitmap_left, face->glyph->bitmap_top),
+				face->glyph->advance.x
+			};
+			Characters.insert(std::pair<GLchar, Character>(c, character));
 		}
-		// Generate texture
-		GLuint texture;
-		glGenTextures(1, &texture);
-		glBindTexture(GL_TEXTURE_2D, texture);
-		glTexImage2D(
-			GL_TEXTURE_2D,
-			0,
-			GL_RED,
-			face->glyph->bitmap.width,
-			face->glyph->bitmap.rows,
-			0,
-			GL_RED,
-			GL_UNSIGNED_BYTE,
-			face->glyph->bitmap.buffer
-		);
-		// Set texture options
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		// Now store character for later use
-		Character character = {
-			texture,
-			glm::ivec2(face->glyph->bitmap.width, face->glyph->bitmap.rows),
-			glm::ivec2(face->glyph->bitmap_left, face->glyph->bitmap_top),
-			face->glyph->advance.x
-		};
-		Characters.insert(std::pair<GLchar, Character>(c, character));
+
+		FT_Done_Face(face);
+		FT_Done_FreeType(ft);
+
+		// Configure VAO/VBO for texture quads
+		glGenVertexArrays(1, &VAO);
+		glGenBuffers(1, &VBO);
+		glBindVertexArray(VAO);
+		glBindBuffer(GL_ARRAY_BUFFER, VBO);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 6 * 4, NULL, GL_DYNAMIC_DRAW);
+		glEnableVertexAttribArray(0);
+		glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), 0);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glBindVertexArray(0);
 	}
-
-	FT_Done_Face(face);
-	FT_Done_FreeType(ft);
-
-	// Configure VAO/VBO for texture quads
-	glGenVertexArrays(1, &VAO);
-	glGenBuffers(1, &VBO);
-	glBindVertexArray(VAO);
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 6 * 4, NULL, GL_DYNAMIC_DRAW);
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), 0);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindVertexArray(0);
-
-	camera = Camera(Camera::PROJECTION, 800, 600); // Setup our camera
-	camera.fov = 120.0f;
-	camera.SetPositionVector(0.0f, -10.0f, 4.0f); // Put camera at this position
-	camera.SetTargetVector(0.0f, 0.0f, 0.0f); // Look at this position
-	camera.SetUpVector(0.0f, 1.0f, 0.0f); // Camera is pointing up (0,-1,0) for down
-
-	camera.ResizeFrustum(1.0f, 0.1f, 100.0f); // Set up frustum
 
 	printf("EnableOpenGL() called\n");
 
@@ -116,15 +98,34 @@ void OpenGLRenderer::EnableOpenGL() {
 
 void OpenGLRenderer::PrepareToRender()
 {
+
+
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	camera.Render();
+
+	//Enable depth test to prevent some faces from being invisible
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	camera->Render();
+}
+
+void OpenGLRenderer::Render()
+{
+}
+
+void OpenGLRenderer::PostRender()
+{
+	//Enable depth test to prevent some faces from being invisible
+	glDisable(GL_DEPTH_TEST);
+	glDisable(GL_BLEND);
 }
 
 void OpenGLRenderer::SetProgram(GLuint _program)
 {
 	//program = _program;
-	camera.SetProgram(_program);
+	camera->SetProgram(_program);
 }
 
 void OpenGLRenderer::Destroy()
@@ -135,13 +136,9 @@ void OpenGLRenderer::Destroy()
 	glDeleteVertexArrays(1, &VAO);
 }
 
-void OpenGLRenderer::RenderSimpleModel()
-{
-}
-
 void OpenGLRenderer::RenderTransform(glm::mat4 transform)
 {
-	camera.RenderModel(transform);
+	camera->RenderModel(transform);
 }
 
 void OpenGLRenderer::RenderText(std::string text, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 color)
@@ -190,10 +187,17 @@ void OpenGLRenderer::RenderText(std::string text, GLfloat x, GLfloat y, GLfloat 
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-Camera & OpenGLRenderer::GetCamera()
+void OpenGLRenderer::SetActiveCamera(Camera & cam)
+{
+	camera = &cam;
+}
+
+Camera* OpenGLRenderer::GetActiveCamera()
 {
 	return camera;
 }
+
+
 
 
 

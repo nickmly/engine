@@ -4,7 +4,6 @@
 SimpleModel::SimpleModel(vector<Vertex> _vert, OpenGLRenderer &_rend, const char* _textureFile,
 	char* _vertShader, char* _fragShader)
 {
-	scale = glm::vec3(1.0);
 	renderer = &_rend;
 	AssignVertices(_vert);
 	
@@ -65,48 +64,39 @@ SimpleModel::SimpleModel(vector<Vertex> _vert, OpenGLRenderer &_rend, const char
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	}	
-	scale = glm::vec3(1.0f);
 	printf("verPos construction %d\n",vertPos.size());
 }
 
+SimpleModel::~SimpleModel()
+{
+}
 
 void SimpleModel::AssignVertices(std::vector<Vertex> _vertices)
 {
 	glm::vec3 newVertex;
 	glm::vec2 new2DVertex;
-	/********************ignore commented code testing for optimization************************/
-	//vector<glm::vec3> pos, color, normal;
-	//vector<glm::vec2> uv;
+
 	for (int i = 0; i < (int)_vertices.size(); i++) { // Loop through all the vertices in the vector
 		switch (_vertices[i].type)
 		{
 		case Vertex::POSITION: // If position, take only x,y,z values
 			newVertex = glm::vec3(_vertices[i].values.x, _vertices[i].values.y, _vertices[i].values.z);
-			//pos.push_back(newVertex);
 			vertPos.push_back(newVertex);
 			break;
 		case Vertex::COLOR: // If color, take only x,y,z values
 			newVertex = glm::vec3(_vertices[i].values.x, _vertices[i].values.y, _vertices[i].values.z);
-			//color.push_back(newVertex);
 			vertColor.push_back(newVertex);
 			break;
 		case Vertex::NORMAL:
 			newVertex = glm::vec3(_vertices[i].values.x, _vertices[i].values.y, _vertices[i].values.z);
-			//normal.push_back(newVertex);
 			vertNormal.push_back(newVertex);
 			break;
 		case Vertex::TEXTURE:// If texture, take only x,y(UV) values
 			new2DVertex = glm::vec2(_vertices[i].values.x, _vertices[i].values.y);
-			//uv.push_back(new2DVertex);
 			vertUV.push_back(new2DVertex);
 			break;
 		}
-	
 	}
-	//vertPos = new std::vector<glm::vec3>(pos);
-	//vertColor = new std::vector<glm::vec3>(color);
-	//vertUV = new std::vector<glm::vec2>(uv);
-	//vertNormal = new std::vector<glm::vec3>(normal);
 	printf("AssignVertices() called\nNew size of verts: %d\n", vertPos.size());
 }
 
@@ -149,24 +139,4 @@ void SimpleModel::AddComponent(Vertex::VertexType type)
 void SimpleModel::AddVertices(vector<Vertex> _vert)
 {
 	//vertices = _vert;
-}
-
-void SimpleModel::SetTransform(glm::mat4 _transform)
-{
-	transform = _transform;
-}
-
-void SimpleModel::SetScale(glm::vec3 _scale)
-{
-	scale = _scale;
-}
-
-glm::vec3 SimpleModel::GetScale()
-{
-	return scale;
-}
-
-
-SimpleModel::~SimpleModel()
-{
 }

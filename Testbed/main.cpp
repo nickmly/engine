@@ -5,7 +5,6 @@
 #include <Clock.h>
 #include <LogManager.h>
 #include "MainMenu.h"
-#include "Scene1.h"
 //#include <ResourceManager.h>
 //#include <Material.h>
 #include <sstream>
@@ -54,7 +53,7 @@ int main(int argc, char** argv) {
 	//Scene object pointers created in the project testbed all new scenes will inherit from Scene
 	//polymorphically assign the created sceen to basetype Scene
 	Scene *mainMenu = new MainMenu(renderer);
-	Scene *scene1 = new Scene1(renderer);
+
 
 	/************NOTE********************* 
 	GSM is a SceneManager  is a singleton using unique_ptr
@@ -63,7 +62,7 @@ int main(int argc, char** argv) {
 	**/
 	//Add scenes to the SceneManager 
 	GSM->AddScene(mainMenu);
-	GSM->AddScene(scene1);
+
 	//Apply game loop variables to GSM
 	GSM->Initialize(&windowEvent, renderer, &clock);
 	//Start first scene
@@ -91,16 +90,36 @@ int main(int argc, char** argv) {
 					//use key to test scene at index 1
 					GSM->SetScene(1);
 				}
-				
 			}
 			if (windowEvent.type == SDL_KEYUP) {
 				GSM->OnInput(windowEvent.type, windowEvent.key.keysym.sym);
 				//app.onInput(windowEvent.type, windowEvent.key.keysym.sym, 0, 0);
 			}
 		}	
+
+		switch (GSM->GetCurrentScene()->GetSceneState()) {
+		case(Scene::SCENE_STATE::PAUSED):
+			GSM->GetCurrentScene()->onPause();
+			break;
+		case(Scene::SCENE_STATE::RUNNING):
+			//render
+			GSM->GetCurrentScene()->preRender();
+			GSM->GetCurrentScene()->render();
+			//update
+			GSM->GetCurrentScene()->onUpdate(clock.GetDeltaTime());
+			//PostRender **in theory this should be drawing to next buffer ????? **
+			GSM->GetCurrentScene()->postRender();
+			break;
+		case(Scene::SCENE_STATE::COMPLETE):
+			GSM->GetCurrentScene()->onComplete();
+			break;
+		case(Scene::SCENE_STATE::QUIT):
+			GSM->GetCurrentScene()->onQuit();
+			break;
+		default:
+			break;
+		}
 		//update everything
-		GSM->Update(clock.GetDeltaTime());
-		
 		/*app.update(clock.GetDeltaTime());
 		app.preRender(clock.GetDeltaTime());
 		app.render();*/

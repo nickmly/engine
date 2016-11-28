@@ -18,28 +18,33 @@ class OpenGLRenderer : public AbstractRenderer
 private:
 	//GLuint program;
 	//TODO:: camera should be created in scene for multiple camera options... maybe
-	Camera camera;
+	Camera *camera;
 	GLuint VAO, VBO;
 	Shader textShader;
+
 public:
-	virtual void RenderPrimitive(PrimitiveType prim);
+	OpenGLRenderer();
+	~OpenGLRenderer();
+
 	void EnableOpenGL();
 
 	//Prepare to render eachmodel 
-	void PrepareToRender(); 
+	void PrepareToRender();
+	void Render();
+	void PostRender();
 
 	//Set shader program
 	void SetProgram(GLuint _program);
-	
+
 	//Delete all buffers, shader program, and arrays
 	void Destroy();
-
-	void RenderSimpleModel();
 
 	//Render a model using its transform matrix
 	void RenderTransform(glm::mat4 transform);
 
-	void RenderText(std::string text, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 color);		
+	void RenderText(std::string text, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 color);
 
-	Camera &GetCamera();
+	void SetActiveCamera(Camera &cam);
+	Camera* GetActiveCamera();
+
 };

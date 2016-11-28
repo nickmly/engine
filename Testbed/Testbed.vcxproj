@@ -158,7 +158,6 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainMenu.cpp" />
-    <ClCompile Include="Scene1.cpp" />
     <ClCompile Include="TestApp.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -168,7 +167,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainMenu.h" />
-    <ClInclude Include="Scene1.h" />
     <ClInclude Include="TestApp.h" />
   </ItemGroup>
   <ItemGroup>

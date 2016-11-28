@@ -20,24 +20,30 @@ void SceneManager::Initialize(SDL_Event *e, OpenGLRenderer *_renderer, Clock *_c
 }
 
 void SceneManager::Run() {
-		//Starts First scene in SceneList
-		//SceneNumber defaults to 0;
+		//Starts First scene in SceneList //default SceneNumber is 0
 		currentScene = SceneList.at(SceneNumber);
 		currentScene->onStart();
 }
 
+void SceneManager::PreUpdate()
+{
+		currentScene->preRender();
+}
+
 void SceneManager::Update(const float deltaTime) {
-	//prepCamera
-	currentScene->preRender(deltaTime);
 	//renderScene
 	currentScene->render();
 	//updateScene
-	currentScene->update(clock->GetDeltaTime());
+	currentScene->onUpdate(clock->GetDeltaTime());
+}
+
+void SceneManager::PostUpdate()
+{
 }
 
 void SceneManager::OnInput(Uint32 event, SDL_Keycode key)
 {
-	currentScene->onInput(event, key);
+	currentScene->HandleInput(event, key);
 }
 
 void SceneManager::AddScene(Scene *scene)
@@ -45,7 +51,7 @@ void SceneManager::AddScene(Scene *scene)
 	SceneList.push_back(scene);
 }
 
-void SceneManager::SetScene(int sceneNumber) {
+void SceneManager::SetScene(unsigned int sceneNumber) {
 	//changes SceneNumber to desired scene number
 	SceneNumber = sceneNumber;
 	//sets current scene to desired scene number
@@ -54,6 +60,11 @@ void SceneManager::SetScene(int sceneNumber) {
 		//checks IsStarted in Base Scene.h onStart() only if the scene has not yet been started
 		currentScene->onStart();
 	}
+}
+
+Scene* SceneManager::GetCurrentScene()
+{
+	return currentScene;
 }
 
 void SceneManager::End() {

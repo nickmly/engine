@@ -17,7 +17,6 @@ Mesh::~Mesh()
 {
 }
 
-
 void Mesh::ProcessVertices()
 {
 	glm::vec3 newVertex;
@@ -38,7 +37,6 @@ void Mesh::ProcessVertices()
 			vertUV.push_back(new2DVertex);
 			break;
 		}
-
 	}
 }
 

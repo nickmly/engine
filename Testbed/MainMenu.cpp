@@ -4,8 +4,8 @@ using namespace std;
 MainMenu::MainMenu(OpenGLRenderer *_renderer)
 {
 	renderer = _renderer;
-	//oncreate happens on creation and stores all models and shaders on the heap
-	//doing this before the game loop begins should provide a more efficient runtime
+	sceneGraph = new SceneGraph();
+
 	onCreate();
 }
 
@@ -15,9 +15,25 @@ MainMenu::~MainMenu()
 	light->~SimpleModel();
 }
 
+//*************PRE SCENE*************//
+
 void MainMenu::onCreate()
 {
 	
+	mainCamera = Camera(Camera::PROJECTION, 800, 600); // Setup our camera
+	mainCamera.fov = 120.0f;
+	mainCamera.SetPositionVector(0.0f, -10.0f, 4.0f); // Put camera at this position
+	mainCamera.SetTargetVector(0.0f, 0.0f, 0.0f); // Look at this position
+	mainCamera.SetUpVector(0.0f, 1.0f, 0.0f); // Camera is pointing up (0,-1,0) for down
+	mainCamera.ResizeFrustum(1.0f, 0.1f, 100.0f); // Set up frustum
+
+	
+	secondCamera = Camera(Camera::PROJECTION, 800, 600);
+	secondCamera.fov = 120.0f;
+	secondCamera.SetPositionVector(-15.0f, -10.0f, 4.0f); 
+	secondCamera.SetTargetVector(0.0f, 0.0f, 0.0f); 
+	secondCamera.SetUpVector(0.0f, 1.0f, 0.0f); 
+	secondCamera.ResizeFrustum(1.0f, 0.1f, 100.0f);
 	//Create a model with these vertices and assign it to a renderer
 	//Models should be initialized when the game is loaded doing this in 
 	//loading models in OnStart() would require the creation of possibly really complex models at runtime
@@ -34,115 +50,131 @@ void MainMenu::onCreate()
 		"shader.frag"
 	);
 	light = new SimpleModel(GeometricShapes::GetShape(GeometricShapes::cube), *renderer, "wall.jpg", "lightShader.vert", "lightShader.frag");
+
+	cube = new GameObject(*square);
+	cube2 = new GameObject(*square2);
+	
 }
 
 void MainMenu::onStart()
 {
-	//renderer = new OpenGLRenderer();
-	square->SetScale(glm::vec3(1.0f, 1.0f, 1.0f));
-	square2->SetScale(glm::vec3(1.0f));
-	light->SetScale(glm::vec3(1.0f));
+	//use this to assign a camera to the renderer
+	renderer->SetActiveCamera(mainCamera);
 
-	//TODO: move bounding box to gameobject class
-    playerBox = new BoundingBox(square->GetScale());
-	ballBox = new BoundingBox(square->GetScale());
+	// gameObject to scene
+	sceneGraph->GetRootSceneNode()->AppendChild(cube->GetSceneNode());
+	
+	//append 2nd cube to first cube 
+	cube->GetSceneNode()->AppendChild(cube2->GetSceneNode());
 
-	//creates a game object using the previously initialized Models5
-	//TODO:: move the above bounding box to GameObject a construction option
-	player = new GameObject(*square, *playerBox, *renderer);
-
-	ball = new GameObject(*square2, *ballBox, *renderer);
-
-	player->SetPosition(glm::vec3(-6.0f, 0.0f, 0.0f));
-	ball->SetPosition(glm::vec3(6.0f, 0.0f, 0.0f));
-	ball->SetAngle(5.0f); // Rotate by 5.0 units each frame
+	//sets local position relative to its parent node
+	cube->SetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
+	cube2->SetPosition(glm::vec3(3.0f, 0.0f, 0.0f));
 
 	started = true;
+	
+	sceneState = SCENE_STATE::RUNNING;
 }
 
-void MainMenu::onEnd()
+//***********GAME STATES****************//
+
+void MainMenu::onUpdate(float deltaTime)
 {
-	renderer->Destroy();
+	//sets rotation only on x for parent cube
+	cube->SetRotation(glm::vec3(0.0025, 0.0f, 0.0f));
+	//sets rotation only on y for child cube which will inherit the rotation of its parent as well
+	cube2->SetRotation(glm::vec3(0.0f, 0.0025, 0.0f));
 }
 
-void MainMenu::preRender(float timeSinceLastFrame)
+void MainMenu::onPause()
+{
+}
+
+void MainMenu::onComplete()
+{
+}
+
+void MainMenu::onQuit()
+{
+}
+
+
+//*************RENDERING**************//
+
+void MainMenu::preRender()
 {
 	renderer->PrepareToRender();
 }
 
 void MainMenu::render()
-{	
-	player->Render();
-	ball->Render();
-	light->RenderModel();
-	//For some reason this won't work unless there is two rendertext calls?
-	renderer->RenderText("fillertext", 800.0f, 600.0f, 1.0f, glm::vec3(0.5f, 0.8f, 0.2f));
-	renderer->RenderText("MainMenu", 0.0f, 16.0f, 1.0f, glm::vec3(1.0f, 1.0f, 1.0f));
-}
-
-void MainMenu::update(float deltaTime)
 {
-	//Handle movement
-	player->Update(deltaTime);
-	ball->Update(deltaTime);
-	bool intersecting = player->GetBoundingBox()->BoxIntersects(*ball->GetBoundingBox());
-	if (intersecting) {
-		player->SetInitialVelocity(-player->GetInitialVelocity());
-	}
+	sceneGraph->RenderSceneGraph();
 }
 
 void MainMenu::postRender()
 {
-
+	renderer->PostRender();
 }
-//Handles all input from a keyboard
-//TODO:: creat input manager class and place it into SceneManager to delegate scene recieving input
-void MainMenu::onInput(Uint32 event, SDL_Keycode key) {
 
+
+//*************INPUT*****************//
+
+//TODO::include in inpute manager
+void MainMenu::HandleInput(Uint32 event, SDL_Keycode key)
+{
 	switch (event) {
 	case SDL_KEYDOWN:
 		switch (key) {
 		case SDLK_a:
-			player->AddForce(glm::vec3(-15.0f, 0.0f, 0.0f));
+			cube->SetPosition(glm::vec3(-0.25f, 0.0f, 0.0f));
 			break;
 		case SDLK_d:
-			player->AddForce(glm::vec3(15.0f, 0.0f, 0.0f));
+			cube->SetPosition(glm::vec3(0.25f, 0.0f, 0.0f));
 			break;
 		case SDLK_w:
-			player->AddForce(glm::vec3(0.0f, 15.0f, 0.0f));
+			cube->SetPosition(glm::vec3( 0.0f, 0.25f, 0.0f));
 			break;
 		case SDLK_s:
-			player->AddForce(glm::vec3(0.0f, -15.0f, 0.0f));
+			cube->SetPosition(glm::vec3( 0.0f, -0.25f, 0.0f));
 			break;
+
+	/////////////////************move child node**************////////////////////////
+		case SDLK_f:
+			cube2->SetPosition(glm::vec3(0.25f, 0.0f, 0.0f));
+			break;
+	//////////////////////////////////////////////////////
+			//TESTSCENE STATE
 		case SDLK_z:
-			glDisable(GL_DEPTH_TEST);
+			//test paused state
+			sceneState=SCENE_STATE::PAUSED;
 			break;
 		case SDLK_x:
-			glEnable(GL_DEPTH_TEST);
+			//test running state
+			sceneState = SCENE_STATE::RUNNING;
 			break;
+			////////////TEST CAMERA SWITCH
+		case SDLK_c:
+			renderer->SetActiveCamera(secondCamera);
+			break;
+		case SDLK_v:
+			renderer->SetActiveCamera(mainCamera);
 		}
 		break;
 
 	case SDL_KEYUP:
 		switch (key) {
 		case SDLK_a:
+			break;
 		case SDLK_d:
-			player->clearForces_X();
 			break;
 		case SDLK_w:
+			break;
 		case SDLK_s:
-			player->clearForces_Y();
 			break;
 		}
 		break;
 	}
 }
-
-
-
-//Called from main.cpp
-//Handles all input from a mouse
-//TODO::include in inpute manager
 void MainMenu::onMouse(int button, int state, int x, int y)
 {
 	switch (button) {
@@ -153,3 +185,5 @@ void MainMenu::onMouse(int button, int state, int x, int y)
 		break;
 	}
 }
+
+//***********************************//
