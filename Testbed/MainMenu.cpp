@@ -84,6 +84,10 @@ void MainMenu::onUpdate(float deltaTime)
 	cube->SetRotation(glm::vec3(0.0025, 0.0f, 0.0f));
 	//sets rotation only on y for child cube which will inherit the rotation of its parent as well
 	cube2->SetRotation(glm::vec3(0.0f, 0.0025, 0.0f));
+
+	//For some reason this won't work unless there is two rendertext calls?
+	renderer->RenderText("fillertext", 800.0f, 600.0f, 1.0f, glm::vec3(0.5f, 0.8f, 0.2f));
+	renderer->RenderText("MainMenu", 0.0f, 16.0f, 1.0f, glm::vec3(1.0f, 1.0f, 1.0f));
 }
 
 void MainMenu::onPause()
