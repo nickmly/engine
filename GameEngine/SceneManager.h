@@ -1,7 +1,7 @@
 #pragma once
 #include <memory>
 #include "OpenGLRenderer.h"
-#include "Scene.h"
+#include "GameScene.h"
 #include "SDL.h"
 #include <iostream>
 #include "Clock.h"
@@ -22,7 +22,7 @@ class SceneManager
 	private:
 		//creates points to addresses of main.cpp game loop variables
 		OpenGLRenderer *renderer;
-		Scene *currentScene;
+		GameScene *currentScene;
 		SDL_Event *inputEvent;
 
 		///std::unique_ptr is a smart pointer that destroys the object it point to when the unique_ptr goes out of scope.
@@ -36,7 +36,7 @@ class SceneManager
 	private:
 		bool isRunning;
 		unsigned int fps; /// Frames / second
-		vector<Scene*> SceneList;
+		vector<GameScene*> SceneList;
 		Clock *clock;
 
 	public:
@@ -55,13 +55,13 @@ class SceneManager
 
 		void End();
 
-		void AddScene(Scene *scene);
+		void AddScene(GameScene *scene);
 		
 		bool sceneChange = false;
 		
 		unsigned int SceneNumber;
 		void SetScene(unsigned int sceneNumber);
 
-		Scene* GetCurrentScene();
+		GameScene* GetCurrentScene();
 
 };

@@ -52,7 +52,7 @@ int main(int argc, char** argv) {
 
 	//Scene object pointers created in the project testbed all new scenes will inherit from Scene
 	//polymorphically assign the created sceen to basetype Scene
-	Scene *mainMenu = new MainMenu(renderer);
+	GameScene *mainMenu = new MainMenu(renderer);
 
 
 	/************NOTE********************* 
@@ -98,10 +98,10 @@ int main(int argc, char** argv) {
 		}	
 
 		switch (GSM->GetCurrentScene()->GetSceneState()) {
-		case(Scene::SCENE_STATE::PAUSED):
+		case(GameScene::SCENE_STATE::PAUSED):
 			GSM->GetCurrentScene()->onPause();
 			break;
-		case(Scene::SCENE_STATE::RUNNING):
+		case(GameScene::SCENE_STATE::RUNNING):
 			//render
 			GSM->GetCurrentScene()->preRender();
 			GSM->GetCurrentScene()->render();
@@ -110,10 +110,10 @@ int main(int argc, char** argv) {
 			//PostRender **in theory this should be drawing to next buffer ????? **
 			GSM->GetCurrentScene()->postRender();
 			break;
-		case(Scene::SCENE_STATE::COMPLETE):
+		case(GameScene::SCENE_STATE::COMPLETE):
 			GSM->GetCurrentScene()->onComplete();
 			break;
-		case(Scene::SCENE_STATE::QUIT):
+		case(GameScene::SCENE_STATE::QUIT):
 			GSM->GetCurrentScene()->onQuit();
 			break;
 		default:

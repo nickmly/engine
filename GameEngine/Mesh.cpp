@@ -1,15 +1,15 @@
 #include "Mesh.h"
 #include "FileReader.h"
 
-Mesh::Mesh(vector<Vertex> _vertices, vector<GLuint> _indices, vector<Texture> _textures, char* _vertShader, char* _fragShader)
+Mesh::Mesh(vector<mVertex> _vertices, vector<GLuint> _indices, vector<Texture> _textures)
 {
 	vertices = _vertices;
 	indices = _indices;
 	textures = _textures;
 
-	shader = Shader(FileReader::ReadFromFile(_vertShader).c_str(), FileReader::ReadFromFile(_fragShader).c_str());
+	//shader = _shader;
 
-	ProcessVertices();
+	//ProcessVertices();
 	SetupMesh();
 }
 
@@ -17,88 +17,105 @@ Mesh::~Mesh()
 {
 }
 
-void Mesh::ProcessVertices()
-{
-	glm::vec3 newVertex;
-	glm::vec2 new2DVertex;
-	for (int i = 0; i < (int)vertices.size(); i++) { // Loop through all the vertices in the vector
-		switch (vertices[i].type)
-		{
-		case Vertex::POSITION: // If position, take only x,y,z values
-			newVertex = glm::vec3(vertices[i].values.x, vertices[i].values.y, vertices[i].values.z);
-			vertPos.push_back(newVertex);
-			break;
-		case Vertex::NORMAL:
-			newVertex = glm::vec3(vertices[i].values.x, vertices[i].values.y, vertices[i].values.z);
-			vertNormal.push_back(newVertex);
-			break;
-		case Vertex::TEXTURE:// If texture, take only x,y(UV) values
-			new2DVertex = glm::vec2(vertices[i].values.x, vertices[i].values.y);
-			vertUV.push_back(new2DVertex);
-			break;
-		}
-	}
-}
+//void Mesh::ProcessVertices()
+//{
+//	glm::vec3 newVertex;
+//	glm::vec2 new2DVertex;
+//	for (int i = 0; i < (int)vertices.size(); i++) { // Loop through all the vertices in the vector
+//		switch (vertices[i].type)
+//		{
+//		case Vertex::POSITION: // If position, take only x,y,z values
+//			newVertex = glm::vec3(vertices[i].values.x, vertices[i].values.y, vertices[i].values.z);
+//			vertPos.push_back(newVertex);
+//			break;
+//		case Vertex::NORMAL:
+//			newVertex = glm::vec3(vertices[i].values.x, vertices[i].values.y, vertices[i].values.z);
+//			vertNormal.push_back(newVertex);
+//			break;
+//		case Vertex::TEXTURE:// If texture, take only x,y(UV) values
+//			new2DVertex = glm::vec2(vertices[i].values.x, vertices[i].values.y);
+//			vertUV.push_back(new2DVertex);
+//			break;
+//		}
+//	}
+//	printf("ProcessVertices() Size: %d\n",vertPos.size());
+//}
 
 void Mesh::SetupMesh()
 {
-	glGenVertexArrays(1, &VAO); // Generate 1 vertex array
-
-	glGenBuffers(3, VBO); // Generate vertex buffer object
-	glGenBuffers(1, &EBO); // Generate element buffer object
+	glGenVertexArrays(1, &VAO);
+	glGenBuffers(1, &VBO);
+	glGenBuffers(1, &EBO);
 
 	glBindVertexArray(VAO);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
-	//Bind vertex positions
-	glBindBuffer(GL_ARRAY_BUFFER, VBO[0]);
-	glBufferData(GL_ARRAY_BUFFER, vertPos.size() * sizeof(glm::vec3), &vertPos.at(0), GL_STATIC_DRAW);
-	glBindAttribLocation(shader.GetProgram(), 0, "vPosition");
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
-	glEnableVertexAttribArray(0);
+	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(mVertex),
+		&vertices[0], GL_STATIC_DRAW);
 
-	//Bind UV coordinates
-	glBindBuffer(GL_ARRAY_BUFFER, VBO[1]);
-	glBufferData(GL_ARRAY_BUFFER, vertUV.size() * sizeof(glm::vec2), &vertUV.at(0), GL_STATIC_DRAW);
-	glBindAttribLocation(shader.GetProgram(), 0, "vTexCoord");
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
-	glEnableVertexAttribArray(1);
-
-	//Bind normals
-	glBindBuffer(GL_ARRAY_BUFFER, VBO[2]);
-	glBufferData(GL_ARRAY_BUFFER, vertNormal.size() * sizeof(glm::vec3), &vertNormal.at(0), GL_STATIC_DRAW);
-	glBindAttribLocation(shader.GetProgram(), 3, "vNormal");
-	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
-	glEnableVertexAttribArray(2);
-
-	//Bind indices
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint), &indices.at(0), GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint),
+		&indices[0], GL_STATIC_DRAW);
+
+	// Vertex Positions
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(mVertex),
+		(GLvoid*)0);
+	// Vertex Normals
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(mVertex),
+		(GLvoid*)offsetof(mVertex, Normal));
+	// Vertex Texture Coords
+	glEnableVertexAttribArray(2);
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(mVertex),
+		(GLvoid*)offsetof(mVertex, TexCoords));
 
 	glBindVertexArray(0);
+	printf("SetupMesh()\n");
 }
 
-void Mesh::Render()
+/*void Mesh::SetShader(Shader _shader)
 {
-	GLuint diffuseNr = 1; // Number of diffuse textures
-	GLuint specNr = 1; // Number of specular textures
-	for (GLuint i = 0; i < textures.size(); i++) {
-		glActiveTexture(GL_TEXTURE0 + i);
+	shader = _shader;
+}*/
+
+void Mesh::Render(Shader shader)
+{
+	// Bind appropriate textures
+	GLuint diffuseNr = 1;
+	GLuint specularNr = 1;
+	for (GLuint i = 0; i < textures.size(); i++)
+	{
+		glActiveTexture(GL_TEXTURE0 + i); // Active proper texture unit before binding
+										  // Retrieve texture number (the N in diffuse_textureN)
 		stringstream ss;
 		string number;
 		string name = textures[i].type;
 		if (name == "texture_diffuse")
-			ss << diffuseNr++;
+			ss << diffuseNr++; // Transfer GLuint to stream
 		else if (name == "texture_specular")
-			ss << specNr++;
+			ss << specularNr++; // Transfer GLuint to stream
 		number = ss.str();
-
-		glUniform1f(glGetUniformLocation(shader.GetProgram(), ("material." + name + number).c_str()), i);
-		glBindTexture(GL_TEXTURE_2D, this->textures[i].id);
+		// Now set the sampler to the correct texture unit
+		glUniform1i(glGetUniformLocation(shader.GetProgram(), (name + number).c_str()), i);
+		// And finally bind the texture
+		glBindTexture(GL_TEXTURE_2D, textures[i].id);
 	}
-	glActiveTexture(GL_TEXTURE0);
+
+	// Also set each mesh's shininess property to a default value (if you want you could extend this to another mesh property and possibly change this value)
+	glUniform1f(glGetUniformLocation(shader.GetProgram(), "material.shininess"), 16.0f);
+
+	// Draw mesh
 	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
+
+	// Always good practice to set everything back to defaults once configured.
+	for (GLuint i = 0; i < textures.size(); i++)
+	{
+		glActiveTexture(GL_TEXTURE0 + i);
+		glBindTexture(GL_TEXTURE_2D, 0);
+	}
 
 }
 

@@ -46,7 +46,7 @@ void SceneManager::OnInput(Uint32 event, SDL_Keycode key)
 	currentScene->HandleInput(event, key);
 }
 
-void SceneManager::AddScene(Scene *scene)
+void SceneManager::AddScene(GameScene *scene)
 {
 	SceneList.push_back(scene);
 }
@@ -62,7 +62,7 @@ void SceneManager::SetScene(unsigned int sceneNumber) {
 	}
 }
 
-Scene* SceneManager::GetCurrentScene()
+GameScene* SceneManager::GetCurrentScene()
 {
 	return currentScene;
 }

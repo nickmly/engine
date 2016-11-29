@@ -1,10 +1,11 @@
 #pragma once
 ///refactor with all scenes these includes into Scene.h
-#include <Scene.h>
+#include <GameScene.h>
 #include "SDL.h"
 #include "GL\glew.h"
 #include <OpenGLRenderer.h>
 #include "ResourceManager.h"
+#include "Model.h"
 #include "SimpleModel.h"
 #include "Vertex.h"
 #include "GeometricShapes.h"
@@ -14,7 +15,7 @@
 #include "FileReader.h"
 #include "GameObject.h"
 #include "SceneGraph.h"
-class MainMenu : public Scene
+class MainMenu : public GameScene
 {
 public:
 	MainMenu(OpenGLRenderer *_renderer);
@@ -25,6 +26,8 @@ private:
 	OpenGLRenderer *renderer;
 	//heap variables
 	SimpleModel *square, *square2, *light;
+
+	Model* customModel;
 
 	GameObject *cube, *cube2;
 	//MAIN OR INITIAL SCENE CAMERA

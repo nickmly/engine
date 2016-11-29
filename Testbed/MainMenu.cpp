@@ -1,4 +1,5 @@
 #include "MainMenu.h"
+
 using namespace std;
 
 MainMenu::MainMenu(OpenGLRenderer *_renderer)
@@ -34,6 +35,9 @@ void MainMenu::onCreate()
 	secondCamera.SetTargetVector(0.0f, 0.0f, 0.0f); 
 	secondCamera.SetUpVector(0.0f, 1.0f, 0.0f); 
 	secondCamera.ResizeFrustum(1.0f, 0.1f, 100.0f);
+
+	Shader shader = Shader(FileReader::ReadFromFile("shader.vert").c_str(), FileReader::ReadFromFile("shader.frag").c_str());
+	customModel = new Model("box2.obj", shader);
 	//Create a model with these vertices and assign it to a renderer
 	//Models should be initialized when the game is loaded doing this in 
 	//loading models in OnStart() would require the creation of possibly really complex models at runtime
@@ -112,7 +116,8 @@ void MainMenu::preRender()
 
 void MainMenu::render()
 {
-	sceneGraph->RenderSceneGraph();
+	//sceneGraph->RenderSceneGraph();
+	customModel->Render();
 }
 
 void MainMenu::postRender()
