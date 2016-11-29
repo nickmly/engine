@@ -5,6 +5,7 @@
 #include "Mesh.h"
 #include "SOIL.h"
 #include "Shader.h"
+#include "OpenGLRenderer.h"
 
 //ASSIMP
 #include "Importer.hpp"
@@ -18,6 +19,8 @@ class Model
 {
 private:
 	Shader shader;
+	OpenGLRenderer* renderer;
+	glm::mat4 transform;
 
 	vector<Texture> textures_loaded;
 
@@ -35,7 +38,7 @@ private:
 
 	GLint TextureFromFile(const char* path, string directory);
 public:
-	Model(GLchar *path, Shader _shader);
+	Model(GLchar *path, Shader _shader, OpenGLRenderer &_rend);
 	~Model();
 	void Render();
 };

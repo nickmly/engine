@@ -1,9 +1,11 @@
 #include "Model.h"
 #include "FileReader.h"
 
-Model::Model(GLchar * path, Shader _shader)
+Model::Model(GLchar * path, Shader _shader, OpenGLRenderer &_rend)
 {
 	shader = _shader;
+	renderer = &_rend;
+	transform = glm::mat4(1.0f);
 	LoadModel(path);
 }
 
@@ -15,6 +17,9 @@ void Model::Render()
 {
 	for (GLuint i = 0; i < meshes.size(); i++)
 	{
+		shader.Use();
+		renderer->SetProgram(shader.GetProgram());
+		renderer->RenderTransform(transform);
 		meshes[i].Render(shader);
 	}
 }
@@ -57,7 +62,7 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 	{
 		mVertex vertex;
 		glm::vec3 vector; // We declare a placeholder vector since assimp uses its own vector class that doesn't directly convert to glm's vec3 class so we transfer the data to this placeholder glm::vec3 first.
-						  // Positions
+		// Positions
 		vector.x = mesh->mVertices[i].x;
 		vector.y = mesh->mVertices[i].y;
 		vector.z = mesh->mVertices[i].z;

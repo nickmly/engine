@@ -31,13 +31,13 @@ void MainMenu::onCreate()
 	
 	secondCamera = Camera(Camera::PROJECTION, 800, 600);
 	secondCamera.fov = 120.0f;
-	secondCamera.SetPositionVector(-15.0f, -10.0f, 4.0f); 
+	secondCamera.SetPositionVector(0.0f, 20.0f, 4.0f); 
 	secondCamera.SetTargetVector(0.0f, 0.0f, 0.0f); 
 	secondCamera.SetUpVector(0.0f, 1.0f, 0.0f); 
 	secondCamera.ResizeFrustum(1.0f, 0.1f, 100.0f);
 
-	Shader shader = Shader(FileReader::ReadFromFile("shader.vert").c_str(), FileReader::ReadFromFile("shader.frag").c_str());
-	customModel = new Model("box2.obj", shader);
+	Shader shader = Shader(FileReader::ReadFromFile("newshader.vert").c_str(), FileReader::ReadFromFile("newshader.frag").c_str());
+	customModel = new Model("sphere.obj", shader, *renderer);
 	//Create a model with these vertices and assign it to a renderer
 	//Models should be initialized when the game is loaded doing this in 
 	//loading models in OnStart() would require the creation of possibly really complex models at runtime
