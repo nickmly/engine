@@ -27,9 +27,10 @@ private:
 	//heap variables
 	SimpleModel *square, *square2, *light;
 
-	Model* customModel;
+	Model* earthModel, *marsModel;
 
-	GameObject *cube, *cube2;
+	GameObject *earthObject;
+	GameObject *marsObject;
 	//MAIN OR INITIAL SCENE CAMERA
 	Camera mainCamera;
 	Camera secondCamera;

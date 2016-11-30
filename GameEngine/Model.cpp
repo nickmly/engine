@@ -24,6 +24,16 @@ void Model::Render()
 	}
 }
 
+glm::mat4 Model::GetTransform()
+{
+	return transform;
+}
+
+void Model::SetTransform(glm::mat4 _transform)
+{
+	transform = _transform;
+}
+
 void Model::LoadModel(string path)
 {
 	Assimp::Importer importer;

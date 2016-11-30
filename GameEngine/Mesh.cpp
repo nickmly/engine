@@ -105,6 +105,12 @@ void Mesh::Render(Shader shader)
 	// Also set each mesh's shininess property to a default value (if you want you could extend this to another mesh property and possibly change this value)
 	glUniform1f(glGetUniformLocation(shader.GetProgram(), "material.shininess"), 16.0f);
 
+	//TODO: move this to another class (lamp/light class)
+	GLint lightColorLoc = glGetUniformLocation(shader.GetProgram(), "lightColor");
+	glUniform3f(lightColorLoc, 1.0f, 0.8f, 0.5f); // Also set light's color (white)
+	GLint lightPosLoc = glGetUniformLocation(shader.GetProgram(), "lightPos");
+	glUniform3f(lightPosLoc, 0.0f, 0.0f, 0.0f);
+
 	// Draw mesh
 	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);

@@ -37,11 +37,14 @@ void MainMenu::onCreate()
 	secondCamera.ResizeFrustum(1.0f, 0.1f, 100.0f);
 
 	Shader shader = Shader(FileReader::ReadFromFile("newshader.vert").c_str(), FileReader::ReadFromFile("newshader.frag").c_str());
-	customModel = new Model("sphere.obj", shader, *renderer);
+	earthModel = new Model("assets/planets/earth.obj", shader, *renderer);
+	earthObject = new GameObject(*earthModel);
+	marsModel = new Model("assets/planets/mars.obj", shader, *renderer);
+	marsObject = new GameObject(*marsModel);
 	//Create a model with these vertices and assign it to a renderer
 	//Models should be initialized when the game is loaded doing this in 
 	//loading models in OnStart() would require the creation of possibly really complex models at runtime
-	square = new SimpleModel(GeometricShapes::GetShape(GeometricShapes::cube),
+	/*square = new SimpleModel(GeometricShapes::GetShape(GeometricShapes::cube),
 		*renderer,
 		"bluewall.jpg",
 		"shader.vert",
@@ -52,11 +55,11 @@ void MainMenu::onCreate()
 		"container.jpg",
 		"shader2.vert",
 		"shader.frag"
-	);
+	);*/
 	light = new SimpleModel(GeometricShapes::GetShape(GeometricShapes::cube), *renderer, "wall.jpg", "lightShader.vert", "lightShader.frag");
 
-	cube = new GameObject(*square);
-	cube2 = new GameObject(*square2);
+	/*cube = new GameObject(*square);
+	cube2 = new GameObject(*square2);*/
 	
 }
 
@@ -66,14 +69,14 @@ void MainMenu::onStart()
 	renderer->SetActiveCamera(mainCamera);
 
 	// gameObject to scene
-	sceneGraph->GetRootSceneNode()->AppendChild(cube->GetSceneNode());
+	sceneGraph->GetRootSceneNode()->AppendChild(earthObject->GetSceneNode());
 	
 	//append 2nd cube to first cube 
-	cube->GetSceneNode()->AppendChild(cube2->GetSceneNode());
+	earthObject->GetSceneNode()->AppendChild(marsObject->GetSceneNode());
 
 	//sets local position relative to its parent node
-	cube->SetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
-	cube2->SetPosition(glm::vec3(3.0f, 0.0f, 0.0f));
+	earthObject->SetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
+	marsObject->SetPosition(glm::vec3(3.0f, 0.0f, 0.0f));
 
 	started = true;
 	
@@ -85,13 +88,14 @@ void MainMenu::onStart()
 void MainMenu::onUpdate(float deltaTime)
 {
 	//sets rotation only on x for parent cube
-	cube->SetRotation(glm::vec3(0.0025, 0.0f, 0.0f));
+	earthObject->SetRotation(glm::vec3(0.0025, 0.0f, 0.0f));
 	//sets rotation only on y for child cube which will inherit the rotation of its parent as well
-	cube2->SetRotation(glm::vec3(0.0f, 0.0025, 0.0f));
+	marsObject->SetRotation(glm::vec3(0.0f, 0.0025, 0.0f));
 
 	//For some reason this won't work unless there is two rendertext calls?
 	renderer->RenderText("fillertext", 800.0f, 600.0f, 1.0f, glm::vec3(0.5f, 0.8f, 0.2f));
 	renderer->RenderText("MainMenu", 0.0f, 16.0f, 1.0f, glm::vec3(1.0f, 1.0f, 1.0f));
+
 }
 
 void MainMenu::onPause()
@@ -116,8 +120,7 @@ void MainMenu::preRender()
 
 void MainMenu::render()
 {
-	//sceneGraph->RenderSceneGraph();
-	customModel->Render();
+	sceneGraph->RenderSceneGraph();
 }
 
 void MainMenu::postRender()
@@ -135,21 +138,21 @@ void MainMenu::HandleInput(Uint32 event, SDL_Keycode key)
 	case SDL_KEYDOWN:
 		switch (key) {
 		case SDLK_a:
-			cube->SetPosition(glm::vec3(-0.25f, 0.0f, 0.0f));
+			earthObject->SetPosition(glm::vec3(-0.25f, 0.0f, 0.0f));
 			break;
 		case SDLK_d:
-			cube->SetPosition(glm::vec3(0.25f, 0.0f, 0.0f));
+			earthObject->SetPosition(glm::vec3(0.25f, 0.0f, 0.0f));
 			break;
 		case SDLK_w:
-			cube->SetPosition(glm::vec3( 0.0f, 0.25f, 0.0f));
+			earthObject->SetPosition(glm::vec3( 0.0f, 0.25f, 0.0f));
 			break;
 		case SDLK_s:
-			cube->SetPosition(glm::vec3( 0.0f, -0.25f, 0.0f));
+			earthObject->SetPosition(glm::vec3( 0.0f, -0.25f, 0.0f));
 			break;
 
 	/////////////////************move child node**************////////////////////////
 		case SDLK_f:
-			cube2->SetPosition(glm::vec3(0.25f, 0.0f, 0.0f));
+			marsObject->SetPosition(glm::vec3(0.25f, 0.0f, 0.0f));
 			break;
 	//////////////////////////////////////////////////////
 			//TESTSCENE STATE

@@ -2,7 +2,7 @@
 #include "SDL.h"
 #include "BoundingSphere.h"
 #include "BoundingBox.h"
-#include "SimpleModel.h"
+#include "Model.h"
 #include "SceneNode.h"
 
 class GameObject
@@ -12,7 +12,7 @@ private:
 	//scenenode contains the transform matrix for the world position
 	SceneNode   *sceneNode;
 	//model passed in for now, this should be a component **MESH**
-	SimpleModel *model;
+	Model *model;
 
 	//World transform variables
 	glm::vec3 position;
@@ -22,7 +22,7 @@ private:
 public:
 
 	GameObject();
-	GameObject(SimpleModel &_model);
+	GameObject(Model &_model);
 	~GameObject();
 
 	void Update(float deltaTime);

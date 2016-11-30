@@ -1,6 +1,6 @@
 #include "GameObject.h"
 
-GameObject::GameObject(SimpleModel &_model)
+GameObject::GameObject(Model &_model)
 {
 	model = &_model;
 	sceneNode = new SceneNode();

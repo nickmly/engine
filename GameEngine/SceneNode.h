@@ -4,7 +4,7 @@
 #include "glm.hpp"
 #include "gtc/quaternion.hpp"
 
-#include "SimpleModel.h"
+#include "Model.h"
 
 class SceneNode
 {
@@ -27,11 +27,11 @@ private:
 	SceneNode *parent;
 
 	//Renderables
-	std::vector<SimpleModel*> MeshList;
+	std::vector<Model*> MeshList;
 
 public:
 
-	typedef vector<SimpleModel*>::iterator mesh_iterator;
+	typedef vector<Model*>::iterator mesh_iterator;
 	mesh_iterator MeshBegin();
 	mesh_iterator MeshEnd();
 
@@ -40,7 +40,7 @@ public:
 	void RemoveChild(SceneNode *node);
 	void ReParent(SceneNode *_adoptiveParent);
 
-	void AttachMesh(SimpleModel *model);
+	void AttachMesh(Model *model);
 
 	void RenderSceneNode();
 	////**********ACCESSORS***********////

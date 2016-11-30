@@ -53,7 +53,7 @@ void SceneNode::ReParent(SceneNode *_adoptiveParent)
 	parent = _adoptiveParent;
 }
 
-void SceneNode::AttachMesh(SimpleModel *model)
+void SceneNode::AttachMesh(Model *model)
 {	
 	model->SetTransform(transform);
 	MeshList.push_back(model);
@@ -65,7 +65,7 @@ void SceneNode::RenderSceneNode()
 		for (int i = 0; i < MeshList.size(); i++)
 		{
 			MeshList.at(i)->SetTransform(transform);
-			MeshList.at(i)->RenderModel();
+			MeshList.at(i)->Render();
 		}
 	}
 	SceneNode *child = firstChild;
