@@ -15,11 +15,11 @@ public:
 	//MOVEMENT
 
 	//Forward Movement
-	void Walk(const float _distance);
+	virtual void Walk(const float _distance)override;
 	//Horizontal Movement
-	void Strafe(const float _distance);
+	virtual void Strafe(const float _distance)override;
 	//Vertical Movement
-	void Lift(const float _distance);
+	virtual void Lift(const float _distance)override;
 
 
 protected:

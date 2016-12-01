@@ -40,6 +40,7 @@ void FPS_Camera::Walk(const float _distance)
 	//uses look as the direction to translate
 	translation += (look*speed*_distance);
 	Update();
+	translation = glm::vec3(0.0f);
 }
 
 void FPS_Camera::Strafe(const float _distance)
@@ -47,6 +48,7 @@ void FPS_Camera::Strafe(const float _distance)
 	//uses right as the direction to translate
 	translation += (right*speed*_distance);
 	Update();
+	translation = glm::vec3(0.0f);
 }
 
 void FPS_Camera::Lift(const float _distance)
@@ -54,5 +56,6 @@ void FPS_Camera::Lift(const float _distance)
 	//uses up as the direction to translate
 	translation += (up*speed*_distance);
 	Update();
+	translation = glm::vec3(0.0f);
 }
 

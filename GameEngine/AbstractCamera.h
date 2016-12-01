@@ -45,7 +45,7 @@ protected:
 public: //ACCESSORS MUTATORS
 
 	const glm::mat4 GetViewMatrix() const; // returns ViewMatrix for rendering
-	const glm::mat4 GetProjMatix() const; // returns ProjMatrix for rendering
+	const glm::mat4 GetProjMatrix() const; // returns ProjMatrix for rendering
 
 	//camera position
 	void SetPosition(const glm::vec3& p);
@@ -56,5 +56,10 @@ public: //ACCESSORS MUTATORS
 	const float GetFOV() const;
 
 	const float GetAspectRatio() const;
+
+public:
+	virtual void Walk(float dist) = 0;
+	virtual void Strafe(float dist) = 0;
+	virtual void Lift(float dist) = 0;
 };
 

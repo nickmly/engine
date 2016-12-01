@@ -152,6 +152,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AABB.h" />
+    <ClInclude Include="AbstractCamera.h" />
     <ClInclude Include="AbstractRenderer.h" />
     <ClInclude Include="BasicTypes.h" />
     <ClInclude Include="BoundingBox.h" />
@@ -161,6 +162,7 @@
     <ClInclude Include="Color.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="FileReader.h" />
+    <ClInclude Include="FPS_Camera.h" />
     <ClInclude Include="Frustum.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GeometricShapes.h" />
@@ -182,11 +184,13 @@
     <ClInclude Include="SimpleModel.h" />
     <ClInclude Include="SOILImage.h" />
     <ClInclude Include="StlOptions.h" />
+    <ClInclude Include="TargetCamera.h" />
     <ClInclude Include="Util.h" />
     <ClInclude Include="Vertex.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AABB.cpp" />
+    <ClCompile Include="AbstractCamera.cpp" />
     <ClCompile Include="BasicTypes.cpp" />
     <ClCompile Include="BoundingBox.cpp" />
     <ClCompile Include="BoundingSphere.cpp" />
@@ -194,6 +198,7 @@
     <ClCompile Include="Clock.cpp" />
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="Engine.cpp" />
+    <ClCompile Include="FPS_Camera.cpp" />
     <ClCompile Include="Frustum.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GeometricShapes.cpp" />
@@ -211,6 +216,7 @@
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="SimpleModel.cpp" />
     <ClCompile Include="SOILImage.cpp" />
+    <ClCompile Include="TargetCamera.cpp" />
     <ClCompile Include="Util.cpp" />
     <ClCompile Include="Vertex.cpp" />
   </ItemGroup>

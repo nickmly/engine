@@ -8,7 +8,6 @@ AbstractCamera::AbstractCamera(void)
 	Zfar = 1000;
 }
 
-
 AbstractCamera::~AbstractCamera(void)
 {
 }
@@ -35,7 +34,7 @@ const glm::mat4 AbstractCamera::GetViewMatrix() const
 	return ViewMatrix;
 }
 
-const glm::mat4 AbstractCamera::GetProjMatix() const
+const glm::mat4 AbstractCamera::GetProjMatrix() const
 {
 	return ProjMatrix;
 }

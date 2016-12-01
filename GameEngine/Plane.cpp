@@ -43,7 +43,7 @@ float Plane::GetDistance()
 	return d;
 }
 
-float Plane::GetSignedDistance(glm::vec3 & pt)
+float Plane::GetSignedDistance(const glm::vec3 & pt)
 {
 	glm::vec3 N(a, b, c);
 	return glm::dot(N, pt) + d;

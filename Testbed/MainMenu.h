@@ -15,6 +15,8 @@
 #include "FileReader.h"
 #include "GameObject.h"
 #include "SceneGraph.h"
+#include "FPS_Camera.h"
+#include "TargetCamera.h"
 class MainMenu : public GameScene
 {
 public:
@@ -22,19 +24,21 @@ public:
 	~MainMenu();
 
 private:
+
+	
 	//ptr to renderer created in main.cpp
 	OpenGLRenderer *renderer;
 	//heap variables
 	SimpleModel *square, *square2, *light;
 
-	Model* earthModel, *marsModel;
-
+	Model* earthModel, *marsModel, *scope;
 	GameObject *earthObject;
 	GameObject *marsObject;
 	//MAIN OR INITIAL SCENE CAMERA
 	Camera mainCamera;
 	Camera secondCamera;
-
+	AbstractCamera *fpsCamera;
+	AbstractCamera *targetCamera;
 	SceneGraph *sceneGraph;
 
 public:
@@ -58,6 +62,8 @@ public:
 	//***********INPUT**************//
 	virtual void HandleInput(Uint32 event, SDL_Keycode key) override;
 	void onMouse(int button, int state, int x, int y);
+
+
 };
 
 

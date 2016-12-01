@@ -21,53 +21,42 @@ MainMenu::~MainMenu()
 void MainMenu::onCreate()
 {
 	
-	mainCamera = Camera(Camera::PROJECTION, 800, 600); // Setup our camera
-	mainCamera.fov = 120.0f;
-	mainCamera.SetPositionVector(0.0f, -10.0f, 4.0f); // Put camera at this position
-	mainCamera.SetTargetVector(0.0f, 0.0f, 0.0f); // Look at this position
-	mainCamera.SetUpVector(0.0f, 1.0f, 0.0f); // Camera is pointing up (0,-1,0) for down
-	mainCamera.ResizeFrustum(1.0f, 0.1f, 100.0f); // Set up frustum
-
+	//mainCamera = Camera(Camera::PROJECTION, 800, 600); // Setup our camera
+	//mainCamera.fov = 120.0f;
+	//mainCamera.SetPositionVector(0.0f, -10.0f, 4.0f); // Put camera at this position
+	//mainCamera.SetTargetVector(0.0f, 0.0f, 0.0f); // Look at this position
+	//mainCamera.SetUpVector(0.0f, 1.0f, 0.0f); // Camera is pointing up (0,-1,0) for down
+	//mainCamera.ResizeFrustum(1.0f, 0.1f, 100.0f); // Set up frustum
 	
-	secondCamera = Camera(Camera::PROJECTION, 800, 600);
-	secondCamera.fov = 120.0f;
-	secondCamera.SetPositionVector(0.0f, 20.0f, 4.0f); 
-	secondCamera.SetTargetVector(0.0f, 0.0f, 0.0f); 
-	secondCamera.SetUpVector(0.0f, 1.0f, 0.0f); 
-	secondCamera.ResizeFrustum(1.0f, 0.1f, 100.0f);
+	//
+	//secondCamera = Camera(Camera::PROJECTION, 800, 600);
+	//secondCamera.fov = 120.0f;
+	//secondCamera.SetPositionVector(0.0f, 20.0f, 4.0f); 
+	//secondCamera.SetTargetVector(0.0f, 0.0f, 0.0f); 
+	//secondCamera.SetUpVector(0.0f, 1.0f, 0.0f); 
+	//secondCamera.ResizeFrustum(1.0f, 0.1f, 100.0f);
+
+	fpsCamera = new FPS_Camera();
+	fpsCamera->SetupProjection(120.0f, 800 / 600, 0.1f, 1000.0f);
+	fpsCamera->SetPosition(glm::vec3(0.0f, 1, -10));
 
 	Shader shader = Shader(FileReader::ReadFromFile("newshader.vert").c_str(), FileReader::ReadFromFile("newshader.frag").c_str());
+	
 	earthModel = new Model("assets/planets/earth.obj", shader, *renderer);
 	earthObject = new GameObject(*earthModel);
 	marsModel = new Model("assets/planets/mars.obj", shader, *renderer);
 	marsObject = new GameObject(*marsModel);
-	//Create a model with these vertices and assign it to a renderer
-	//Models should be initialized when the game is loaded doing this in 
-	//loading models in OnStart() would require the creation of possibly really complex models at runtime
-	/*square = new SimpleModel(GeometricShapes::GetShape(GeometricShapes::cube),
-		*renderer,
-		"bluewall.jpg",
-		"shader.vert",
-		"shader.frag"
-	);
-	square2 = new SimpleModel(GeometricShapes::GetShape(GeometricShapes::cube),
-		*renderer,
-		"container.jpg",
-		"shader2.vert",
-		"shader.frag"
-	);*/
+	scope = new Model("box.obj", shader, *renderer);
 	light = new SimpleModel(GeometricShapes::GetShape(GeometricShapes::cube), *renderer, "wall.jpg", "lightShader.vert", "lightShader.frag");
-
-	/*cube = new GameObject(*square);
-	cube2 = new GameObject(*square2);*/
 	
 }
 
 void MainMenu::onStart()
 {
 	//use this to assign a camera to the renderer
-	renderer->SetActiveCamera(mainCamera);
-
+	//renderer->SetActiveCamera(mainCamera);
+	renderer->SetActiveCam(*fpsCamera);
+	
 	// gameObject to scene
 	sceneGraph->GetRootSceneNode()->AppendChild(earthObject->GetSceneNode());
 	
@@ -81,6 +70,8 @@ void MainMenu::onStart()
 	started = true;
 	
 	sceneState = SCENE_STATE::RUNNING;
+	
+
 }
 
 //***********GAME STATES****************//
@@ -95,7 +86,7 @@ void MainMenu::onUpdate(float deltaTime)
 	//For some reason this won't work unless there is two rendertext calls?
 	renderer->RenderText("fillertext", 800.0f, 600.0f, 1.0f, glm::vec3(0.5f, 0.8f, 0.2f));
 	renderer->RenderText("MainMenu", 0.0f, 16.0f, 1.0f, glm::vec3(1.0f, 1.0f, 1.0f));
-
+	
 }
 
 void MainMenu::onPause()
@@ -120,6 +111,7 @@ void MainMenu::preRender()
 
 void MainMenu::render()
 {
+
 	sceneGraph->RenderSceneGraph();
 }
 
@@ -138,18 +130,27 @@ void MainMenu::HandleInput(Uint32 event, SDL_Keycode key)
 	case SDL_KEYDOWN:
 		switch (key) {
 		case SDLK_a:
-			earthObject->SetPosition(glm::vec3(-0.25f, 0.0f, 0.0f));
+			//earthObject->SetPosition(glm::vec3(-0.25f, 0.0f, 0.0f));
+			fpsCamera->Strafe(-1.0f);
 			break;
 		case SDLK_d:
-			earthObject->SetPosition(glm::vec3(0.25f, 0.0f, 0.0f));
+			//earthObject->SetPosition(glm::vec3(0.25f, 0.0f, 0.0f));
+			fpsCamera->Strafe(1.0f);
 			break;
 		case SDLK_w:
-			earthObject->SetPosition(glm::vec3( 0.0f, 0.25f, 0.0f));
+			//earthObject->SetPosition(glm::vec3( 0.0f, 0.25f, 0.0f));
+			fpsCamera->Walk(1.0f);
 			break;
 		case SDLK_s:
-			earthObject->SetPosition(glm::vec3( 0.0f, -0.25f, 0.0f));
+			//earthObject->SetPosition(glm::vec3( 0.0f, -0.25f, 0.0f));
+			fpsCamera->Walk(-1.0f);
 			break;
-
+		case SDLK_e:
+			fpsCamera->Lift(0.25f);
+			break;
+		case SDLK_c:
+			fpsCamera->Lift(-0.25f);
+			break;
 	/////////////////************move child node**************////////////////////////
 		case SDLK_f:
 			marsObject->SetPosition(glm::vec3(0.25f, 0.0f, 0.0f));
@@ -165,7 +166,7 @@ void MainMenu::HandleInput(Uint32 event, SDL_Keycode key)
 			sceneState = SCENE_STATE::RUNNING;
 			break;
 			////////////TEST CAMERA SWITCH
-		case SDLK_c:
+		case SDLK_g:
 			renderer->SetActiveCamera(secondCamera);
 			break;
 		case SDLK_v:

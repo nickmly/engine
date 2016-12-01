@@ -12,15 +12,18 @@
 #include <map>
 #include "ft2build.h"
 #include FT_FREETYPE_H
-
+#include "AbstractCamera.h"
 class OpenGLRenderer : public AbstractRenderer
 {
 private:
 	//GLuint program;
 	//TODO:: camera should be created in scene for multiple camera options... maybe
 	Camera *camera;
+	AbstractCamera *cam;
 	GLuint VAO, VBO;
 	Shader textShader;
+
+	GLuint modelHandle, viewHandle, projHandle;
 
 public:
 	OpenGLRenderer();
@@ -47,4 +50,6 @@ public:
 	void SetActiveCamera(Camera &cam);
 	Camera* GetActiveCamera();
 
+	void SetActiveCam( AbstractCamera &_cam) { cam = &_cam; }
+	AbstractCamera* GetActiveCam() { return cam; }
 };

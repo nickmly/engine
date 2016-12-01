@@ -41,6 +41,7 @@ public:
 	Model(GLchar *path, Shader _shader, OpenGLRenderer &_rend);
 	~Model();
 	void Render();
+
 	glm::mat4 GetTransform();
 	void SetTransform(glm::mat4 _transform);
 };

@@ -98,17 +98,14 @@ void OpenGLRenderer::EnableOpenGL() {
 
 void OpenGLRenderer::PrepareToRender()
 {
-
-
-	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	glClearColor(115.0f, 115.0f, 115.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	//Enable depth test to prevent some faces from being invisible
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-	camera->Render();
+	//camera->Render();
 }
 
 void OpenGLRenderer::Render()
@@ -125,7 +122,10 @@ void OpenGLRenderer::PostRender()
 void OpenGLRenderer::SetProgram(GLuint _program)
 {
 	//program = _program;
-	camera->SetProgram(_program);
+	//camera->SetProgram(_program);
+	modelHandle = glGetUniformLocation(_program, "model"); // Assign modelHandle to uniform value model in shader program
+	viewHandle = glGetUniformLocation(_program, "view");
+	projHandle = glGetUniformLocation(_program, "projection");
 }
 
 void OpenGLRenderer::Destroy()
@@ -138,7 +138,10 @@ void OpenGLRenderer::Destroy()
 
 void OpenGLRenderer::RenderTransform(glm::mat4 transform)
 {
-	camera->RenderModel(transform);
+	glUniformMatrix4fv(viewHandle, 1, GL_FALSE, &cam->GetViewMatrix()[0][0]); // Send it to the GLSL file
+	glUniformMatrix4fv(projHandle, 1, GL_FALSE, &cam->GetProjMatrix()[0][0]); // Send it to the GLSL file
+	glUniformMatrix4fv(modelHandle, 1, GL_FALSE, &transform[0][0]); // Send it to the GLSL file
+	//camera->RenderModel(transform);
 }
 
 void OpenGLRenderer::RenderText(std::string text, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 color)
