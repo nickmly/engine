@@ -46,6 +46,11 @@ void SceneManager::OnInput(Uint32 event, SDL_Keycode key)
 	currentScene->HandleInput(event, key);
 }
 
+void SceneManager::OnMouse(Uint32 event, Uint8 button, Uint16 x, Uint16 y, Sint16 xrel, Sint16 yrel)
+{
+	currentScene->HandleMouse(event, button, x, y, xrel, yrel);
+}
+
 void SceneManager::AddScene(GameScene *scene)
 {
 	SceneList.push_back(scene);

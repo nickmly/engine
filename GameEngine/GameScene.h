@@ -53,6 +53,7 @@ public:
 	//Manage Scene Input
 	//TODO:: creat input manager class and place it into SceneManager to delegate scene recieving input
 	virtual void HandleInput(Uint32 event, SDL_Keycode key) = 0;
+	virtual void HandleMouse(Uint32 event, Uint8 button, Uint16 x, Uint16 y, Sint16 xrel, Sint16 yrel) = 0;
 
 	//Maniupulate SceneState
 	void SetSceneState(SCENE_STATE type) {

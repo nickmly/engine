@@ -95,6 +95,9 @@ int main(int argc, char** argv) {
 				GSM->OnInput(windowEvent.type, windowEvent.key.keysym.sym);
 				//app.onInput(windowEvent.type, windowEvent.key.keysym.sym, 0, 0);
 			}
+			if (windowEvent.type == SDL_MOUSEBUTTONDOWN || windowEvent.type == SDL_MOUSEMOTION) {
+				GSM->OnMouse(windowEvent.type, windowEvent.button.button, windowEvent.motion.x, windowEvent.motion.y, windowEvent.motion.xrel, windowEvent.motion.yrel);
+			}
 		}	
 
 		switch (GSM->GetCurrentScene()->GetSceneState()) {

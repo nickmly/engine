@@ -4,6 +4,7 @@
 #include "SDL.h"
 #include "GL\glew.h"
 #include <OpenGLRenderer.h>
+#include "SpriteRenderer.h"
 #include "ResourceManager.h"
 #include "Model.h"
 #include "SimpleModel.h"
@@ -30,6 +31,7 @@ private:
 	OpenGLRenderer *renderer;
 	//heap variables
 	SimpleModel *square, *square2, *light;
+	SpriteRenderer *space;
 
 	Model* earthModel, *marsModel, *scope;
 	GameObject *earthObject;
@@ -61,7 +63,7 @@ public:
 	
 	//***********INPUT**************//
 	virtual void HandleInput(Uint32 event, SDL_Keycode key) override;
-	void onMouse(int button, int state, int x, int y);
+	virtual void HandleMouse(Uint32 event, Uint8 button, Uint16 x, Uint16 y, Sint16 xrel, Sint16 yrel) override;
 
 
 };

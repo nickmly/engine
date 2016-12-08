@@ -49,6 +49,9 @@ void MainMenu::onCreate()
 	scope = new Model("box.obj", shader, *renderer);
 	light = new SimpleModel(GeometricShapes::GetShape(GeometricShapes::cube), *renderer, "wall.jpg", "lightShader.vert", "lightShader.frag");
 	
+
+	Shader spriteShader = Shader(FileReader::ReadFromFile("UI_shader.vert").c_str(), FileReader::ReadFromFile("UI_shader.frag").c_str());
+	space = new SpriteRenderer(spriteShader, "assets/planets/space.png");
 }
 
 void MainMenu::onStart()
@@ -69,9 +72,7 @@ void MainMenu::onStart()
 
 	started = true;
 	
-	sceneState = SCENE_STATE::RUNNING;
-	
-
+	sceneState = SCENE_STATE::RUNNING;	
 }
 
 //***********GAME STATES****************//
@@ -85,8 +86,7 @@ void MainMenu::onUpdate(float deltaTime)
 
 	//For some reason this won't work unless there is two rendertext calls?
 	renderer->RenderText("fillertext", 800.0f, 600.0f, 1.0f, glm::vec3(0.5f, 0.8f, 0.2f));
-	renderer->RenderText("MainMenu", 0.0f, 16.0f, 1.0f, glm::vec3(1.0f, 1.0f, 1.0f));
-	
+	renderer->RenderText("MainMenu", 0.0f, 16.0f, 1.0f, glm::vec3(1.0f, 1.0f, 1.0f));	
 }
 
 void MainMenu::onPause()
@@ -107,11 +107,11 @@ void MainMenu::onQuit()
 void MainMenu::preRender()
 {
 	renderer->PrepareToRender();
+	space->DrawSprite(glm::vec2(0.0f, 0.0f), glm::vec2(1.0f, 1.0f), 0.0f);
 }
 
 void MainMenu::render()
-{
-
+{	
 	sceneGraph->RenderSceneGraph();
 }
 
@@ -119,7 +119,6 @@ void MainMenu::postRender()
 {
 	renderer->PostRender();
 }
-
 
 //*************INPUT*****************//
 
@@ -188,15 +187,23 @@ void MainMenu::HandleInput(Uint32 event, SDL_Keycode key)
 		break;
 	}
 }
-void MainMenu::onMouse(int button, int state, int x, int y)
+
+void MainMenu::HandleMouse(Uint32 event, Uint8 button, Uint16 x, Uint16 y, Sint16 xrel, Sint16 yrel)
 {
-	switch (button) {
-	case GLUT_LEFT_BUTTON:
-		if (state == GLUT_DOWN) {
+	switch (event) {
+	case SDL_MOUSEBUTTONDOWN:
+		if (button == SDL_BUTTON_LEFT) {
+
+		}
+		if (button == SDL_BUTTON_RIGHT) {
 
 		}
 		break;
+	case SDL_MOUSEMOTION:
+		fpsCamera->Rotate(0.0f, yrel/100, xrel/100);
+		break;
 	}
 }
+
 
 //***********************************//

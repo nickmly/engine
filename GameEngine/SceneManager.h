@@ -53,6 +53,8 @@ class SceneManager
 
 		void OnInput(Uint32 event, SDL_Keycode key);
 
+		void OnMouse(Uint32 event, Uint8 button, Uint16 x, Uint16 y, Sint16 xrel, Sint16 yrel);
+
 		void End();
 
 		void AddScene(GameScene *scene);

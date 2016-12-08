@@ -98,7 +98,7 @@ void OpenGLRenderer::EnableOpenGL() {
 
 void OpenGLRenderer::PrepareToRender()
 {
-	glClearColor(115.0f, 115.0f, 115.0f, 1.0f);
+	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	//Enable depth test to prevent some faces from being invisible
@@ -114,7 +114,6 @@ void OpenGLRenderer::Render()
 
 void OpenGLRenderer::PostRender()
 {
-	//Enable depth test to prevent some faces from being invisible
 	glDisable(GL_DEPTH_TEST);
 	glDisable(GL_BLEND);
 }

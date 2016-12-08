@@ -183,6 +183,7 @@
     <ClInclude Include="Shader.h" />
     <ClInclude Include="SimpleModel.h" />
     <ClInclude Include="SOILImage.h" />
+    <ClInclude Include="SpriteRenderer.h" />
     <ClInclude Include="StlOptions.h" />
     <ClInclude Include="TargetCamera.h" />
     <ClInclude Include="Util.h" />
@@ -201,6 +202,7 @@
     <ClCompile Include="FPS_Camera.cpp" />
     <ClCompile Include="Frustum.cpp" />
     <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="GeometricShapes.cpp" />
     <ClCompile Include="LogManager.cpp" />
     <ClCompile Include="Material.cpp" />
@@ -216,6 +218,7 @@
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="SimpleModel.cpp" />
     <ClCompile Include="SOILImage.cpp" />
+    <ClCompile Include="SpriteRenderer.cpp" />
     <ClCompile Include="TargetCamera.cpp" />
     <ClCompile Include="Util.cpp" />
     <ClCompile Include="Vertex.cpp" />
