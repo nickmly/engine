@@ -20,7 +20,7 @@ void Model::Render()
 		shader.Use();
 		renderer->SetProgram(shader.GetProgram());
 		renderer->RenderTransform(transform);
-		meshes[i].Render(shader);
+		meshes[i].Render(shader, *renderer);
 	}
 }
 

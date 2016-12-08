@@ -79,7 +79,7 @@ void Mesh::SetupMesh()
 	shader = _shader;
 }*/
 
-void Mesh::Render(Shader shader)
+void Mesh::Render(Shader shader, OpenGLRenderer rend)
 {
 	// Bind appropriate textures
 	GLuint diffuseNr = 1;
@@ -103,13 +103,27 @@ void Mesh::Render(Shader shader)
 	}
 
 	// Also set each mesh's shininess property to a default value (if you want you could extend this to another mesh property and possibly change this value)
-	glUniform1f(glGetUniformLocation(shader.GetProgram(), "material.shininess"), 16.0f);
+	//glUniform1f(glGetUniformLocation(shader.GetProgram(), "material.shininess"), 16.0f);
+
+	GLint matAmbientLoc = glGetUniformLocation(shader.GetProgram(), "material.ambient");
+	GLint matDiffuseLoc = glGetUniformLocation(shader.GetProgram(), "material.diffuse");
+	GLint matSpecularLoc = glGetUniformLocation(shader.GetProgram(), "material.specular");
+	GLint matShineLoc = glGetUniformLocation(shader.GetProgram(), "material.shininess");
+
+	glUniform3f(matAmbientLoc, 1.0f, 0.5f, 0.31f);
+	glUniform3f(matDiffuseLoc, 1.0f, 0.5f, 0.31f);
+	glUniform3f(matSpecularLoc, 0.5f, 0.5f, 0.5f);
+	glUniform1f(matShineLoc, 32.0f);
 
 	////TODO: move this to another class (lamp/light class)
 	GLint lightColorLoc = glGetUniformLocation(shader.GetProgram(), "lightColor");
 	glUniform3f(lightColorLoc, 1.0f, 0.8f, 0.5f); // Also set light's color (white)
 	GLint lightPosLoc = glGetUniformLocation(shader.GetProgram(), "lightPos");
 	glUniform3f(lightPosLoc, 0.0f, 0.0f, 0.0f);
+	GLint viewPosLoc = glGetUniformLocation(shader.GetProgram(), "viewPos");
+	glUniform3f(viewPosLoc, rend.GetActiveCam()->GetPosition().x, rend.GetActiveCam()->GetPosition().y, rend.GetActiveCam()->GetPosition().z);
+	
+
 
 	// Draw mesh
 	glBindVertexArray(VAO);

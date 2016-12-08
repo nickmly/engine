@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 #include "Shader.h"
-
+#include "OpenGLRenderer.h"
 
 #include "scene.h"
 
@@ -49,7 +49,7 @@ public:
 	vector<GLuint> indices;
 	vector<Texture> textures;
 	//void SetShader(Shader _shader);
-	void Render(Shader shader);
+	void Render(Shader shader, OpenGLRenderer rend);
 
 	Mesh(vector<mVertex> _vertices, vector<GLuint> _indices, vector<Texture> _textures);
 	~Mesh();

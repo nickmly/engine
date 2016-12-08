@@ -55,6 +55,12 @@
     <None Include="lightShader.vert">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="newshader.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="newshader.vert">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="container.jpg">

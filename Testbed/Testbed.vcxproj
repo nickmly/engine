@@ -175,6 +175,8 @@
   <ItemGroup>
     <None Include="lightShader.frag" />
     <None Include="lightShader.vert" />
+    <None Include="newshader.frag" />
+    <None Include="newshader.vert" />
     <None Include="shader.frag" />
     <None Include="shader.vert" />
     <None Include="shader2.vert" />
