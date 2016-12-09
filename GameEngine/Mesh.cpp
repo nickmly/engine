@@ -110,16 +110,25 @@ void Mesh::Render(Shader shader, OpenGLRenderer rend)
 	GLint matSpecularLoc = glGetUniformLocation(shader.GetProgram(), "material.specular");
 	GLint matShineLoc = glGetUniformLocation(shader.GetProgram(), "material.shininess");
 
-	glUniform3f(matAmbientLoc, 1.0f, 0.5f, 0.31f);
-	glUniform3f(matDiffuseLoc, 1.0f, 0.5f, 0.31f);
+	glUniform3f(matAmbientLoc, 1.0f, 1.0f, 1.0f);
+	glUniform3f(matDiffuseLoc, 1.0f, 1.0f, 1.0f);
 	glUniform3f(matSpecularLoc, 0.5f, 0.5f, 0.5f);
 	glUniform1f(matShineLoc, 32.0f);
 
 	////TODO: move this to another class (lamp/light class)
-	GLint lightColorLoc = glGetUniformLocation(shader.GetProgram(), "lightColor");
-	glUniform3f(lightColorLoc, 1.0f, 0.8f, 0.5f); // Also set light's color (white)
-	GLint lightPosLoc = glGetUniformLocation(shader.GetProgram(), "lightPos");
+	//GLint lightColorLoc = glGetUniformLocation(shader.GetProgram(), "lightColor");
+	//glUniform3f(lightColorLoc, 1.0f, 0.8f, 0.5f); // Also set light's color (white)
+	//GLint lightPosLoc = glGetUniformLocation(shader.GetProgram(), "lightPos");
+	//glUniform3f(lightPosLoc, 0.0f, 0.0f, 0.0f);
+	GLint lightALoc = glGetUniformLocation(shader.GetProgram(), "light.ambient");
+	glUniform3f(lightALoc, 1.0f, 1.0f, 1.0f); 
+	GLint lightDLoc = glGetUniformLocation(shader.GetProgram(), "light.diffuse");
+	glUniform3f(lightALoc, 1.0f, 1.0f, 1.0f);
+	GLint lightSLoc = glGetUniformLocation(shader.GetProgram(), "light.specular");
+	glUniform3f(lightALoc, 1.0f, 1.0f, 1.0f);
+	GLint lightPosLoc = glGetUniformLocation(shader.GetProgram(), "light.position");
 	glUniform3f(lightPosLoc, 0.0f, 0.0f, 0.0f);
+
 	GLint viewPosLoc = glGetUniformLocation(shader.GetProgram(), "viewPos");
 	glUniform3f(viewPosLoc, rend.GetActiveCam()->GetPosition().x, rend.GetActiveCam()->GetPosition().y, rend.GetActiveCam()->GetPosition().z);
 	

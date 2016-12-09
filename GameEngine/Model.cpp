@@ -95,7 +95,6 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 		else
 			vertex.TexCoords = glm::vec2(0.0f, 0.0f);
 		vertices.push_back(vertex);
-		printf("Vertex pushed. Position: (%f,%f,%f)\n\tNormal: (%f,%f,%f)\n", vertex.Position.x, vertex.Position.y, vertex.Position.z, vertex.Normal.x, vertex.Normal.y, vertex.Normal.z);
 	}
 	// Now wak through each of the mesh's faces (a face is a mesh its triangle) and retrieve the corresponding vertex indices.
 	for (GLuint i = 0; i < mesh->mNumFaces; i++)

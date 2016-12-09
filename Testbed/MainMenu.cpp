@@ -1,7 +1,7 @@
 #include "MainMenu.h"
 
 using namespace std;
-
+float delta = -1.0f;
 MainMenu::MainMenu(OpenGLRenderer *_renderer)
 {
 	renderer = _renderer;
@@ -79,13 +79,14 @@ void MainMenu::onStart()
 
 void MainMenu::onUpdate(float deltaTime)
 {
+	delta = deltaTime;
 	//sets rotation only on x for parent cube
 	earthObject->SetRotation(glm::vec3(0.0025, 0.0f, 0.0f));
 	//sets rotation only on y for child cube which will inherit the rotation of its parent as well
 	marsObject->SetRotation(glm::vec3(0.0f,0.0025f, 0.0f));
 	//For some reason this won't work unless there is two rendertext calls?
 	renderer->RenderText("fillertext", 800.0f, 600.0f, 1.0f, glm::vec3(0.5f, 0.8f, 0.2f));
-	renderer->RenderText("MainMenu", 0.0f, 16.0f, 1.0f, glm::vec3(1.0f, 1.0f, 1.0f));	
+	renderer->RenderText("MainMenu", 0.0f, 16.0f, 1.0f, glm::vec3(1.0f, 1.0f, 1.0f));
 
 	fpsCamera->Rotate(camRotation.x, camRotation.y, camRotation.z);
 }
@@ -201,9 +202,8 @@ void MainMenu::HandleMouse(Uint32 event, Uint8 button, Uint16 x, Uint16 y, Sint1
 		}
 		break;
 	case SDL_MOUSEMOTION:
-		camRotation.x += xrel * 0.5f;
-		camRotation.y += yrel * 0.5f;
-		
+		camRotation.x += (xrel * 50.0f * delta) * -1.0f;
+		camRotation.y += yrel * 50.0f * delta;		
 		break;
 	}
 }
