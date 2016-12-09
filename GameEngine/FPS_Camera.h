@@ -10,10 +10,9 @@ public:
 	~FPS_Camera(void);
 
 	//update ViewMatrix
-	void Update();
+	virtual void Update() override;
 
 	//MOVEMENT
-
 	//Forward Movement
 	virtual void Walk(const float _distance)override;
 	//Horizontal Movement

@@ -26,7 +26,7 @@ public:
 
 private:
 
-	
+	glm::vec3 camRotation;
 	//ptr to renderer created in main.cpp
 	OpenGLRenderer *renderer;
 	//heap variables
