@@ -33,9 +33,14 @@ private:
 	SimpleModel *square, *square2, *light;
 	SpriteRenderer *space;
 
-	Model* earthModel, *marsModel, *scope;
+	Model* earthModel, *marsModel, *sunModel, *saturnModel, *neptuneModel, *mercuryModel, *uranusModel, *scope;
 	GameObject *earthObject;
 	GameObject *marsObject;
+	GameObject *sunObject;
+	GameObject *saturnObject;
+	GameObject *neptuneObject;
+	GameObject *mercuryObject;
+	GameObject *uranusObject;
 	//MAIN OR INITIAL SCENE CAMERA
 	Camera mainCamera;
 	Camera secondCamera;

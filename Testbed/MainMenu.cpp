@@ -44,8 +44,28 @@ void MainMenu::onCreate()
 	
 	earthModel = new Model("assets/planets/earth.obj", shader, *renderer);
 	earthObject = new GameObject(*earthModel);
+
 	marsModel = new Model("assets/planets/mars.obj", shader, *renderer);
 	marsObject = new GameObject(*marsModel);
+
+	sunModel = new Model("assets/planets/sun.obj", shader, *renderer);
+	sunObject = new GameObject(*sunModel);
+
+	saturnModel = new Model("assets/planets/saturn.obj", shader, *renderer);
+	saturnObject = new GameObject(*saturnModel);
+
+	uranusModel = new Model("assets/planets/uranus.obj", shader, *renderer);
+	uranusObject = new GameObject(*uranusModel);
+
+	neptuneModel = new Model("assets/planets/neptune.obj", shader, *renderer);
+	neptuneObject = new GameObject(*neptuneModel);
+
+	mercuryModel = new Model("assets/planets/mercury.obj", shader, *renderer);
+	mercuryObject = new GameObject(*mercuryModel);
+
+	marsObject->SetScale(glm::vec3(2.0f));
+	saturnObject->SetScale(glm::vec3(1.5f));
+	uranusObject->SetScale(glm::vec3(2.0f));
 	scope = new Model("box.obj", shader, *renderer);
 	light = new SimpleModel(GeometricShapes::GetShape(GeometricShapes::cube), *renderer, "wall.jpg", "lightShader.vert", "lightShader.frag");
 	
@@ -61,15 +81,22 @@ void MainMenu::onStart()
 	renderer->SetActiveCam(*fpsCamera);
 	
 	// gameObject to scene
-	sceneGraph->GetRootSceneNode()->AppendChild(earthObject->GetSceneNode());
-	
+	sceneGraph->GetRootSceneNode()->AppendChild(sunObject->GetSceneNode());
+	sunObject->GetSceneNode()->AppendChild(earthObject->GetSceneNode());
+	sunObject->GetSceneNode()->AppendChild(marsObject->GetSceneNode());
+	sunObject->GetSceneNode()->AppendChild(saturnObject->GetSceneNode());
+	sunObject->GetSceneNode()->AppendChild(uranusObject->GetSceneNode());
+	sunObject->GetSceneNode()->AppendChild(neptuneObject->GetSceneNode());
+	sunObject->GetSceneNode()->AppendChild(mercuryObject->GetSceneNode());
 	//append 2nd cube to first cube 
-	earthObject->GetSceneNode()->AppendChild(marsObject->GetSceneNode());
+	//earthObject->GetSceneNode()->AppendChild(marsObject->GetSceneNode());
 
 	//sets local position relative to its parent node
-	earthObject->SetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
-	marsObject->SetPosition(glm::vec3(3.0f, 0.0f, 0.0f));
-
+	earthObject->SetPosition(glm::vec3(-3.0f, 0.0f, -1.0f));
+	marsObject->SetPosition(glm::vec3(3.0f, 0.0f, 2.0f));
+	saturnObject->SetPosition(glm::vec3(8.0f, 0.0f, 6.0f));
+	uranusObject->SetPosition(glm::vec3(16.0f, 0.0f, 8.0f));
+	neptuneObject->SetPosition(glm::vec3(-7.0f, 0.0f, -1.5f));
 	started = true;
 	
 	sceneState = SCENE_STATE::RUNNING;	
@@ -81,7 +108,7 @@ void MainMenu::onUpdate(float deltaTime)
 {
 	delta = deltaTime;
 	//sets rotation only on x for parent cube
-	earthObject->SetRotation(glm::vec3(0.0025, 0.0f, 0.0f));
+	sunObject->SetRotation(glm::vec3(0.0f, 0.0025f, 0.0f));
 	//sets rotation only on y for child cube which will inherit the rotation of its parent as well
 	marsObject->SetRotation(glm::vec3(0.0f,0.0025f, 0.0f));
 	//For some reason this won't work unless there is two rendertext calls?
