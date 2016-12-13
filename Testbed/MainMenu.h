@@ -34,13 +34,14 @@ private:
 	SpriteRenderer *space;
 
 	Model* earthModel, *marsModel, *sunModel, *saturnModel, *neptuneModel, *mercuryModel, *uranusModel, *scope;
-	GameObject *earthObject;
-	GameObject *marsObject;
+	Model *fake;
+	GameObject *earthObject, *earthRotation;
+	GameObject *marsObject, *marsRotation;
 	GameObject *sunObject;
-	GameObject *saturnObject;
-	GameObject *neptuneObject;
-	GameObject *mercuryObject;
-	GameObject *uranusObject;
+	GameObject *saturnObject, *saturnRotation;
+	GameObject *neptuneObject, *neptuneRotation;
+	GameObject *mercuryObject, *mercuryRotation;
+	GameObject *uranusObject, *uranusRotation;
 	//MAIN OR INITIAL SCENE CAMERA
 	Camera mainCamera;
 	Camera secondCamera;

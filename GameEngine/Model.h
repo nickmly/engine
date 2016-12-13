@@ -39,6 +39,7 @@ private:
 	GLint TextureFromFile(const char* path, string directory);
 public:
 	Model(GLchar *path, Shader _shader, OpenGLRenderer &_rend);
+	Model();
 	~Model();
 	void Render();
 

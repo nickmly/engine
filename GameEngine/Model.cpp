@@ -9,6 +9,10 @@ Model::Model(GLchar * path, Shader _shader, OpenGLRenderer &_rend)
 	LoadModel(path);
 }
 
+Model::Model()
+{
+}
+
 Model::~Model()
 {
 }

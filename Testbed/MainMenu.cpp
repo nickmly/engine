@@ -6,7 +6,7 @@ MainMenu::MainMenu(OpenGLRenderer *_renderer)
 {
 	renderer = _renderer;
 	sceneGraph = new SceneGraph();
-
+	fake = new Model();
 	onCreate();
 }
 
@@ -44,28 +44,38 @@ void MainMenu::onCreate()
 	
 	earthModel = new Model("assets/planets/earth.obj", shader, *renderer);
 	earthObject = new GameObject(*earthModel);
+	earthRotation = new GameObject(*fake);
 
 	marsModel = new Model("assets/planets/mars.obj", shader, *renderer);
 	marsObject = new GameObject(*marsModel);
+	marsRotation = new GameObject(*fake);
 
 	sunModel = new Model("assets/planets/sun.obj", shader, *renderer);
 	sunObject = new GameObject(*sunModel);
 
 	saturnModel = new Model("assets/planets/saturn.obj", shader, *renderer);
 	saturnObject = new GameObject(*saturnModel);
+	saturnRotation = new GameObject(*fake);
 
 	uranusModel = new Model("assets/planets/uranus.obj", shader, *renderer);
 	uranusObject = new GameObject(*uranusModel);
+	uranusRotation = new GameObject(*fake);
 
 	neptuneModel = new Model("assets/planets/neptune.obj", shader, *renderer);
 	neptuneObject = new GameObject(*neptuneModel);
+	neptuneRotation = new GameObject(*fake);
+
 
 	mercuryModel = new Model("assets/planets/mercury.obj", shader, *renderer);
 	mercuryObject = new GameObject(*mercuryModel);
+	mercuryRotation = new GameObject(*fake);
 
-	marsObject->SetScale(glm::vec3(2.0f));
-	saturnObject->SetScale(glm::vec3(1.5f));
-	uranusObject->SetScale(glm::vec3(2.0f));
+	sunObject->SetScale(glm::vec3(1.0f));
+	marsObject->SetScale(glm::vec3(0.80f));
+	saturnObject->SetScale(glm::vec3(0.65f));
+	uranusObject->SetScale(glm::vec3(0.60f));
+	earthObject->SetScale(glm::vec3(0.35f));
+
 	scope = new Model("box.obj", shader, *renderer);
 	light = new SimpleModel(GeometricShapes::GetShape(GeometricShapes::cube), *renderer, "wall.jpg", "lightShader.vert", "lightShader.frag");
 	
@@ -82,12 +92,30 @@ void MainMenu::onStart()
 	
 	// gameObject to scene
 	sceneGraph->GetRootSceneNode()->AppendChild(sunObject->GetSceneNode());
-	sunObject->GetSceneNode()->AppendChild(earthObject->GetSceneNode());
-	sunObject->GetSceneNode()->AppendChild(marsObject->GetSceneNode());
-	sunObject->GetSceneNode()->AppendChild(saturnObject->GetSceneNode());
-	sunObject->GetSceneNode()->AppendChild(uranusObject->GetSceneNode());
-	sunObject->GetSceneNode()->AppendChild(neptuneObject->GetSceneNode());
-	sunObject->GetSceneNode()->AppendChild(mercuryObject->GetSceneNode());
+
+	sceneGraph->GetRootSceneNode()->AppendChild(earthRotation->GetSceneNode());
+	earthRotation->GetSceneNode()->AppendChild(earthObject->GetSceneNode());
+
+	sceneGraph->GetRootSceneNode()->AppendChild(marsRotation->GetSceneNode());
+	marsRotation->GetSceneNode()->AppendChild(marsObject->GetSceneNode());
+
+	sceneGraph->GetRootSceneNode()->AppendChild(saturnRotation->GetSceneNode());
+	saturnRotation->GetSceneNode()->AppendChild(saturnObject->GetSceneNode());
+
+	sceneGraph->GetRootSceneNode()->AppendChild(uranusRotation->GetSceneNode());
+	uranusRotation->GetSceneNode()->AppendChild(uranusObject->GetSceneNode());
+
+	sceneGraph->GetRootSceneNode()->AppendChild(neptuneRotation->GetSceneNode());
+	neptuneRotation->GetSceneNode()->AppendChild(neptuneObject->GetSceneNode());
+
+	sceneGraph->GetRootSceneNode()->AppendChild(mercuryRotation->GetSceneNode());
+	mercuryRotation->GetSceneNode()->AppendChild(mercuryObject->GetSceneNode());
+	//sunObject->GetSceneNode()->AppendChild(earthObject->GetSceneNode());
+	//sunObject->GetSceneNode()->AppendChild(marsObject->GetSceneNode());
+	//sunObject->GetSceneNode()->AppendChild(saturnObject->GetSceneNode());
+	//sunObject->GetSceneNode()->AppendChild(uranusObject->GetSceneNode());
+	//sunObject->GetSceneNode()->AppendChild(neptuneObject->GetSceneNode());
+	//sunObject->GetSceneNode()->AppendChild(mercuryObject->GetSceneNode());
 	//append 2nd cube to first cube 
 	//earthObject->GetSceneNode()->AppendChild(marsObject->GetSceneNode());
 
@@ -108,9 +136,9 @@ void MainMenu::onUpdate(float deltaTime)
 {
 	delta = deltaTime;
 	//sets rotation only on x for parent cube
-	sunObject->SetRotation(glm::vec3(0.0f, 0.0025f, 0.0f));
+	//sunObject->SetRotation(glm::vec3(0.0f, 0.0025f, 0.0f));
 	//sets rotation only on y for child cube which will inherit the rotation of its parent as well
-	marsObject->SetRotation(glm::vec3(0.0f,0.0025f, 0.0f));
+	marsRotation->SetRotation(glm::vec3(0.0f,0.0025f, 0.0f));
 	//For some reason this won't work unless there is two rendertext calls?
 	renderer->RenderText("fillertext", 800.0f, 600.0f, 1.0f, glm::vec3(0.5f, 0.8f, 0.2f));
 	renderer->RenderText("MainMenu", 0.0f, 16.0f, 1.0f, glm::vec3(1.0f, 1.0f, 1.0f));
@@ -159,25 +187,25 @@ void MainMenu::HandleInput(Uint32 event, SDL_Keycode key)
 		switch (key) {
 		case SDLK_a:
 			//earthObject->SetPosition(glm::vec3(-0.25f, 0.0f, 0.0f));
-			fpsCamera->Strafe(-1.0f);
+			fpsCamera->Strafe(-3.25f);
 			break;
 		case SDLK_d:
 			//earthObject->SetPosition(glm::vec3(0.25f, 0.0f, 0.0f));
-			fpsCamera->Strafe(1.0f);
+			fpsCamera->Strafe(3.25f);
 			break;
 		case SDLK_w:
 			//earthObject->SetPosition(glm::vec3( 0.0f, 0.25f, 0.0f));
-			fpsCamera->Walk(1.0f);
+			fpsCamera->Walk(3.25f);
 			break;
 		case SDLK_s:
 			//earthObject->SetPosition(glm::vec3( 0.0f, -0.25f, 0.0f));
-			fpsCamera->Walk(-1.0f);
+			fpsCamera->Walk(-3.25f);
 			break;
 		case SDLK_e:
-			fpsCamera->Lift(0.25f);
+			fpsCamera->Lift(1.25f);
 			break;
 		case SDLK_c:
-			fpsCamera->Lift(-0.25f);
+			fpsCamera->Lift(-1.25f);
 			break;
 	/////////////////************move child node**************////////////////////////
 		case SDLK_f:
