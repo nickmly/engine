@@ -33,15 +33,20 @@ private:
 	SimpleModel *square, *square2, *light;
 	SpriteRenderer *space;
 
-	Model* earthModel, *marsModel, *sunModel, *saturnModel, *neptuneModel, *mercuryModel, *uranusModel, *scope;
+	Model* earthModel, *marsModel, *sunModel, *saturnModel, *neptuneModel, *mercuryModel, *uranusModel, *venusModel, *jupiterModel, *moonModel, *scope;
 	Model *fake;
 	GameObject *earthObject, *earthRotation;
+	GameObject *earthMoonObject, *earthMoonRotation;
 	GameObject *marsObject, *marsRotation;
 	GameObject *sunObject;
 	GameObject *saturnObject, *saturnRotation;
 	GameObject *neptuneObject, *neptuneRotation;
 	GameObject *mercuryObject, *mercuryRotation;
 	GameObject *uranusObject, *uranusRotation;
+	GameObject *jupiterObject, *jupiterRotation;
+	GameObject *venusObject, *venusRotation;
+	GameObject **saturnMoons, **saturnMoonRotations;
+	GameObject **jupiterMoons, **jupiterMoonRotations;
 	//MAIN OR INITIAL SCENE CAMERA
 	Camera mainCamera;
 	Camera secondCamera;

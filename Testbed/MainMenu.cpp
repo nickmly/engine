@@ -46,6 +46,11 @@ void MainMenu::onCreate()
 	earthObject = new GameObject(*earthModel);
 	earthRotation = new GameObject(*fake);
 
+
+	moonModel = new Model("assets/planets/moon.obj", shader, *renderer);
+	earthMoonObject = new GameObject(*moonModel);
+	earthMoonRotation = new GameObject(*fake);
+
 	marsModel = new Model("assets/planets/mars.obj", shader, *renderer);
 	marsObject = new GameObject(*marsModel);
 	marsRotation = new GameObject(*fake);
@@ -64,17 +69,44 @@ void MainMenu::onCreate()
 	neptuneModel = new Model("assets/planets/neptune.obj", shader, *renderer);
 	neptuneObject = new GameObject(*neptuneModel);
 	neptuneRotation = new GameObject(*fake);
-
-
+	
 	mercuryModel = new Model("assets/planets/mercury.obj", shader, *renderer);
 	mercuryObject = new GameObject(*mercuryModel);
 	mercuryRotation = new GameObject(*fake);
 
+	venusModel = new Model("assets/planets/venus.obj", shader, *renderer);
+	venusObject = new GameObject(*venusModel);
+	venusRotation = new GameObject(*fake);
+
+	jupiterModel = new Model("assets/planets/jupiter.obj", shader, *renderer);
+	jupiterObject = new GameObject(*jupiterModel);
+	jupiterRotation = new GameObject(*fake);
+
+	saturnMoons = new GameObject*[4];
+	saturnMoonRotations = new GameObject*[4];
+
+	jupiterMoons = new GameObject*[5];
+	jupiterMoonRotations = new GameObject*[5];
+	for (int i = 0; i < 4; i++) {
+		saturnMoons[i] = new GameObject(*moonModel);
+		saturnMoonRotations[i] = new GameObject(*fake);
+		saturnMoons[i]->SetScale(glm::vec3(0.25f));
+	}
+
+	jupiterMoons = new GameObject*[5];
+	for (int i = 0; i < 5; i++) {
+		jupiterMoons[i] = new GameObject(*moonModel);
+		jupiterMoonRotations[i] = new GameObject(*fake);
+		jupiterMoons[i]->SetScale(glm::vec3(0.25f));
+	}
+
 	sunObject->SetScale(glm::vec3(1.0f));
+
 	marsObject->SetScale(glm::vec3(0.80f));
 	saturnObject->SetScale(glm::vec3(0.65f));
 	uranusObject->SetScale(glm::vec3(0.60f));
 	earthObject->SetScale(glm::vec3(0.35f));
+
 
 	scope = new Model("box.obj", shader, *renderer);
 	light = new SimpleModel(GeometricShapes::GetShape(GeometricShapes::cube), *renderer, "wall.jpg", "lightShader.vert", "lightShader.frag");
@@ -110,6 +142,16 @@ void MainMenu::onStart()
 
 	sceneGraph->GetRootSceneNode()->AppendChild(mercuryRotation->GetSceneNode());
 	mercuryRotation->GetSceneNode()->AppendChild(mercuryObject->GetSceneNode());
+
+	sceneGraph->GetRootSceneNode()->AppendChild(venusRotation->GetSceneNode());
+	venusRotation->GetSceneNode()->AppendChild(venusObject->GetSceneNode());
+
+	sceneGraph->GetRootSceneNode()->AppendChild(jupiterRotation->GetSceneNode());
+	jupiterRotation->GetSceneNode()->AppendChild(jupiterObject->GetSceneNode());
+
+
+
+
 	//sunObject->GetSceneNode()->AppendChild(earthObject->GetSceneNode());
 	//sunObject->GetSceneNode()->AppendChild(marsObject->GetSceneNode());
 	//sunObject->GetSceneNode()->AppendChild(saturnObject->GetSceneNode());
@@ -125,6 +167,25 @@ void MainMenu::onStart()
 	saturnObject->SetPosition(glm::vec3(8.0f, 0.0f, 6.0f));
 	uranusObject->SetPosition(glm::vec3(16.0f, 0.0f, 8.0f));
 	neptuneObject->SetPosition(glm::vec3(-7.0f, 0.0f, -1.5f));
+	venusObject->SetPosition(glm::vec3(-7.5f, 0.0f, -2.0f));
+	jupiterObject->SetPosition(glm::vec3(9.0f, 0.0f, 3.0f));
+
+	for (int i = 0; i < 4; i++) {
+		sceneGraph->GetRootSceneNode()->AppendChild(saturnMoonRotations[i]->GetSceneNode());
+		saturnMoonRotations[i]->SetPosition(saturnObject->GetPosition());
+		saturnMoonRotations[i]->GetSceneNode()->AppendChild(saturnMoons[i]->GetSceneNode());
+		
+		saturnMoons[i]->SetPosition(glm::vec3(-i / 2, 0.0f, 0.0f));
+	}
+
+	for (int i = 0; i < 5; i++) {
+		sceneGraph->GetRootSceneNode()->AppendChild(jupiterMoonRotations[i]->GetSceneNode());
+		jupiterMoonRotations[i]->SetPosition(jupiterObject->GetPosition());
+		jupiterMoonRotations[i]->GetSceneNode()->AppendChild(jupiterMoons[i]->GetSceneNode());
+		
+		jupiterMoons[i]->SetPosition(glm::vec3(i / 2, 0.0f, 0.0f));
+	}
+
 	started = true;
 	
 	sceneState = SCENE_STATE::RUNNING;	
@@ -139,6 +200,17 @@ void MainMenu::onUpdate(float deltaTime)
 	//sunObject->SetRotation(glm::vec3(0.0f, 0.0025f, 0.0f));
 	//sets rotation only on y for child cube which will inherit the rotation of its parent as well
 	marsRotation->SetRotation(glm::vec3(0.0f,0.0025f, 0.0f));
+	saturnRotation->SetRotation(glm::vec3(0.0f, 0.0035f, 0.0f));
+	for (int i = 0; i < 4; i++) {
+		//saturnMoonRotations[i]->SetPosition(saturnObject->GetPosition());
+		saturnMoonRotations[i]->SetRotation(glm::vec3(0.0f, 0.001f * i, 0.0f));
+		saturnMoons[i]->SetPosition(saturnMoonRotations[i]->GetPosition() + glm::vec3(-i/2,0.0f,0.0f));
+		
+	}
+	for (int i = 0; i < 5; i++) {
+		jupiterMoonRotations[i]->SetRotation(glm::vec3(0.0f, 0.001f * i, 0.0f));
+	}
+
 	//For some reason this won't work unless there is two rendertext calls?
 	renderer->RenderText("fillertext", 800.0f, 600.0f, 1.0f, glm::vec3(0.5f, 0.8f, 0.2f));
 	renderer->RenderText("MainMenu", 0.0f, 16.0f, 1.0f, glm::vec3(1.0f, 1.0f, 1.0f));
