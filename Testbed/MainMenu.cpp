@@ -39,7 +39,8 @@ void MainMenu::onCreate()
 	fpsCamera->SetupProjection(120.0f, 800 / 600, 0.1f, 1000.0f);
 	fpsCamera->SetPosition(glm::vec3(0.0f, 100, 0.0f));
 	
-	Shader shader = Shader(FileReader::ReadFromFile("newshader.vert").c_str(), FileReader::ReadFromFile("newshader.frag").c_str());
+	Shader shader = Shader(FileReader::ReadFromFile("model_shader.vert").c_str(), FileReader::ReadFromFile("model_shader.frag").c_str());
+	Shader sunShader = Shader(FileReader::ReadFromFile("model_shader_nolight.vert").c_str(), FileReader::ReadFromFile("model_shader.frag").c_str());
 	
 	earthModel = new Model("assets/planets/earth.obj", shader, *renderer);
 	earthObject = new GameObject(*earthModel);
@@ -52,7 +53,7 @@ void MainMenu::onCreate()
 	marsObject = new GameObject(*marsModel);
 	marsRotation = new GameObject(*fake);
 
-	sunModel = new Model("assets/planets/sun.obj", shader, *renderer);
+	sunModel = new Model("assets/planets/sun.obj", sunShader, *renderer);
 	sunObject = new GameObject(*sunModel);
 
 	saturnModel = new Model("assets/planets/saturn.obj", shader, *renderer);
