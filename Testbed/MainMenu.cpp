@@ -35,11 +35,10 @@ void MainMenu::onCreate()
 	//secondCamera.SetTargetVector(0.0f, 0.0f, 0.0f); 
 	//secondCamera.SetUpVector(0.0f, 1.0f, 0.0f); 
 	//secondCamera.ResizeFrustum(1.0f, 0.1f, 100.0f);
-
 	fpsCamera = new FPS_Camera();
 	fpsCamera->SetupProjection(120.0f, 800 / 600, 0.1f, 1000.0f);
-	fpsCamera->SetPosition(glm::vec3(0.0f, 1, -10));
-
+	fpsCamera->SetPosition(glm::vec3(0.0f, 100, 0.0f));
+	
 	Shader shader = Shader(FileReader::ReadFromFile("newshader.vert").c_str(), FileReader::ReadFromFile("newshader.frag").c_str());
 	
 	earthModel = new Model("assets/planets/earth.obj", shader, *renderer);
@@ -48,8 +47,6 @@ void MainMenu::onCreate()
 
 
 	moonModel = new Model("assets/planets/moon.obj", shader, *renderer);
-	earthMoonObject = new GameObject(*moonModel);
-	earthMoonRotation = new GameObject(*fake);
 
 	marsModel = new Model("assets/planets/mars.obj", shader, *renderer);
 	marsObject = new GameObject(*marsModel);
@@ -82,31 +79,37 @@ void MainMenu::onCreate()
 	jupiterObject = new GameObject(*jupiterModel);
 	jupiterRotation = new GameObject(*fake);
 
+
+	earthMoon = new GameObject(*moonModel);
+	earthMoonRotation = new GameObject(*fake);
+
+	marsMoons = new GameObject*[2];
+	marsMoonRotations = new GameObject*[2];
+	for (int i = 0; i < 2; i++) {
+		marsMoons[i] = new GameObject(*moonModel);
+		marsMoonRotations[i] = new GameObject(*fake);
+	}
+
+	uranusMoons = new GameObject*[3];
+	uranusMoonRotations = new GameObject*[3];
+	for (int i = 0; i < 3; i++) {
+		uranusMoons[i] = new GameObject(*moonModel);
+		uranusMoonRotations[i] = new GameObject(*fake);
+	}
+
 	saturnMoons = new GameObject*[4];
 	saturnMoonRotations = new GameObject*[4];
-
-	jupiterMoons = new GameObject*[5];
-	jupiterMoonRotations = new GameObject*[5];
 	for (int i = 0; i < 4; i++) {
 		saturnMoons[i] = new GameObject(*moonModel);
 		saturnMoonRotations[i] = new GameObject(*fake);
-		saturnMoons[i]->SetScale(glm::vec3(0.25f));
 	}
 
 	jupiterMoons = new GameObject*[5];
+	jupiterMoonRotations = new GameObject*[5];
 	for (int i = 0; i < 5; i++) {
 		jupiterMoons[i] = new GameObject(*moonModel);
 		jupiterMoonRotations[i] = new GameObject(*fake);
-		jupiterMoons[i]->SetScale(glm::vec3(0.25f));
 	}
-
-	sunObject->SetScale(glm::vec3(1.0f));
-
-	marsObject->SetScale(glm::vec3(0.80f));
-	saturnObject->SetScale(glm::vec3(0.65f));
-	uranusObject->SetScale(glm::vec3(0.60f));
-	earthObject->SetScale(glm::vec3(0.35f));
-
 
 	scope = new Model("box.obj", shader, *renderer);
 	light = new SimpleModel(GeometricShapes::GetShape(GeometricShapes::cube), *renderer, "wall.jpg", "lightShader.vert", "lightShader.frag");
@@ -149,41 +152,67 @@ void MainMenu::onStart()
 	sceneGraph->GetRootSceneNode()->AppendChild(jupiterRotation->GetSceneNode());
 	jupiterRotation->GetSceneNode()->AppendChild(jupiterObject->GetSceneNode());
 
+	//Set Planet Scales
+	sunObject->SetScale(glm::vec3(3.50f));
 
+	mercuryObject->SetScale(glm::vec3(0.35f));
+	venusObject->SetScale(glm::vec3(0.36f));
+	earthObject->SetScale(glm::vec3(0.61f));
+	marsObject->SetScale(glm::vec3(0.48f));
+	jupiterObject->SetScale(glm::vec3(1.50f));
+	saturnObject->SetScale(glm::vec3(1.06f));
+	uranusObject->SetScale(glm::vec3(0.864f));
+	neptuneObject->SetScale(glm::vec3(0.853f));
 
+	//Set Planet Positions Relative to center of the world == to the sun
+	mercuryObject->SetPosition(glm::vec3(2.70f,0.0f,0.0f));
+	venusObject->SetPosition(glm::vec3(5.80f, 0.0f, 0.0f));
+	earthObject->SetPosition(glm::vec3(8.90f, 0.0f, 0.0f));
+	marsObject->SetPosition(glm::vec3(12.70f, 0.0f, 0.0f));
+	jupiterObject->SetPosition(glm::vec3(18.80f, 0.0f, 0.0f));
+	saturnObject->SetPosition(glm::vec3(30.30f, 0.0f, 0.0f));
+	uranusObject->SetPosition(glm::vec3(34.70f, 0.0f, 0.0f));
+	neptuneObject->SetPosition(glm::vec3(40.30f, 0.0f, 0.0f));
+	
+	earthObject->GetSceneNode()->AppendChild(earthMoonRotation->GetSceneNode());
+	earthMoonRotation->GetSceneNode()->AppendChild(earthMoon->GetSceneNode());
+	earthMoon->SetScale(glm::vec3(0.1f));
+	earthMoon->SetPosition(glm::vec3(2.0f, 0.0f, 0.0f));
 
-	//sunObject->GetSceneNode()->AppendChild(earthObject->GetSceneNode());
-	//sunObject->GetSceneNode()->AppendChild(marsObject->GetSceneNode());
-	//sunObject->GetSceneNode()->AppendChild(saturnObject->GetSceneNode());
-	//sunObject->GetSceneNode()->AppendChild(uranusObject->GetSceneNode());
-	//sunObject->GetSceneNode()->AppendChild(neptuneObject->GetSceneNode());
-	//sunObject->GetSceneNode()->AppendChild(mercuryObject->GetSceneNode());
-	//append 2nd cube to first cube 
-	//earthObject->GetSceneNode()->AppendChild(marsObject->GetSceneNode());
+	for (int i = 0; i < 2; i++) {
+		//sceneGraph->GetRootSceneNode()->AppendChild(saturnMoonRotations[i]->GetSceneNode());
+		marsObject->GetSceneNode()->AppendChild(marsMoonRotations[i]->GetSceneNode());
+		marsMoonRotations[i]->GetSceneNode()->AppendChild(marsMoons[i]->GetSceneNode());
 
-	//sets local position relative to its parent node
-	earthObject->SetPosition(glm::vec3(-3.0f, 0.0f, -1.0f));
-	marsObject->SetPosition(glm::vec3(3.0f, 0.0f, 2.0f));
-	saturnObject->SetPosition(glm::vec3(8.0f, 0.0f, 6.0f));
-	uranusObject->SetPosition(glm::vec3(16.0f, 0.0f, 8.0f));
-	neptuneObject->SetPosition(glm::vec3(-7.0f, 0.0f, -1.5f));
-	venusObject->SetPosition(glm::vec3(-7.5f, 0.0f, -2.0f));
-	jupiterObject->SetPosition(glm::vec3(9.0f, 0.0f, 3.0f));
+		marsMoons[i]->SetScale(glm::vec3(0.1f));
+		marsMoons[i]->SetPosition(glm::vec3(1.350f *i, 0.0f, 0.0f));
+	}
+
+	for (int i = 0; i < 3; i++) {
+		//sceneGraph->GetRootSceneNode()->AppendChild(saturnMoonRotations[i]->GetSceneNode());
+		uranusObject->GetSceneNode()->AppendChild(uranusMoonRotations[i]->GetSceneNode());
+		uranusMoonRotations[i]->GetSceneNode()->AppendChild(uranusMoons[i]->GetSceneNode());
+
+		uranusMoons[i]->SetScale(glm::vec3(0.2f));
+		uranusMoons[i]->SetPosition(glm::vec3(1.850f *i, 0.0f, 0.0f));
+	}
 
 	for (int i = 0; i < 4; i++) {
-		sceneGraph->GetRootSceneNode()->AppendChild(saturnMoonRotations[i]->GetSceneNode());
-		saturnMoonRotations[i]->SetPosition(saturnObject->GetPosition());
+		//sceneGraph->GetRootSceneNode()->AppendChild(saturnMoonRotations[i]->GetSceneNode());
+		saturnObject->GetSceneNode()->AppendChild(saturnMoonRotations[i]->GetSceneNode());
 		saturnMoonRotations[i]->GetSceneNode()->AppendChild(saturnMoons[i]->GetSceneNode());
 		
-		saturnMoons[i]->SetPosition(glm::vec3(-i / 2, 0.0f, 0.0f));
+		saturnMoons[i]->SetScale(glm::vec3(0.2f));
+		saturnMoons[i]->SetPosition(glm::vec3(1.850f *i, 0.0f, 0.0f));
 	}
 
 	for (int i = 0; i < 5; i++) {
-		sceneGraph->GetRootSceneNode()->AppendChild(jupiterMoonRotations[i]->GetSceneNode());
-		jupiterMoonRotations[i]->SetPosition(jupiterObject->GetPosition());
+		//sceneGraph->GetRootSceneNode()->AppendChild(jupiterMoonRotations[i]->GetSceneNode());
+		jupiterObject->GetSceneNode()->AppendChild(jupiterMoonRotations[i]->GetSceneNode());
 		jupiterMoonRotations[i]->GetSceneNode()->AppendChild(jupiterMoons[i]->GetSceneNode());
 		
-		jupiterMoons[i]->SetPosition(glm::vec3(i / 2, 0.0f, 0.0f));
+		jupiterMoons[i]->SetScale(glm::vec3(0.2f));
+		jupiterMoons[i]->SetPosition(glm::vec3(1.35f *i , 0.0f, 0.0f));
 	}
 
 	started = true;
@@ -199,18 +228,32 @@ void MainMenu::onUpdate(float deltaTime)
 	//sets rotation only on x for parent cube
 	//sunObject->SetRotation(glm::vec3(0.0f, 0.0025f, 0.0f));
 	//sets rotation only on y for child cube which will inherit the rotation of its parent as well
-	marsRotation->SetRotation(glm::vec3(0.0f,0.0025f, 0.0f));
-	saturnRotation->SetRotation(glm::vec3(0.0f, 0.0035f, 0.0f));
+	
+	mercuryRotation->SetRotation(glm::vec3(0.0f, 0.0025f, 0.0f));
+	venusRotation->SetRotation(glm::vec3(0.0f, 0.00189f, 0.0f));
+	earthRotation->SetRotation(glm::vec3(0.0f, 0.00202f, 0.0f));
+	marsRotation->SetRotation(glm::vec3(0.0f, 0.0025f, 0.0f));
+	jupiterRotation->SetRotation(glm::vec3(0.0f, 0.000395f, 0.0f));
+	saturnRotation->SetRotation(glm::vec3(0.0f, 0.00035f, 0.0f));
+	uranusRotation->SetRotation(glm::vec3(0.0f, 0.000235f, 0.0f));
+	neptuneRotation->SetRotation(glm::vec3(0.0f, 0.00025f, 0.0f));
+
+	earthMoon->SetRotation(glm::vec3(0.0f, 0.0024f, 0.0f));
 	for (int i = 0; i < 4; i++) {
 		//saturnMoonRotations[i]->SetPosition(saturnObject->GetPosition());
-		saturnMoonRotations[i]->SetRotation(glm::vec3(0.0f, 0.001f * i, 0.0f));
-		saturnMoons[i]->SetPosition(saturnMoonRotations[i]->GetPosition() + glm::vec3(-i/2,0.0f,0.0f));
+		saturnMoonRotations[i]->SetRotation(glm::vec3(0.0f, 0.011 / i, 0.0f));
+		//saturnMoons[i]->SetPosition(glm::vec3(-2.0f * i ,0.0f,0.0f));
 		
 	}
 	for (int i = 0; i < 5; i++) {
-		jupiterMoonRotations[i]->SetRotation(glm::vec3(0.0f, 0.001f * i, 0.0f));
+		jupiterMoonRotations[i]->SetRotation(glm::vec3(0.0f, 0.011 / i, 0.0f));
 	}
-
+	for (int i = 0; i < 3; i++) {
+		uranusMoonRotations[i]->SetRotation(glm::vec3(0.0f, 0.011 / i, 0.0f));
+	}	
+	for (int i = 0; i < 2; i++) {
+		marsMoonRotations[i]->SetRotation(glm::vec3(0.0f, 0.011 / i, 0.0f));
+	}
 	//For some reason this won't work unless there is two rendertext calls?
 	renderer->RenderText("fillertext", 800.0f, 600.0f, 1.0f, glm::vec3(0.5f, 0.8f, 0.2f));
 	renderer->RenderText("MainMenu", 0.0f, 16.0f, 1.0f, glm::vec3(1.0f, 1.0f, 1.0f));
@@ -259,29 +302,29 @@ void MainMenu::HandleInput(Uint32 event, SDL_Keycode key)
 		switch (key) {
 		case SDLK_a:
 			//earthObject->SetPosition(glm::vec3(-0.25f, 0.0f, 0.0f));
-			fpsCamera->Strafe(-3.25f);
+			fpsCamera->Strafe(-0.850f);
 			break;
 		case SDLK_d:
 			//earthObject->SetPosition(glm::vec3(0.25f, 0.0f, 0.0f));
-			fpsCamera->Strafe(3.25f);
+			fpsCamera->Strafe(0.850f);
 			break;
 		case SDLK_w:
 			//earthObject->SetPosition(glm::vec3( 0.0f, 0.25f, 0.0f));
-			fpsCamera->Walk(3.25f);
+			fpsCamera->Walk(0.850f);
 			break;
 		case SDLK_s:
 			//earthObject->SetPosition(glm::vec3( 0.0f, -0.25f, 0.0f));
-			fpsCamera->Walk(-3.25f);
+			fpsCamera->Walk(-0.850f);
 			break;
 		case SDLK_e:
-			fpsCamera->Lift(1.25f);
+			fpsCamera->Lift(0.25f);
 			break;
 		case SDLK_c:
-			fpsCamera->Lift(-1.25f);
+			fpsCamera->Lift(-0.25f);
 			break;
 	/////////////////************move child node**************////////////////////////
 		case SDLK_f:
-			marsObject->SetPosition(glm::vec3(0.25f, 0.0f, 0.0f));
+	
 			break;
 	//////////////////////////////////////////////////////
 			//TESTSCENE STATE
@@ -311,6 +354,9 @@ void MainMenu::HandleInput(Uint32 event, SDL_Keycode key)
 		case SDLK_w:
 			break;
 		case SDLK_s:
+			break;
+		case SDLK_f:
+
 			break;
 		}
 		break;

@@ -36,7 +36,7 @@ private:
 	Model* earthModel, *marsModel, *sunModel, *saturnModel, *neptuneModel, *mercuryModel, *uranusModel, *venusModel, *jupiterModel, *moonModel, *scope;
 	Model *fake;
 	GameObject *earthObject, *earthRotation;
-	GameObject *earthMoonObject, *earthMoonRotation;
+
 	GameObject *marsObject, *marsRotation;
 	GameObject *sunObject;
 	GameObject *saturnObject, *saturnRotation;
@@ -45,8 +45,12 @@ private:
 	GameObject *uranusObject, *uranusRotation;
 	GameObject *jupiterObject, *jupiterRotation;
 	GameObject *venusObject, *venusRotation;
+
+	GameObject *earthMoon, *earthMoonRotation;
+	GameObject **marsMoons, **marsMoonRotations;
 	GameObject **saturnMoons, **saturnMoonRotations;
 	GameObject **jupiterMoons, **jupiterMoonRotations;
+	GameObject **uranusMoons, **uranusMoonRotations;
 	//MAIN OR INITIAL SCENE CAMERA
 	Camera mainCamera;
 	Camera secondCamera;
