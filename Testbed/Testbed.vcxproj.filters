@@ -34,19 +34,10 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="shader.frag">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="shader.vert">
-      <Filter>Resource Files</Filter>
-    </None>
     <None Include="textShader.frag">
       <Filter>Resource Files</Filter>
     </None>
     <None Include="textShader.vert">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="shader2.vert">
       <Filter>Resource Files</Filter>
     </None>
     <None Include="lightShader.frag">
@@ -55,10 +46,16 @@
     <None Include="lightShader.vert">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="newshader.frag">
+    <None Include="model_shader.vert">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="newshader.vert">
+    <None Include="model_shader.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="assets\shaders\skyboxShader.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="assets\shaders\skyboxShader.vert">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>

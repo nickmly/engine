@@ -12,7 +12,6 @@
 #include "scene.h"
 #include "postprocess.h"
 
-
 using namespace std;
 
 class Model

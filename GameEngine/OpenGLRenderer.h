@@ -48,7 +48,6 @@ public:
 	void RenderText(std::string text, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 color);
 
 	void SetActiveCamera(Camera &cam);
-	Camera* GetActiveCamera();
 
 	void SetActiveCam( AbstractCamera &_cam) { cam = &_cam; }
 	AbstractCamera* GetActiveCam() { return cam; }

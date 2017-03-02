@@ -102,35 +102,9 @@ void Mesh::Render(Shader shader, OpenGLRenderer rend)
 		glBindTexture(GL_TEXTURE_2D, textures[i].id);
 	}
 
-	// Also set each mesh's shininess property to a default value (if you want you could extend this to another mesh property and possibly change this value)
-	//glUniform1f(glGetUniformLocation(shader.GetProgram(), "material.shininess"), 16.0f);
-
-	/*GLint matAmbientLoc = glGetUniformLocation(shader.GetProgram(), "material.ambient");
-	GLint matDiffuseLoc = glGetUniformLocation(shader.GetProgram(), "material.diffuse");
-	GLint matSpecularLoc = glGetUniformLocation(shader.GetProgram(), "material.specular");
-	GLint matShineLoc = glGetUniformLocation(shader.GetProgram(), "material.shininess");
-
-	glUniform3f(matAmbientLoc, 1.0f, 1.0f, 1.0f);
-	glUniform3f(matDiffuseLoc, 1.0f, 1.0f, 1.0f);
-	glUniform3f(matSpecularLoc, 0.5f, 0.5f, 0.5f);
-	glUniform1f(matShineLoc, 32.0f);
-*/
-	
-	/*GLint lightALoc = glGetUniformLocation(shader.GetProgram(), "light.ambient");
-	glUniform3f(lightALoc, 1.0f, 1.0f, 1.0f); 
-	GLint lightDLoc = glGetUniformLocation(shader.GetProgram(), "light.diffuse");
-	glUniform3f(lightALoc, 1.0f, 1.0f, 1.0f);
-	GLint lightSLoc = glGetUniformLocation(shader.GetProgram(), "light.specular");
-	glUniform3f(lightALoc, 1.0f, 1.0f, 1.0f);
-	GLint lightPosLoc = glGetUniformLocation(shader.GetProgram(), "light.position");
-	glUniform3f(lightPosLoc, 0.0f, 0.0f, 0.0f);
-
-	GLint viewPosLoc = glGetUniformLocation(shader.GetProgram(), "viewPos");
-	glUniform3f(viewPosLoc, rend.GetActiveCam()->GetPosition().x, rend.GetActiveCam()->GetPosition().y, rend.GetActiveCam()->GetPosition().z);*/
-
-	glUniform3f(glGetUniformLocation(shader.GetProgram(), "diffuse_color"), 1.0f, 1.0f, 1.0f);
-	glUniform3f(glGetUniformLocation(shader.GetProgram(), "specular_color"), 0.5f, 0.5f, 0.5f);
-	glUniform3f(glGetUniformLocation(shader.GetProgram(), "light_position"), 0.0f, 0.0f, 0.0f);
+	glUniform3f(glGetUniformLocation(shader.GetProgram(), "diffuse_color"), 0.2f, 0.0f, 0.7f);
+	glUniform3f(glGetUniformLocation(shader.GetProgram(), "specular_color"), 0.4f, 0.4f, 0.4f);
+	glUniform3f(glGetUniformLocation(shader.GetProgram(), "light_position"), 0.0f, 0.0f, 30.0f);
 
 	// Draw mesh
 	glBindVertexArray(VAO);

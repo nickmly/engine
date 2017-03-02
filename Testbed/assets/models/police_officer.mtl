@@ -1,0 +1,24 @@
+# Blender MTL File: 'Armoured_Police_Officer_FInal.blend'
+# Material Count: 2
+
+newmtl Armoured_Officer
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.014670 0.014670 0.014670
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 1
+map_Kd Armoured_Police_Officer.png
+
+newmtl Visor
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.405654 0.288103 0.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 1
+map_Kd Armoured_Police_Officer.png

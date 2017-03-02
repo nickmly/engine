@@ -1,0 +1,96 @@
+# Blender MTL File: 'bank.blend'
+# Material Count: 9
+
+newmtl None
+Ns 0
+Ka 0.018849 0.004100 0.005414
+Kd 0.8 0.8 0.8
+Ks 0.8 0.8 0.8
+d 1
+illum 2
+map_Kd CityPalettev2.png
+
+newmtl None_NONE
+Ns 0
+Ka 0.018849 0.004100 0.005414
+Kd 0.8 0.8 0.8
+Ks 0.8 0.8 0.8
+d 1
+illum 2
+
+newmtl alternate_color
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd CityPalettev2.png
+
+newmtl alternate_color_CityPalettev2.png
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd CityPalettev2.png
+
+newmtl banner
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.162639 0.005946 0.004743
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 1
+map_Kd CityPalettev2.png
+
+newmtl main_color
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.539073 0.539073 0.539073
+Ks 0.300000 0.300000 0.300000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd CityPalettev2.png
+
+newmtl main_color_CityPalettev2.png
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.539073 0.539073 0.539073
+Ks 0.300000 0.300000 0.300000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd CityPalettev2.png
+
+newmtl windows
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.036919 0.083257 0.640000
+Ks 0.086194 0.606014 0.800000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.423077
+illum 2
+map_Kd CityPalettev2.png
+
+newmtl windows_CityPalettev2.png
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.036919 0.083257 0.640000
+Ks 0.086194 0.606014 0.800000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.423077
+illum 2
+map_Kd CityPalettev2.png

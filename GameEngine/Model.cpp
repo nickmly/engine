@@ -1,5 +1,7 @@
 #include "Model.h"
 #include "FileReader.h"
+#include <ctime>
+
 
 Model::Model(GLchar * path, Shader _shader, OpenGLRenderer &_rend)
 {
@@ -22,6 +24,7 @@ void Model::Render()
 	for (GLuint i = 0; i < meshes.size(); i++)
 	{
 		shader.Use();
+
 		renderer->SetProgram(shader.GetProgram());
 		renderer->RenderTransform(transform);
 		meshes[i].Render(shader, *renderer);
@@ -39,20 +42,32 @@ void Model::SetTransform(glm::mat4 _transform)
 }
 
 void Model::LoadModel(string path)
-{
+{	
+	time_t begin;
+	begin = time(&begin);
+	double seconds;
+	printf("Begin loading model\n");
+
 	Assimp::Importer importer;
 	const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs);
+	
 	if (!scene || scene->mFlags == AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 	{
 		std::cout << "Assimp failed to load model! Error: " << importer.GetErrorString() << std::endl;
 		return;
 	}
 	directory = path.substr(0, path.find_last_of('/'));
-	ProcessNode(scene->mRootNode, scene);
+	time_t end;
+	end = time(&end);
+
+	seconds = difftime(end, begin);
+	printf("%.0f seconds to load model.\n", seconds);
+
+	ProcessNode(scene->mRootNode, scene);	
 }
 
 void Model::ProcessNode(aiNode * node, const aiScene * scene)
-{
+{	
 	for (GLuint i = 0; i < node->mNumMeshes; i++)
 	{
 		aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
@@ -66,6 +81,10 @@ void Model::ProcessNode(aiNode * node, const aiScene * scene)
 
 Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 {
+	time_t begin;
+	begin = time(&begin);
+	double seconds; 
+	printf("Begin processing mesh\n");
 	// Data to fill
 	vector<mVertex> vertices;
 	vector<GLuint> indices;
@@ -129,6 +148,11 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 		textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
 	}
 
+	time_t end;
+	end = time(&end);
+
+	seconds = difftime(end, begin);
+	printf("%.0f seconds to process mesh.\n", seconds);
 	// Return a mesh object created from the extracted mesh data
 	return Mesh(vertices, indices, textures);
 }

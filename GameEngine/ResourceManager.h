@@ -58,7 +58,7 @@ public:
 		while (it != table->end()) {
 			//Convert the int to a string
 			stringstream convert;
-			int i = *it->second;
+			ResourceType i = *it->second;
 			convert << i;
 			string result = convert.str();
 			//

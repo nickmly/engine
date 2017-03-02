@@ -79,7 +79,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)\GameEngine;$(SolutionDir)\..\Dependencies\glew-2.0.0\include;$(SolutionDir)\..\Dependencies\assimp\include\assimp;$(SolutionDir)\..\Dependencies\freeglut-MSVC-3.0.0-2.mp\freeglut\include\GL;$(SolutionDir)\..\Dependencies\FreeImage\Source;$(SolutionDir)\..\Dependencies\glm-0.9.8.0\glm;$(SolutionDir)\..\Dependencies\glfw-3.2.1.bin.WIN32\glfw-3.2.1.bin.WIN32\include\GLFW;$(SolutionDir)\..\Dependencies\SDL2-devel-2.0.5-VC\SDL2-2.0.5\include;$(SolutionDir)\..\Dependencies\Simple OpenGL Image Library\src;$(SolutionDir)\..\Dependencies\SDL2_image-devel-2.0.1-VC\SDL2_image-2.0.1\include;$(SolutionDir)\..\Dependencies\freetype-2.3.5-1-bin\include\freetype2</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\..\Dependencies\tinyobjloader-master\tinyobjloader-master;$(SolutionDir)\GameEngine;$(SolutionDir)\..\Dependencies\glew-2.0.0\include;$(SolutionDir)\..\Dependencies\assimp\include\assimp;$(SolutionDir)\..\Dependencies\freeglut-MSVC-3.0.0-2.mp\freeglut\include\GL;$(SolutionDir)\..\Dependencies\FreeImage\Source;$(SolutionDir)\..\Dependencies\glm-0.9.8.0\glm;$(SolutionDir)\..\Dependencies\glfw-3.2.1.bin.WIN32\glfw-3.2.1.bin.WIN32\include\GLFW;$(SolutionDir)\..\Dependencies\SDL2-devel-2.0.5-VC\SDL2-2.0.5\include;$(SolutionDir)\..\Dependencies\Simple OpenGL Image Library\src;$(SolutionDir)\..\Dependencies\SDL2_image-devel-2.0.1-VC\SDL2_image-2.0.1\include;$(SolutionDir)\..\Dependencies\freetype-2.3.5-1-bin\include\freetype2</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -117,7 +117,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)\GameEngine;$(SolutionDir)\..\Dependencies\glew-2.0.0\include;$(SolutionDir)\..\Dependencies\assimp-3.3.1\include\assimp;$(SolutionDir)\..\Dependencies\freeglut-MSVC-3.0.0-2.mp\freeglut\include\GL;$(SolutionDir)\..\Dependencies\FreeImage\Source;$(SolutionDir)\..\Dependencies\glm-0.9.8.0\glm;$(SolutionDir)\..\Dependencies\glfw-3.2.1.bin.WIN32\glfw-3.2.1.bin.WIN32\include\GLFW;$(SolutionDir)\..\Dependencies\SDL2-devel-2.0.5-VC\SDL2-2.0.5\include;$(SolutionDir)\..\Dependencies\Simple OpenGL Image Library\src;$(SolutionDir)\..\Dependencies\SDL2_image-devel-2.0.1-VC\SDL2_image-2.0.1\include;$(SolutionDir)\..\Dependencies\freetype-2.3.5-1-bin\include\freetype2</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\..\Dependencies\tinyobjloader-master\tinyobjloader-master;$(SolutionDir)\GameEngine;$(SolutionDir)\..\Dependencies\glew-2.0.0\include;$(SolutionDir)\..\Dependencies\assimp-3.3.1\include\assimp;$(SolutionDir)\..\Dependencies\freeglut-MSVC-3.0.0-2.mp\freeglut\include\GL;$(SolutionDir)\..\Dependencies\FreeImage\Source;$(SolutionDir)\..\Dependencies\glm-0.9.8.0\glm;$(SolutionDir)\..\Dependencies\glfw-3.2.1.bin.WIN32\glfw-3.2.1.bin.WIN32\include\GLFW;$(SolutionDir)\..\Dependencies\SDL2-devel-2.0.5-VC\SDL2-2.0.5\include;$(SolutionDir)\..\Dependencies\Simple OpenGL Image Library\src;$(SolutionDir)\..\Dependencies\SDL2_image-devel-2.0.1-VC\SDL2_image-2.0.1\include;$(SolutionDir)\..\Dependencies\freetype-2.3.5-1-bin\include\freetype2</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
     </ClCompile>
     <Link>
@@ -167,6 +167,7 @@
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GeometricShapes.h" />
     <ClInclude Include="Image.h" />
+    <ClInclude Include="InputManager.h" />
     <ClInclude Include="IOException.h" />
     <ClInclude Include="LogManager.h" />
     <ClInclude Include="Material.h" />
@@ -182,6 +183,7 @@
     <ClInclude Include="SceneNode.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="SimpleModel.h" />
+    <ClInclude Include="Skybox.h" />
     <ClInclude Include="SOILImage.h" />
     <ClInclude Include="SpriteRenderer.h" />
     <ClInclude Include="StlOptions.h" />
@@ -195,7 +197,6 @@
     <ClCompile Include="BasicTypes.cpp" />
     <ClCompile Include="BoundingBox.cpp" />
     <ClCompile Include="BoundingSphere.cpp" />
-    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Clock.cpp" />
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="Engine.cpp" />
@@ -204,6 +205,7 @@
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="GeometricShapes.cpp" />
+    <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="LogManager.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="Mesh.cpp" />
@@ -217,6 +219,7 @@
     <ClCompile Include="SceneNode.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="SimpleModel.cpp" />
+    <ClCompile Include="Skybox.cpp" />
     <ClCompile Include="SOILImage.cpp" />
     <ClCompile Include="SpriteRenderer.cpp" />
     <ClCompile Include="TargetCamera.cpp" />
