@@ -27,7 +27,7 @@ void Model::Render()
 
 		renderer->SetProgram(shader.GetProgram());
 		renderer->RenderTransform(transform);
-		meshes[i].Render(shader, *renderer);
+		meshes[i].Render(transform, shader, *renderer);
 	}
 }
 

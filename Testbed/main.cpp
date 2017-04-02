@@ -15,8 +15,8 @@ using namespace std;
 const string LOG_THRESHOLD = "NONE"; // Set a threshold for the log file
 
 const char* TITLE = "Window Title";
-const int SCREEN_WIDTH = 800;
-const int SCREEN_HEIGHT = 600;
+const int SCREEN_WIDTH = 1280;
+const int SCREEN_HEIGHT = 720;
 
 //TestApp app;
 SceneManager *GSM = SceneManager::getInstance();

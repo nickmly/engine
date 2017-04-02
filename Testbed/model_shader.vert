@@ -14,12 +14,13 @@ uniform vec3 diffuse_color;
 uniform vec3 specular_color;
 uniform float shininess;
 smooth out vec4 color;
-const vec3 vEyeSpaceCameraPosition =  vec3(0,0,0);
+uniform vec3 vEyeSpaceCameraPosition;
+uniform mat3 lightNormal;
 
 void main()
 {
 	mat4 modelView = view * model;
-	mat3 lightNormal = mat3(transpose(inverse(modelView)));
+	//mat3 lightNormal = mat3(transpose(inverse(modelView)));
 
 	vec4 vEyeSpaceLightPosition = (modelView) * vec4(light_position,1.0f);
 	vec4 vEyeSpacePosition = (modelView) * vec4(position,1.0f);

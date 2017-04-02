@@ -12,6 +12,7 @@
 #include "GeometricShapes.h"
 #include "glm.hpp"
 #include "glut.h"
+#include "SDL.h"
 #include "FileReader.h"
 #include "GameObject.h"
 #include "SceneGraph.h"
@@ -30,18 +31,31 @@ private:
 	OpenGLRenderer *renderer;
 	//heap variables
 	SimpleModel *square, *square2, *light;
+	SpriteRenderer *space;
 
-	Model* skullModel;
-	Model* skyboxModel;
+	Model* earthModel, *marsModel, *sunModel, *saturnModel, *neptuneModel, *mercuryModel, *uranusModel, *venusModel, *jupiterModel, *moonModel, *scope;
 	Model *fake;
-	GameObject* skullObject;
-	GameObject* skyboxObject;
+	GameObject *earthObject, *earthRotation;
 
+	GameObject *marsObject, *marsRotation;
+	GameObject *sunObject;
+	GameObject *saturnObject, *saturnRotation;
+	GameObject *neptuneObject, *neptuneRotation;
+	GameObject *mercuryObject, *mercuryRotation;
+	GameObject *uranusObject, *uranusRotation;
+	GameObject *jupiterObject, *jupiterRotation;
+	GameObject *venusObject, *venusRotation;
+
+	GameObject *earthMoon, *earthMoonRotation;
+	GameObject **marsMoons, **marsMoonRotations;
+	GameObject **saturnMoons, **saturnMoonRotations;
+	GameObject **jupiterMoons, **jupiterMoonRotations;
+	GameObject **uranusMoons, **uranusMoonRotations;
 	//MAIN OR INITIAL SCENE CAMERA
+	
 	AbstractCamera *fpsCamera;
 	AbstractCamera *targetCamera;
 	SceneGraph *sceneGraph;
-	ResourceManager<Model> modelManager;
 
 public:
 	// Inherited via Scene
@@ -55,16 +69,17 @@ public:
 	virtual void onPause() override;
 	virtual void onComplete() override;
 	virtual void onQuit() override;
-	
+
 	//***********RENDERING************//
 	virtual void preRender() override;
 	virtual void render() override;
 	virtual void postRender() override;
-	
+
 	//***********INPUT**************//
 	virtual void HandleInput(Uint32 event, SDL_Keycode key) override;
 	virtual void HandleMouse(Uint32 event, Uint8 button, Uint16 x, Uint16 y, Sint16 xrel, Sint16 yrel) override;
-	
+
+
 };
 
 

@@ -1,5 +1,8 @@
 #include "Mesh.h"
 #include "FileReader.h"
+#include <gtc/type_ptr.hpp>
+#include <gtc/matrix_transform.hpp>
+#include <gtc/matrix_inverse.hpp>
 
 Mesh::Mesh(vector<mVertex> _vertices, vector<GLuint> _indices, vector<Texture> _textures)
 {
@@ -79,7 +82,7 @@ void Mesh::SetupMesh()
 	shader = _shader;
 }*/
 
-void Mesh::Render(Shader shader, OpenGLRenderer rend)
+void Mesh::Render(glm::mat4 transform, Shader shader, OpenGLRenderer rend)
 {
 	// Bind appropriate textures
 	GLuint diffuseNr = 1;
@@ -102,9 +105,15 @@ void Mesh::Render(Shader shader, OpenGLRenderer rend)
 		glBindTexture(GL_TEXTURE_2D, textures[i].id);
 	}
 
-	glUniform3f(glGetUniformLocation(shader.GetProgram(), "diffuse_color"), 0.2f, 0.0f, 0.7f);
-	glUniform3f(glGetUniformLocation(shader.GetProgram(), "specular_color"), 0.4f, 0.4f, 0.4f);
+	glUniform3f(glGetUniformLocation(shader.GetProgram(), "diffuse_color"), 1.0f, 1.0f, 1.0f);
+	glUniform3f(glGetUniformLocation(shader.GetProgram(), "specular_color"), 1.0f, 0.5f, 0.0f);
 	glUniform3f(glGetUniformLocation(shader.GetProgram(), "light_position"), 0.0f, 0.0f, 30.0f);
+	
+	glUniform3f(glGetUniformLocation(shader.GetProgram(), "vEyeSpaceCameraPosition"), rend.GetActiveCam()->GetPosition().x, rend.GetActiveCam()->GetPosition().y, rend.GetActiveCam()->GetPosition().z);
+	
+	glm::mat3 MV = transform * rend.GetActiveCam()->GetViewMatrix();
+	glUniformMatrix3fv(glGetUniformLocation(shader.GetProgram(), "lightNormal"), 1, GL_FALSE, glm::value_ptr(glm::inverseTranspose(MV)));
+
 
 	// Draw mesh
 	glBindVertexArray(VAO);
